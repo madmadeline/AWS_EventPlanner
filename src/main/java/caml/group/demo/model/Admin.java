@@ -4,17 +4,19 @@ package caml.group.demo.model;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+
+import caml.group.demo.model.Model;
+
 import java.time.LocalDateTime;
 
-public class Admin extends User{
+public class Admin {
 	private final String userID;
 	private final String password;
 	Model model;
 	
-
-	public Admin(Model model) {
-		this.userID = "Admin";
-		this.password = "s0methingRandom?idk";
+	public Admin(String userID, String password, Model model) {
+		this.userID = userID;
+		this.password = password;
 		this.model = model;
 	}
 	
