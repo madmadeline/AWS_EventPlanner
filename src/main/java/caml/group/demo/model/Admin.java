@@ -1,18 +1,21 @@
-// TODO have admin extend user?
+// Jyalu
 
 package caml.group.demo.model;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 
-public class Admin {
+public class Admin extends User{
 	private final String userID;
 	private final String password;
+	Model model;
 	
 
-	public Admin() {
+	public Admin(Model model) {
 		this.userID = "Admin";
 		this.password = "s0methingRandom?idk";
+		this.model = model;
 	}
 	
 	
@@ -21,25 +24,49 @@ public class Admin {
 	}
 	
 	
-	public Report createReport(int choiceID) {
+	public Report createReport(Choice choice) {
 		boolean isCompleted = false;
+		int choiceID = 0;
+		
+//		int choiceID = choice.getID();
+		
 		// if choice has a winning alt, isCompleted = true
 		
 		return new Report(choiceID, ZonedDateTime.now(), isCompleted);
 	}
 	
 	
-	// TODO: either have user choose specific time (e.g. wed nov 14 @ 4PM EST) or choose N days (e.g. 2.5)
+
 	public void deleteReports(double days) {
+		long numDays;
+		long numHours;
+		long numMinutes;
+		
+		LocalDateTime limit = LocalDateTime.now();
+		ArrayList<Choice> choices = model.choices;	// TODO use RDS/SQL for choices
+	
 		// convert double to LocalDateTime type
+		numDays = (long) days;
+		limit.minusDays(numDays);
+		
+		days = (days - numDays) * 24;
+		numHours = (long) days;
+		limit.minusHours(numHours);
+		
+		days = (days - numHours) * 1440;
+		numMinutes = (long) days;
+		limit.minusMinutes(numMinutes);
 		
 		
-		// for all choices in the system
-			// convert choice timestamp to local time
-			// is timestamp before given time?
-				// true: delete 
-		
+		// delete old choices
+		for (Choice choice : choices) {
+			// TODO replace this line with next line after brandon uploads his stuff
+			LocalDateTime choiceTime = LocalDateTime.now(); 
+//			LocalDateTime choiceTime = choice.timestamp.toLocalDateTime();
+			
+			if (choiceTime.isBefore(limit)) {
+				choices.remove(choice);
+			}
+		}
 	}
-	
-	
 }
