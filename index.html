@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      </head>
+    <body>
+        <h1>CS3733 Group Project</h1>
+        <div class = "container">
+        <div class = "loginForm">
+            <form>
+                <label for = "username">Username:</label><br>
+                <input type = "text" id = "username" name = "username"><br>
+                <label for = "password">Password:</label><br>
+                <input type = "text" id = "password" name = "password"><br>
+            </form>
+            <button id = "loginBtn">Log In</button>
+        </div>
+        <div class = "alternativesFeedback">
+            <ul>
+                <li>Alternative 1</li>
+                <li>Alternative 2</li>
+                <li>Etc</li>
+            </ul>
+            <h2>Selected Alternative:</h2>
+            <div class = "feedbackBtns">
+            <form id = "feedbackF">
+                <label for = "feedbackForm">Feedback:</label><br>
+                <input type = "text" id = "feedbackForm">
+            </form>
+            
+                <button id = "approveBtn">
+                    <i class="fa fa-thumbs-up fa-3x"></i>
+                </button>
+                <button id = "disapproveBtn">
+                    <i class="fa fa-thumbs-down fa-3x"></i>
+                </button> 
+            </div>
+            <button id = "submitBtn">Submit Feedback</button>
+        </div>
+        <div class = "choicesSearch">
+            <form><input type = "text" id = "search"></form>
+            <button id = "searchBtn">search</button>
+            <ul>
+                <li>Choice 1</li>
+                <li>Choice 2</li>
+                <li>Etc</li>
+            </ul>
+        </div>
+        </div>
+    </body>
+</html>
