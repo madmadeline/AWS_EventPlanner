@@ -9,40 +9,42 @@ import caml.group.demo.model.Model;
 
 import java.time.LocalDateTime;
 
-public class Admin {
-	private final String userID;
-	private final String password;
+public class Admin extends User {
 	Model model;
 	
-	public Admin(String userID, String password, Model model) {
-		this.userID = userID;
-		this.password = password;
+	public Admin(String id, String password, Model model) {
+		super(id, password);
 		this.model = model;
 	}
 	
 	
 	public boolean userPassCorrect(String user, String pass) {
-		return (user.equals(userID) && pass.equals(password));
+		return (user.equals(this.id) && pass.equals(password));
 	}
 	
 	
 	public Report createReport(Choice choice) {
 		boolean isCompleted = false;
-		int choiceID = 0;
+		int choiceID;
 		
-//		int choiceID = choice.getID();
-		
-		// if choice has a winning alt, isCompleted = true
+		choiceID = choice.getID();
+		isCompleted = (choice.getWinner() != null);
 		
 		return new Report(choiceID, ZonedDateTime.now(), isCompleted);
 	}
 	
 	
 
-	public void deleteReports(double days) {
+	/**
+	 * Deletes the number of reports older than the given number of days.
+	 * @param days, the given number of days
+	 * @return the number of reports that were deleted
+	 */
+	public int deleteReports(double days) {
 		long numDays;
 		long numHours;
 		long numMinutes;
+		int numReportsDeleted = 0;
 		
 		LocalDateTime limit = LocalDateTime.now();
 		ArrayList<Choice> choices = model.choices;	// TODO use RDS/SQL for choices
@@ -62,13 +64,13 @@ public class Admin {
 		
 		// delete old choices
 		for (Choice choice : choices) {
-			// TODO replace this line with next line after brandon uploads his stuff
-			LocalDateTime choiceTime = LocalDateTime.now(); 
-//			LocalDateTime choiceTime = choice.timestamp.toLocalDateTime();
+			LocalDateTime choiceTime = choice.time.toLocalDateTime();
 			
 			if (choiceTime.isBefore(limit)) {
 				choices.remove(choice);
+				numReportsDeleted++;
 			}
 		}
+		return numReportsDeleted;
 	}
 }

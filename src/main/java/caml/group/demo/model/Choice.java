@@ -1,20 +1,50 @@
 package caml.group.demo.model;
 
 import java.util.ArrayList;
-import java.time.LocalDateTime;
+import java.util.Iterator;
+import java.time.ZonedDateTime;
 
 public class Choice {
-	final String id;
+	final int id;
 	final String description;
 	final ArrayList<Alternative> alternatives;// = new ArrayList<Alternative>();
-	LocalDateTime time;
+	ArrayList<User> users;
+	ZonedDateTime time;
 	Alternative winner;
 
-	public Choice(String id, String description, ArrayList<Alternative> alternatives, LocalDateTime time) {
+	public Choice(int id, String description, ArrayList<Alternative> alternatives, ZonedDateTime time) {
 		this.id = id;
 		this.description = description;
 		this.alternatives = alternatives;
 		this.time = time;
+		this.winner = null;
 	}
+	
+	public int getID() { return this.id; }
+	public Alternative getWinner() { return this.winner; }
+	public ArrayList<User> getUsers() { return this.users; }
+	
+	public void addUser(User user) { users.add(user); }
+	
+	
+	/**
+	 * Returns the user with the given id if they are
+	 * registered in this choice.
+	 * @param id, the given user id
+	 * @return the user if they are registered, null otherwise
+	 */
+	public User getUser(String id) {
+		for (User user : users) {
+			if (user.getID() == id) { return user; }
+		}
+		return null;
+	}
+	
+	
+	
+	
+	// iterators
+	public Iterator<User> userIterator() { return users.iterator(); }
+	public Iterator<Alternative> altsIterator() { return alternatives.iterator(); }
 }
 
