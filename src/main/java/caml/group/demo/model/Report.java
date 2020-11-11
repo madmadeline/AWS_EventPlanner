@@ -13,4 +13,9 @@ public class Report {
 		this.timestamp = timestamp;
 		this.isCompleted = isCompleted;
 	}
+	
+	
+	public int getChoiceID() { return choiceID; }
+	public ZonedDateTime getTimestamp() { return timestamp; }
+	public boolean getIsCompleted() { return isCompleted; }
 }
