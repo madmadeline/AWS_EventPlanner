@@ -19,4 +19,21 @@ public class Alternative {
 		this.feedback = feedback;	
 	}
 	
+	public String getDestricption() { return destricption;}
+	
+	public int getTotalApprovals() { return totalApprovals;}
+	public void setTotalApprovals(int totalApprovs) { 
+		totalApprovals = totalApprovs;
+		}
+	
+	public int getTotalDisapprovals() { return totalDisapprovals;}
+	public void setTotalDisapprovals(int totalDisapprovs) { 
+		totalDisapprovals = totalDisapprovs;
+		}
+	
+	public ArrayList<ArrayList<String>> getApproversAndDisapprovers() { return approversAndDisapprovers;}
+	
+	public ArrayList<Feedback> getFeedback() { return feedback;}
+	
+	
 }
