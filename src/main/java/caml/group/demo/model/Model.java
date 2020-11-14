@@ -14,6 +14,7 @@ public class Model  implements Iterable<Choice>{
 	Choice currentChoice;
 	Stack<Choice> choicesToCreate; // TODO use SQL/RDS instead
 	Stack<User> usersToRegister; // TODO use SQL/RDS instead
+	ArrayList<Report> reports;
 	
 
 	public Model(String adminName, String adminPass) {
