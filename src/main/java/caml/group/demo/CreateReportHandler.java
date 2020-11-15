@@ -85,6 +85,7 @@ public class CreateReportHandler implements RequestStreamHandler {
 		} else {
 			Choice choice = model.getCurrentChoice();
 			report = admin.createReport(choice);
+			// TODO insert report into database
 			statusCode = 200;
 		}
 

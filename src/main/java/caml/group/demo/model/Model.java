@@ -2,6 +2,7 @@
 
 package caml.group.demo.model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
@@ -15,15 +16,16 @@ public class Model  implements Iterable<Choice>{
 	Stack<Choice> choicesToCreate; // TODO use SQL/RDS instead
 	Stack<User> usersToRegister; // TODO use SQL/RDS instead
 	ArrayList<Report> reports;
-	
+	SqlConnector sqlConnection;
 
-	public Model(String adminName, String adminPass) {
+	public Model(String adminName, String adminPass) throws ClassNotFoundException, SQLException {
 		this.choices = new ArrayList<Choice>();
 		this.admin = new Admin(adminName, adminPass, this);
 		this.currentUser = null;
 		this.currentChoice = null;
 		choicesToCreate = new Stack<Choice>();
 		usersToRegister = new Stack<User>();
+		SqlConnector.Connection();
 	}
 	
 	// getters and setters
@@ -47,8 +49,9 @@ public class Model  implements Iterable<Choice>{
 	 * @param name, the given username
 	 * @param pass, the given password
 	 * @return true if the log in was successful, false otherwise
+	 * @throws SQLException 
 	 */
-	public boolean logIn(String name, String pass) {
+	public boolean logIn(String name, String pass) throws SQLException {
 		// no choice is selected
 		if (currentChoice == null) {
 			// admin logged in
@@ -78,6 +81,8 @@ public class Model  implements Iterable<Choice>{
 			// user doesn't exist --> make new user
 			else {
 				registerUser(name, pass, currentChoice);
+				sqlConnection.InsertIntoUser(name, pass, false);
+				sqlConnection.CloseConnection(); // move to main after
 				// TODO confirm registration??
 				return true;
 			}

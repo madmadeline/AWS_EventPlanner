@@ -19,7 +19,7 @@ public class Alternative {
 		this.feedback = feedback;	
 	}
 	
-	public String getDestricption() { return destricption;}
+	public String getDestricption() { return description;}
 	
 	public int getTotalApprovals() { return totalApprovals;}
 	public void setTotalApprovals(int totalApprovs) { 

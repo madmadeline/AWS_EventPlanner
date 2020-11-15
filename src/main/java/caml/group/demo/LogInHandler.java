@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -82,7 +83,12 @@ public class LogInHandler implements RequestStreamHandler {
 		if (error) {
 			statusCode = 400;
 		} else {
-			loggedIn = model.logIn(username, password);
+			try {
+				loggedIn = model.logIn(username, password);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    	statusCode = 200;
 		}
     	
