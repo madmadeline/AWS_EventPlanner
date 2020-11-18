@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="com.amazonaws:aws-lambda-java-events-sdk-transformer:2.0.2" type="repository">
+    <properties maven-id="com.amazonaws:aws-lambda-java-events-sdk-transformer:2.0.2" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/amazonaws/aws-lambda-java-events-sdk-transformer/2.0.2/aws-lambda-java-events-sdk-transformer-2.0.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
