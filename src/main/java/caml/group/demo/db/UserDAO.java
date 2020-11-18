@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
+
 import caml.group.demo.model.Admin;
 import caml.group.demo.model.Model;
 import caml.group.demo.model.User;
@@ -16,13 +18,13 @@ import caml.group.demo.model.User;
  *
  */
 public class UserDAO { 
-
+	LambdaLogger logger;
 	java.sql.Connection conn;
 	Model model;
 	final String tblName = "User";   // Exact capitalization
 
-    public UserDAO(Model model) {
-    	this.model = model;
+    public UserDAO(LambdaLogger logger) {
+    	this.logger = logger;
     	try  {
     		conn = DatabaseUtil.connect();
     	} catch (Exception e) {
@@ -162,7 +164,7 @@ public class UserDAO {
         String password = resultSet.getString("password");
         boolean isAdmin = resultSet.getBoolean("isAdmin");
         
-        if (isAdmin) { return new Admin(name, password, model); }
+        if (isAdmin) { return new Admin(name, password); }
         return new User (name, password);
     }
 

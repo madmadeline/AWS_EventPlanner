@@ -1,0 +1,1 @@
+{"lastDeploymentHandler":"caml.group.demo.LogInHandler","lastInvokeHandler":null,"handlerMetadata":{"caml.group.demo.LogInHandler":{"deployment":{"regionId":"us-east-1","awsLambdaFunctionName":"login","awsIamRoleName":"developer","awsS3BucketName":"3733camlgroupproject","memory":0,"timeout":0},"invoke":null}},"lastInvokedHandlerDeployed":false}

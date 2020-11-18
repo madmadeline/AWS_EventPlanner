@@ -41,7 +41,7 @@ public class LogInHandlerTest {
 
 	void testInput(String incoming, String outgoing) throws IOException, ClassNotFoundException, SQLException {
 		init();
-		LogInHandler handler = new LogInHandler(model);
+		LogInHandler handler = new LogInHandler();
 		AddLogInRequest req = new Gson().fromJson(incoming, AddLogInRequest.class);
 		AddLogInResponse response = handler.handleRequest(req, createContext("compute"));
 
@@ -51,7 +51,7 @@ public class LogInHandlerTest {
 
 	void testFailInput(String incoming, String outgoing) throws IOException, ClassNotFoundException, SQLException {
 		init();
-		LogInHandler handler = new LogInHandler(model);
+		LogInHandler handler = new LogInHandler();
 		AddLogInRequest req = new Gson().fromJson(incoming, AddLogInRequest.class);
 		AddLogInResponse response = handler.handleRequest(req, createContext("compute"));
 
