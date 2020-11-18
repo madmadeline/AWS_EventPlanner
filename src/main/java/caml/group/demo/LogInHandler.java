@@ -1,112 +1,79 @@
 package caml.group.demo;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.sql.SQLException;
+import caml.group.demo.http.AddLogInRequest;
+import caml.group.demo.http.AddLogInResponse;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import com.amazonaws.util.json.Jackson;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
 
+import caml.group.demo.db.UserDAO;
 import caml.group.demo.model.Model;
+import caml.group.demo.model.User;
 
-public class LogInHandler implements RequestStreamHandler {
+public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResponse> {
 	Model model;
 	LambdaLogger logger;
 	
 	public LogInHandler(Model model) {
 		this.model = model;
 	}
-
-    @Override
-    public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
-    	// create a printer
-    	PrintWriter pw = new PrintWriter(output);
-    	
-    	// create a logger
-    	logger = context.getLogger();
-    	if (context != null) { context.getLogger(); }
-    	
-    	// load entire input into a String (since it contains JSON)
-    	StringBuilder incoming = new StringBuilder();
-    	try (BufferedReader br = new BufferedReader(new InputStreamReader(input))) {
-    		String line = null;
-    		while ((line = br.readLine()) != null) {
-    			incoming.append(line);
-    		}
-    	}
-    	
-    	/* When coming in from Lambda function is pure JSON. When coming from API Gateway or the
-    	 * real thing, then is wrapped inside more complicated JSON and you only want the BODY
-    	 * in most cases. 
-    	 */
-        JsonNode node = Jackson.fromJsonString(incoming.toString(), JsonNode.class);
-        if (node.has("body")) {
-        	node = Jackson.fromJsonString(node.get("body").asText(), JsonNode.class);
-        }
-        
-        
-        // parse the inputed strings
-        String username = "", password = "";
-    	
-        // TODO ensure "username" is correct field name
-    	String param = node.get("username").asText();
-    	boolean error = false;
+	
+	
+	/**
+	 * Try to get User from RDS.
+	 */
+	public User loadUser(String name, String pass) throws Exception {
+		User user = null;
 		try {
-			username = param;
-    	} catch (Exception e) {
-    		logger.log("Unable to parse:" + param + " as username"); 
-			error = true;
-    	}
-    	
-		// TODO ensure "password" is correct field name
-		param = node.get("password").asText();
-		try {
-			password = param;
-    	} catch (Exception e) {
-    		logger.log("Unable to parse:" + param + " as password"); 
-			error = true;
-    	}
-		
-		
-		
-		// log in!
-        int statusCode;
-        boolean loggedIn = false;
-        
-		if (error) {
-			statusCode = 400;
-		} else {
-			try {
-				loggedIn = model.logIn(username, password);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	    	statusCode = 200;
+			if (logger != null) { logger.log("in loadValue"); }
+			UserDAO dao = new UserDAO(model);
+			user = dao.getUser(name, pass);
+			return user;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-    	
-		// Needed for CORS integration...
-		String response = "{ \n" + 
-				         "  \"isBase64Encoded\" : false, \n" +
-				         "  \"statusCode\"      : " + statusCode + ", \n" +
-				         "  \"headers\" : { \n " +
-		                 "     \"Access-Control-Allow-Origin\" : \"*\", \n" + 
-				         "     \"Access-Control-Allow-Method\"  : \"GET,POST,OPTIONS\" \n" + 
-		                 "  }, \n" +
-				         "  \"body\" : \"" + "{ \\\"result\\\" : \\\"" + loggedIn + "\\\" }" + "\" \n" +
-				         "}";
+		return user;
+	}
+	
+	
+	@Override
+	public AddLogInResponse handleRequest(AddLogInRequest req, Context context) {
+		logger = context.getLogger();
+		logger.log("Loading Java Lambda handler of RequestHandler");
+		logger.log(req.toString());
+
+		boolean fail = false;
+		String failMessage = "";
+		User user = null;
+		String name = "";
+		String pass = "";
 		
-        // write out output
-        pw.print(response);
-        pw.close();
-    }
+		try {
+			name = req.getUsername();
+			try {
+				pass = req.getPassword();
+				user = loadUser(name, pass);
+			} catch (Exception e) {
+				failMessage = req.getPassword() + " is an invalid password.";
+				fail = true;
+			}
+		} catch (Exception e) {
+			failMessage = req.getUsername() + " is an invalid username.";
+			fail = true;
+		}
+
+		// compute proper response and return. Note that the status code is internal to the HTTP response
+		// and has to be processed specifically by the client code.
+		AddLogInResponse response;
+		if (fail) {
+			response = new AddLogInResponse(400, failMessage);
+		} else {
+			response = new AddLogInResponse(user, 200);  // success
+		}
+
+		return response; 
+	}
     
 
 }

@@ -12,10 +12,16 @@ import java.time.LocalDateTime;
 public class Admin extends User {
 	Model model;
 	
+	public Admin(String id, String password) {
+		super(id, password);
+	}
+	
 	public Admin(String id, String password, Model model) {
 		super(id, password);
 		this.model = model;
 	}
+	
+	public void setModel(Model model) { this.model = model; }
 	
 	
 	public boolean userPassCorrect(String user, String pass) {

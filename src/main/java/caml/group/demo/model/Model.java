@@ -1,5 +1,3 @@
-// Jyalu
-
 package caml.group.demo.model;
 
 import java.sql.SQLException;

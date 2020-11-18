@@ -34,6 +34,15 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/Jyalu/Downloads/ojdbc8.jar"/>
+	<classpathentry kind="lib" path="/Applications/JAR Files/ojdbc8.jar"/>
+	<classpathentry kind="lib" path="/Users/Jyalu/.m2/repository/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar" sourcepath="/Users/Jyalu/.m2/repository/com/google/code/gson/gson/2.8.6/gson-2.8.6-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.google.code.gson"/>
+			<attribute name="maven.artifactId" value="gson"/>
+			<attribute name="maven.version" value="2.8.6"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
