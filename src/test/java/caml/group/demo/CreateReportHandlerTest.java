@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.SQLException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,14 +26,14 @@ public class CreateReportHandlerTest {
 
 
 	@Before
-	public void init() {
+	public void init() throws ClassNotFoundException, SQLException {
 		model = new Model("admin", "admin:pass");
 		handler = new CreateReportHandler(model);
 	}
 	
 
 	@Test
-	public void testCreateReportHandler() throws IOException {
+	public void testCreateReportHandler() throws IOException, ClassNotFoundException, SQLException {
 		init();
 		
 		InputStream input = new ByteArrayInputStream(SAMPLE_INPUT_STRING.getBytes());;

@@ -11,7 +11,7 @@ import caml.group.demo.db.UserDAO;
 //import caml.group.demo.model.Model;
 import caml.group.demo.model.User;
 
-public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResponse> {
+public class CreateChoiceHandler implements RequestHandler<AddLogInRequest,AddLogInResponse> {
 //	Model model;
 	LambdaLogger logger;
 	

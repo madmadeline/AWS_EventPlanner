@@ -2,17 +2,18 @@ package caml.group.demo.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.time.ZonedDateTime;
+import java.sql.Timestamp;
+//import java.time.ZonedDateTime;
 
 public class Choice {
 	final int id;
 	final String description;
 	final ArrayList<Alternative> alternatives;// = new ArrayList<Alternative>();
 	ArrayList<User> users;
-	ZonedDateTime time;
+	Timestamp time;
 	Alternative winner;
 
-	public Choice(int id, String description, ArrayList<Alternative> alternatives, ZonedDateTime time) {
+	public Choice(int id, String description, ArrayList<Alternative> alternatives, Timestamp time) {
 		this.id = id;
 		this.description = description;
 		this.alternatives = alternatives;
@@ -22,6 +23,7 @@ public class Choice {
 	
 	public int getID() { return this.id; }
 	public Alternative getWinner() { return this.winner; }
+	public void setWinner(Alternative winner) { this.winner = winner; }
 	public ArrayList<User> getUsers() { return this.users; }
 	
 	public void addUser(User user) { users.add(user); }

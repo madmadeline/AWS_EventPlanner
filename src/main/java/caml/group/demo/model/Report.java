@@ -1,14 +1,15 @@
 package caml.group.demo.model;
 
-import java.time.ZonedDateTime;
+import java.sql.Timestamp;
+//import java.time.ZonedDateTime;
 
 public class Report {
 	int choiceID;
-	ZonedDateTime timestamp;
+	Timestamp timestamp;
 	boolean isCompleted;
 	
 
-	public Report(int choiceID, ZonedDateTime timestamp, boolean isCompleted) {
+	public Report(int choiceID, Timestamp timestamp, boolean isCompleted) {
 		this.choiceID = choiceID;
 		this.timestamp = timestamp;
 		this.isCompleted = isCompleted;
@@ -16,6 +17,6 @@ public class Report {
 	
 	
 	public int getChoiceID() { return choiceID; }
-	public ZonedDateTime getTimestamp() { return timestamp; }
+	public Timestamp getTimestamp() { return timestamp; }
 	public boolean getIsCompleted() { return isCompleted; }
 }
