@@ -132,5 +132,10 @@ public class TestContext implements Context {
         public void log(String message) {
             System.err.println(message);
         }
+
+        public void log(byte[] bytes) {
+            System.err.println("You shouldn't be here");
+        }
     }
+
 }

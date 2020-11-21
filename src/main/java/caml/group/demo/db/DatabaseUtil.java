@@ -42,18 +42,27 @@ public class DatabaseUtil {
 		if (rdsMySqlDatabaseUrl == null) {
 			System.err.println("Environment variable rdsMySqlDatabaseUrl is not set!");
 		}
+		try{
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		}
+		catch (ClassNotFoundException e){
+			System.err.println("Failed to find class com.mysql.cj.jdbc.Driver");
+		}
 		
 		try {
-			//System.out.println("start connecting......");
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			
-			conn = DriverManager.getConnection(
+			/*conn = DriverManager.getConnection(
 					jdbcTag + rdsMySqlDatabaseUrl + ":" + rdsMySqlDatabasePort + "/" + schemaName + multiQueries,
 					dbUsername,
-					dbPassword);
+					dbPassword);*/
+			String url = "jdbc:mysql://database-3733.cgkor7xozyye.us-east-1.rds.amazonaws.com:3306/";
+			String userName = "admin";
+			String password = "Theo1020";
+			String dbName = "project";
+			conn = DriverManager.getConnection(url + dbName, userName, password);
+
 			return conn;
 		} catch (Exception ex) {
-			System.err.println("DB-ERROR:" + schemaName + "," + dbUsername + "," + dbPassword + "," + rdsMySqlDatabaseUrl);
+			System.err.println("DB-ERRORraed:" + schemaName + "," + dbUsername + "," + dbPassword + "," + rdsMySqlDatabaseUrl);
 			throw new Exception("Failed in database connection");
 		}
 	}

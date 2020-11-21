@@ -19,7 +19,7 @@ public class TestModel {
 
 	Model model;
 
-
+/*
 	@Before
 	public void init() throws ClassNotFoundException, SQLException {
 		model = new Model("admin", "admin:pass");
@@ -36,4 +36,6 @@ public class TestModel {
 		
 	}
 
+
+ */
 }

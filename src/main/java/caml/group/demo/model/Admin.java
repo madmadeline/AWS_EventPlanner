@@ -2,10 +2,13 @@
 
 package caml.group.demo.model;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 import caml.group.demo.model.Model;
+import org.joda.time.DateTime;
 
 import java.time.LocalDateTime;
 
@@ -36,7 +39,7 @@ public class Admin extends User {
 		choiceID = choice.getID();
 		isCompleted = (choice.getWinner() != null);
 		
-		return new Report(choiceID, ZonedDateTime.now(), isCompleted);
+		return new Report(choiceID, Timestamp.from(Instant.now()), isCompleted);
 	}
 	
 	
