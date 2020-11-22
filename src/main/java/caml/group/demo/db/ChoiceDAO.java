@@ -47,6 +47,29 @@ public class ChoiceDAO {
         return choice;
     }
 
+    public void addChoice(Choice choice) throws Exception {
+        // Inserts alts into alt table
+        ArrayList<Alternative> alts = choice.getAlternatives();
+        AlternativeDAO dao = new AlternativeDAO(logger);
+        for (Alternative alt : alts) {
+            dao.addAlternative(alt);
+        }
+
+        // Adds choice to choice table
+        PreparedStatement ps = conn.prepareStatement("INSERT into " + tblName +
+                "(id, description, dateOfCreation, winningAlt) values (" + choice.getID() + ", " +
+                choice.getDescription() + ", " + choice.getTime() + ", null)");
+        ps.execute();
+        ps.close();
+
+        // Adds choice and alt to match table
+        for(Alternative alt : alts){
+            PreparedStatement ps2 = conn.prepareStatement("INSERT INTO ChoiceAltMatch(choiceID, altID) values ("+
+                    choice.getID() + ", " + alt.getID() + ")");
+            ps2.execute();
+        }
+    }
+
     /**
      * Generates a Choice object that represents several rows of ChoiceAltMatch
      * @param rs, the cursor to the specified row in Choice
