@@ -22,11 +22,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="435318fd-83df-4186-a773-b1271c74bc22" name="Default" comment="Added debug statements">
-      <change afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/ChoiceDAO.java" afterDir="false" />
+    <list default="true" id="435318fd-83df-4186-a773-b1271c74bc22" name="Default" comment="Added todo list for 1st deliverable">
+      <change afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/CreateUserHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/AlternativeDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/AlternativeDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/UserDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +39,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
@@ -159,7 +162,7 @@
       <workItem from="1605894481326" duration="2950000" />
       <workItem from="1605974642067" duration="1236000" />
       <workItem from="1605978639418" duration="13807000" />
-      <workItem from="1606058858024" duration="3259000" />
+      <workItem from="1606058858024" duration="7144000" />
     </task>
     <task id="LOCAL-00001" summary="Got lambda working">
       <created>1605984655231</created>
@@ -175,7 +178,42 @@
       <option name="project" value="LOCAL" />
       <updated>1606008245749</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added the ability to get an alt by id">
+      <created>1606062476346</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1606062476346</updated>
+    </task>
+    <task id="LOCAL-00004" summary="No idea what changed here">
+      <created>1606062489566</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1606062489566</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Removed debug statements">
+      <created>1606062504929</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1606062504929</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Initial commit w/ constructor, get, and helper methods">
+      <created>1606062536259</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1606062536259</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Added todo list for 1st deliverable">
+      <created>1606079787458</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1606079787458</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -196,7 +234,12 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Got lambda working" />
     <MESSAGE value="Added debug statements" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added debug statements" />
+    <MESSAGE value="Added the ability to get an alt by id" />
+    <MESSAGE value="No idea what changed here" />
+    <MESSAGE value="Removed debug statements" />
+    <MESSAGE value="Initial commit w/ constructor, get, and helper methods" />
+    <MESSAGE value="Added todo list for 1st deliverable" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added todo list for 1st deliverable" />
   </component>
   <component name="WindowStateProjectService">
     <state x="3325" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1605982208390">
@@ -235,17 +278,22 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="955" y="185" key="SettingsEditor/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605984036217" />
-    <state x="3112" y="253" key="Vcs.Push.Dialog.v2" timestamp="1606008254281">
+    <state x="3112" y="253" key="Vcs.Push.Dialog.v2" timestamp="1606079794004">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
-    <state x="3112" y="253" key="Vcs.Push.Dialog.v2/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606008254281" />
+    <state x="3112" y="253" key="Vcs.Push.Dialog.v2/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606079794004" />
     <state x="3224" y="411" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1605981647429">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
     <state x="3224" y="411" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605981647429" />
-    <state x="180" y="0" width="1407" height="1027" key="dock-window-1" timestamp="1606060645306">
+    <state x="3337" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1606062550135">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state x="3337" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606062550135" />
+    <state x="180" y="0" width="1407" height="1027" key="dock-window-1" timestamp="1606080608632">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
+    <state x="180" y="0" width="1407" height="1027" key="dock-window-1/2560.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1606080608632" />
     <state x="180" y="0" width="1407" height="1027" key="dock-window-1/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606060645306" />
     <state x="1536" y="0" width="1040" height="1027" key="dock-window-2" timestamp="1606061103324">
       <screen x="0" y="0" width="2560" height="1400" />
