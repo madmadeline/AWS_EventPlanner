@@ -22,6 +22,18 @@ public class Choice {
 	}
 	
 	public int getID() { return this.id; }
+
+	public ArrayList<Alternative> getAlternatives() {
+		return alternatives;
+	}
+
+	public String getDescription(){
+		return description;
+	}
+	public Timestamp getTime(){
+		return time;
+	}
+
 	public Alternative getWinner() { return this.winner; }
 	public void setWinner(Alternative winner) { this.winner = winner; }
 	public ArrayList<User> getUsers() { return this.users; }
