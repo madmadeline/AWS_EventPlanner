@@ -10,10 +10,15 @@ Todo:
 
 
 Classes to write/update:
+Jonathan
 1.  ChoiceDAO
 2.  CreateChoiceHandler
-3.  UserDAO
-4.  LogInHandler
-5.  AlternativeDAO
+3.  FindChoiceHandler??
+Jyalu
+4.  UserDAO
+5.  LogInHandler
 6.  RegisterUserHandler
-7.  Admin
+Brandon
+7.  AlternativeDAO
+8.  Admin
+9.  assign user to choice
