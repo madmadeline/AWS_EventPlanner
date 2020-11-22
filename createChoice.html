@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      </head>
+    <body>
+        <h1>
+            CHOICEMAKER
+        </h1>
+        <div class = "choicesSearch">
+            <h2>Create a New Choice:</h2>
+            <form>
+                <label for = "choiceName">Choice Name:</label><br>
+                <input type = "text" id = "choiceName"><br>
+                <label for = "numParticipants">Maximum # of Participants:</label><br>
+                <input type = "number" id = "numParticipants"><br>
+                <label for = "alt1">Alternatives (at least 2):</label><br>
+                <input type = "text" id = "alt1"><br>
+                <input type = "text" id = "alt2"><br>
+                <input type = "text" id = "alt3"><br>
+                <input type = "text" id = "alt4"><br>
+                <input type = "text" id = "alt5"><br>
+            </form>
+            <button onclick = "sendNewChoice()">Create</button>
+        </div>
+        <div class = "alternativesFeedback">
+            <h2>Find a choice by ID:</h2>
+            <form>
+                <input type = "text" id = "findChoice">
+                <button>Find</button>
+            </form>
+        </div>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+<script>
+    //JAVASCRIPT
+
+    //HTML ELEMENT ONLY FUNCTIONS-----------------------------------------------------------------------------
+
+    //when the user clicks an alternative, display alternative name to the "selected alternative" h2 element
+
+    function displayAltName(elem){
+        var stuff = document.getElementsByClassName("alts");
+        for (var i = 0; i < stuff.length; i++){
+            //reset the unselected elements back to white
+            stuff[i].style.backgroundColor = "white";
+        }
+        var pre = "Selected Alternative: "
+        var altName = elem.innerHTML;
+        //display it to the h2 element id = alternativeName
+        document.getElementById("alternativeName").innerHTML = pre + altName;
+        elem.style.backgroundColor = "lime";
+    }
+
+    //DATABASE ACCESS FUNCTIONS-------------------------------------------------------------------------------
+
+    //update the page on load, retrieve list of choices from the database and display in the table
+    function getChoices(){
+
+    }
+
+    //create choice button onclick event
+    //yeets the choice name and alternatives list over to the database
+    function sendNewChoice(){
+
+    }
+
+    //submit feedback button onclick event
+    //sends the participant name, feedback string, and approval attached to the alternative
+    function sendFeedback(){
+
+    }
+</script>
