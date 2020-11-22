@@ -49,7 +49,6 @@ public class UserDAO {
         try {
             User user = null; // User object representing the database entry
 //            boolean passwordCorrect = true;
-            System.out.println("Printing line");
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + 
             		" WHERE username=? AND password=?");
             ps.setString(1,  name);
