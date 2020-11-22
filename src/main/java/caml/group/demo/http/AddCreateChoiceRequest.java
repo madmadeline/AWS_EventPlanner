@@ -3,7 +3,7 @@ package caml.group.demo.http;
 import java.sql.Timestamp;
 
 public class AddCreateChoiceRequest {
-    String choiceID;
+    int choiceID;
     String choiceDescription;
     String altID;
     String altDescription;
@@ -11,8 +11,8 @@ public class AddCreateChoiceRequest {
     int numLikes = 0;
     int numDislikes = 0;
 
-    public String getChoiceID() { return choiceID; }
-    public void setChoiceID(String id) { this.choiceID = id; }
+    public int getChoiceID() { return choiceID; }
+    public void setChoiceID(int id) { this.choiceID = id; }
 
     public String getChoiceDescription() { return choiceDescription; }
     public void setChoiceDescription(String description) { this.choiceDescription = description; }
