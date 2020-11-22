@@ -1,0 +1,107 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      </head>
+    <body onload = "getChoices()">
+        <h1>CHOICEMAKER</h1>
+        <div class = "container">
+        <div class = "loginForm">
+            <h2>Participate in this Choice:</h2>
+            <form>
+                <label for = "username">Name:</label><br>
+                <input type = "text" id = "username" name = "username"><br>
+                <label for = "password">Password (optional):</label><br>
+                <input type = "text" id = "password" name = "password"><br>
+            </form>
+            <button id = "loginBtn">Participate</button>
+            </table>
+        </div>
+        <div class = "alternativesFeedback">
+            <h2>Selected Choice: Saturday Movie Night</h2>
+            <table id = "alternativesTbl">
+                <thead>
+                    <tr>
+                        <th colspan = "2">Alternatives</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td onclick = "displayAltName(this)" class = "alts">Star Wars marathon</td>
+                    </tr>
+                    <tr>
+                        <td onclick = "displayAltName(this)" class = "alts">Horror double feature</td>
+                    </tr>
+                    <tr>
+                        <td onclick = "displayAltName(this)" class = "alts">classic Disney night</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h2 id = "alternativeName">Selected Alternative:</h2>
+            <div class = "feedbackBtns">
+            <form id = "feedbackF">
+                <label for = "feedbackForm">Feedback:</label><br>
+                <input type = "text" id = "feedbackForm">
+            </form>
+            
+                <button id = "approveBtn">
+                    <i class="fa fa-thumbs-up fa-3x"></i>
+                </button>
+                <button id = "disapproveBtn">
+                    <i class="fa fa-thumbs-down fa-3x"></i>
+                </button> 
+            </div>
+            <button id = "submitBtn" onclick = "sendFeedback()">Submit Feedback</button><br>
+            <button id = "completeBtn">Complete Choice</button>
+        </div>
+        </div>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+<script>
+    //JAVASCRIPT
+
+    //HTML ELEMENT ONLY FUNCTIONS-----------------------------------------------------------------------------
+
+    //when the user clicks an alternative, display alternative name to the "selected alternative" h2 element
+
+    function displayAltName(elem){
+        var stuff = document.getElementsByClassName("alts");
+        for (var i = 0; i < stuff.length; i++){
+            //reset the unselected elements back to white
+            stuff[i].style.backgroundColor = "white";
+        }
+        var pre = "Selected Alternative: "
+        var altName = elem.innerHTML;
+        //display it to the h2 element id = alternativeName
+        document.getElementById("alternativeName").innerHTML = pre + altName;
+        elem.style.backgroundColor = "lime";
+    }
+
+    //DATABASE ACCESS FUNCTIONS-------------------------------------------------------------------------------
+
+    //update the page on load, retrieve list of choices from the database and display in the table
+    function getChoices(){
+
+    }
+
+    //create choice button onclick event
+    //yeets the choice name and alternatives list over to the database
+    function sendNewChoice(){
+
+    }
+
+    //submit feedback button onclick event
+    //sends the participant name, feedback string, and approval attached to the alternative
+    function sendFeedback(){
+
+    }
+</script>

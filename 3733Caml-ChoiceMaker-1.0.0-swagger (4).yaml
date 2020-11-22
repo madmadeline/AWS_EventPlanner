@@ -1,0 +1,302 @@
+#current API: 11/22/2020
+swagger: '2.0'
+info:
+  description: This is the API for Caml's Soft Eng project
+  version: 1.0.0
+  title: ChoiceMaker API
+  # put the contact info for your development or API team
+  contact:
+    email: mmperry@wpi.edu
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: users
+  description: Available to all users
+
+paths:
+  /choice:
+    get:
+      tags:
+      - admins
+      summary: gets all of the choices from the db
+      operationId: getChoices
+      description: The admin can display a report of the choices found in the database.
+      produces:
+      - application/json
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Choice'
+        400:
+          description: "400 response"
+    post:
+      tags:
+      - users
+      summary: creates a choice
+      operationId: addChoice
+      description: Adds a new choice to the database
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: choiceName
+        description: choice to add
+        schema:
+          $ref: '#/definitions/Choice'
+      responses:
+        200:
+          description: item created
+          schema:
+            $ref: '#/definitions/Choice'
+        400:
+          description: invalid input, object invalid
+  /participate:
+    post:
+      tags:
+        - users
+      summary: adds a user to a choice
+      operationId: addParticipant
+      description: Adds a users ID to a choices list of participants
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: participantId
+        description: id to add
+        schema:
+          $ref: '#/definitions/userId'
+      responses:
+        200:
+          description: participant added
+          schema:
+            $ref: '#/definitions/Choice'
+        400:
+          description: invalid input
+  /feedback:
+    post:
+      tags:
+      - users
+      summary: adds a user's feedback
+      operationId: addFeedback
+      description: Adds a users feedback to an alternative
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: participantFeedback
+        description: feedback data to add
+        schema:
+          $ref: "#/definitions/Feedback"
+      responses:
+        200:
+          description: feedback added
+          schema:
+            $ref: '#/definitions/Alternative'
+        400:
+          description: invalid input
+  /approve:
+    post:
+      tags:
+      - users
+      summary: add user approval
+      operationId: addApprove
+      description: adds a user's approval to an alternative
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: participantApproval
+        description: approval to add
+        schema:
+          $ref: "#/definitions/Approval"
+      responses:
+        200:
+          description: approval added
+          schema:
+            $ref: '#/definitions/Approval'
+        400:
+          description: invalid input
+  /disapprove:
+    post:
+      tags:
+      - users
+      summary: add user disapproval
+      operationId: addDisapprove
+      description: adds a user's disapproval to an alternative
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: participantDisapproval
+        description: disapproval to add
+        schema:
+          $ref: "#/definitions/Approval"
+      responses:
+        200:
+          description: disapproval added
+          schema:
+            $ref: '#/definitions/Alternative'
+        400:
+          description: invalid input
+  /unselect:
+   post:
+      tags:
+      - users
+      summary: remove user approval
+      operationId: unselectApproval
+      description: removes a users (dis)approval from an alternative
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: removeApproval
+        description: approval to remove
+        schema:
+          $ref: "#/definitions/Approval"
+      responses:
+        200:
+          description: approval removed
+          schema:
+            $ref: '#/definitions/Alternative'
+        400:
+          description: invalid input
+  /complete:
+    post:
+      tags:
+      - users
+      summary: complete a choice
+      operationId: completeChoice
+      description: updates a choice to show it is completed and an alternative has been selected as the winner
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: choiceToComplete
+        description: the choice to complete
+        schema:
+          $ref: "#/definitions/Choice"
+      responses:
+        200:
+          description: choice completed
+          schema:
+            $ref: '#/definitions/Choice'
+        400:
+          description: invalid input
+  /delete:
+    post:
+      tags:
+      - admins
+      summary: delete old choices
+      operationId: deleteChoices
+      description: deletes all choices older than the given number of days.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: choiceAge
+        description: the number of days old to delete choices
+        schema:
+          $ref: "#/definitions/Age"
+      responses:
+        200:
+          description: choices deleted
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Choice'
+        400:
+          description: invalid input
+definitions:
+  Age:
+    type: "integer"
+  Approval:
+    type: object
+    required:
+    - "userID"
+    - "approval"
+    properties:
+      userID:
+        type: "string"
+      approval:
+        type: "string"
+  userId:
+    type: "integer"
+  Feedback:
+    type: object
+    required:
+    - "message"
+    - "timestamp"
+    - "userID"
+    properties:
+      message:
+        type: "string"
+      timestamp:
+        type: "object"
+      userID:
+        type: "string"
+  Alternative:
+    type: object
+    required:
+    - "description"
+    - "totalApprovals"
+    - "totalDisapprovals"
+    - "feedback"
+    properties:
+      description:
+        type: "string"
+      totalApprovals:
+        type: "integer"
+      totalDisapprovals:
+        type: "integer"
+      feedback:
+        type: "array"
+        items:
+          $ref: "#/definitions/Feedback"
+  Choice:
+    type: object
+    required:
+    - "id"
+    - "description"
+    - "alternatives"
+    - "time"
+    properties:
+      id:
+        type: "integer"
+      description:
+        type: "string"
+      alternatives:
+        type: "array"
+        items:
+          $ref: "#/definitions/Alternative"
+      time:
+        type: "object"
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /3733Caml/ChoiceMaker/1.0.0
+schemes:
+ - https
