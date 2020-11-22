@@ -26,8 +26,11 @@ public class UserDAO {
     public UserDAO(LambdaLogger logger) {
     	this.logger = logger;
     	try  {
+            logger.log("Connecting in UserDAO.java");
     		conn = DatabaseUtil.connect();
+            logger.log("Connection Succeeded in UserDAO.java");
     	} catch (Exception e) {
+    	    logger.log("Connection Failed in UserDAO.java");
     		conn = null;
     	}
     }
@@ -46,9 +49,9 @@ public class UserDAO {
         try {
             User user = null; // User object representing the database entry
 //            boolean passwordCorrect = true;
-            
+            System.out.println("Printing line");
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + 
-            		" WHERE username=?; AND password=?;");
+            		" WHERE username=? AND password=?");
             ps.setString(1,  name);
             ps.setString(2, pass);
             ResultSet resultSet = ps.executeQuery(); // cursor that points to database row
@@ -84,7 +87,7 @@ public class UserDAO {
     
     public boolean deleteUser(User user) throws Exception {
         try {
-            PreparedStatement ps = conn.prepareStatement("DELETE FROM " + tblName + " WHERE name = ?;");
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM " + tblName + " WHERE username = ?;");
             ps.setString(1, user.getID());
             int numAffected = ps.executeUpdate();
             ps.close();

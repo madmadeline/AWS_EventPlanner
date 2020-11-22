@@ -22,11 +22,11 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 	public User loadUser(String name, String pass) throws Exception {
 		User user = null;
 		try {
-			if (logger != null) { logger.log("in loadUser"); }
+			if (logger != null) { logger.log("in loadUser updated in LogInHandler"); }
 			UserDAO dao = new UserDAO(logger);
-			if (logger != null) { logger.log("retrieved DAO"); }
+			if (logger != null) { logger.log("retrieved DAO in LogInHandler"); }
 			user = dao.getUser(name, pass);
-			if (logger != null) { logger.log("retrieved user"); }
+			if (logger != null) { logger.log("retrieved user in LogInHandler"); }
 			return user;
 		} catch (Exception e) {
 			e.printStackTrace();

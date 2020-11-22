@@ -1,5 +1,7 @@
 package caml.group.demo.db;
 
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -50,16 +52,10 @@ public class DatabaseUtil {
 		}
 		
 		try {
-			/*conn = DriverManager.getConnection(
+			conn = DriverManager.getConnection(
 					jdbcTag + rdsMySqlDatabaseUrl + ":" + rdsMySqlDatabasePort + "/" + schemaName + multiQueries,
-					dbUsername,
-					dbPassword);*/
-			String url = "jdbc:mysql://database-3733.cgkor7xozyye.us-east-1.rds.amazonaws.com:3306/";
-			String userName = "admin";
-			String password = "Theo1020";
-			String dbName = "project";
-			conn = DriverManager.getConnection(url + dbName, userName, password);
-
+					"admin",
+					"Theo1020");
 			return conn;
 		} catch (Exception ex) {
 			System.err.println("DB-ERRORraed:" + schemaName + "," + dbUsername + "," + dbPassword + "," + rdsMySqlDatabaseUrl);

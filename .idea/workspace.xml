@@ -22,74 +22,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="435318fd-83df-4186-a773-b1271c74bc22" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_aws_java_sdk_cognitoidentity_1_11_256.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_aws_java_sdk_core_1_11_256.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_aws_java_sdk_dynamodb_1_11_256.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_aws_java_sdk_kinesis_1_11_256.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_aws_java_sdk_kms_1_11_256.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_aws_java_sdk_s3_1_11_256.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_aws_java_sdk_sns_1_11_256.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_aws_java_sdk_sqs_1_11_256.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_aws_lambda_java_core_1_1_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_aws_lambda_java_events_1_3_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_jmespath_java_1_11_256.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_6_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_6_7.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_6_7_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_dataformat_jackson_dataformat_cbor_2_6_7.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_codec_commons_codec_1_9.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_logging_commons_logging_1_1_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__joda_time_joda_time_2_8_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_12.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_bytebuddy_byte_buddy_1_6_11.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_bytebuddy_byte_buddy_agent_1_6_11.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_5_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_4_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_mockito_mockito_core_2_7_22.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_objenesis_objenesis_2_5.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__software_amazon_ion_ion_java_1_0_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/com_google_code_gson_gson_2_8_6.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/mysql_connector_java_8_0_22.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="435318fd-83df-4186-a773-b1271c74bc22" name="Default" comment="Got lambda working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CS3733CamlGroupProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/CS3733CamlGroupProject.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/LogInHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/LogInHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/DatabaseUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/DatabaseUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/model/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/model/Admin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/caml/group/demo/CreateReportHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/caml/group/demo/CreateReportHandlerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/caml/group/demo/DeleteReportHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/caml/group/demo/DeleteReportHandlerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/caml/group/demo/LogInHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/caml/group/demo/LogInHandlerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/caml/group/demo/SubmitFeedbackHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/caml/group/demo/SubmitFeedbackHandlerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/caml/group/demo/TestContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/caml/group/demo/TestContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/caml/group/demo/TestUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/caml/group/demo/TestUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/caml/group/demo/model/TestModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/caml/group/demo/model/TestModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/maven/caml.group/demo/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/maven/caml.group/demo/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/caml/group/demo/model/Admin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/caml/group/demo/model/Alternative.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/caml/group/demo/model/Choice.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/caml/group/demo/model/Choice.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/caml/group/demo/model/Feedback.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/caml/group/demo/model/Model.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/caml/group/demo/model/Model.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/caml/group/demo/model/Rating.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/caml/group/demo/model/RatingType.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/caml/group/demo/model/RatingType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/caml/group/demo/model/Report.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/caml/group/demo/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/caml/group/demo/model/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/caml/group/demo/TestContext$TestLogger.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/caml/group/demo/TestContext.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/caml/group/demo/TestUtils$DateTimeDeserializer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/caml/group/demo/TestUtils$DateTimeSerializer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/caml/group/demo/TestUtils$DynamodbEventMixin$AttributeValueMixIn.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/caml/group/demo/TestUtils$DynamodbEventMixin$RecordMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/caml/group/demo/TestUtils$DynamodbEventMixin$StreamRecordMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/caml/group/demo/TestUtils$DynamodbEventMixin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/caml/group/demo/TestUtils$TestJacksonMapperModule.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/caml/group/demo/TestUtils$UpperCaseRecordsPropertyNamingStrategy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/caml/group/demo/TestUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/UserDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +67,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-java-8.0.22.jar" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../p3" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.18275861" />
@@ -190,7 +127,7 @@
       <option name="credentialProviderId" value="profile:default" />
       <option name="regionId" value="us-east-1" />
       <option name="functionName" value="helloWorld" />
-      <option name="input" value="{&#10;  &quot;username&quot;: &quot;jlrosaum&quot;&#10;}" />
+      <option name="input" value="{&#10;  &quot;username&quot;:&quot;korpseman&quot;&#10;}" />
       <option name="inputIsFile" value="false" />
       <method v="2" />
     </configuration>
@@ -219,8 +156,16 @@
       <updated>1605474188924</updated>
       <workItem from="1605894481326" duration="2950000" />
       <workItem from="1605974642067" duration="1236000" />
-      <workItem from="1605978639418" duration="5671000" />
+      <workItem from="1605978639418" duration="13522000" />
     </task>
+    <task id="LOCAL-00001" summary="Got lambda working">
+      <created>1605984655231</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1605984655231</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -238,43 +183,51 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Got lambda working" />
+    <option name="LAST_COMMIT_MESSAGE" value="Got lambda working" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="3325" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1605982208390">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
     <state x="3325" y="226" key="#com.intellij.ide.util.MemberChooser/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605982208390" />
-    <state x="3300" y="275" key="FileChooserDialogImpl" timestamp="1605983931036">
+    <state x="3300" y="275" key="FileChooserDialogImpl" timestamp="1606005295415">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
-    <state x="3300" y="275" key="FileChooserDialogImpl/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605983931036" />
-    <state width="1877" height="280" key="GridCell.Tab.0.bottom" timestamp="1605984369063">
+    <state x="3300" y="275" key="FileChooserDialogImpl/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606005295415" />
+    <state width="1877" height="280" key="GridCell.Tab.0.bottom" timestamp="1606007974727">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
     <state width="1257" height="399" key="GridCell.Tab.0.bottom/2560.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1605975114185" />
-    <state width="1877" height="280" key="GridCell.Tab.0.bottom/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605984369063" />
-    <state width="1877" height="280" key="GridCell.Tab.0.center" timestamp="1605984369063">
+    <state width="1877" height="280" key="GridCell.Tab.0.bottom/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606007974727" />
+    <state width="1877" height="280" key="GridCell.Tab.0.center" timestamp="1606007974727">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
     <state width="1257" height="399" key="GridCell.Tab.0.center/2560.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1605975114185" />
-    <state width="1877" height="280" key="GridCell.Tab.0.center/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605984369063" />
-    <state width="1877" height="280" key="GridCell.Tab.0.left" timestamp="1605984369063">
+    <state width="1877" height="280" key="GridCell.Tab.0.center/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606007974727" />
+    <state width="1877" height="280" key="GridCell.Tab.0.left" timestamp="1606007974727">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
     <state width="1257" height="399" key="GridCell.Tab.0.left/2560.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1605975114184" />
-    <state width="1877" height="280" key="GridCell.Tab.0.left/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605984369063" />
-    <state width="1877" height="280" key="GridCell.Tab.0.right" timestamp="1605984369063">
+    <state width="1877" height="280" key="GridCell.Tab.0.left/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606007974727" />
+    <state width="1877" height="280" key="GridCell.Tab.0.right" timestamp="1606007974727">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
     <state width="1257" height="399" key="GridCell.Tab.0.right/2560.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1605975114185" />
-    <state width="1877" height="280" key="GridCell.Tab.0.right/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605984369063" />
+    <state width="1877" height="280" key="GridCell.Tab.0.right/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606007974727" />
+    <state x="3100" y="255" key="IDE.errors.dialog" timestamp="1606005112984">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state x="3100" y="255" key="IDE.errors.dialog/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606005112984" />
     <state x="955" y="185" key="SettingsEditor" timestamp="1605984036217">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="955" y="185" key="SettingsEditor/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605984036217" />
-    <state x="3112" y="253" key="Vcs.Push.Dialog.v2" timestamp="1605734247461">
+    <state x="3112" y="253" key="Vcs.Push.Dialog.v2" timestamp="1605984669486">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
-    <state x="3112" y="253" key="Vcs.Push.Dialog.v2/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605734247461" />
+    <state x="3112" y="253" key="Vcs.Push.Dialog.v2/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605984669486" />
     <state x="3224" y="411" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1605981647429">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
