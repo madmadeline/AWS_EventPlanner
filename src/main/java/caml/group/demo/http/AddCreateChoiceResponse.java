@@ -7,7 +7,7 @@ public class AddCreateChoiceResponse {
     public int statusCode;
     public String error;
 
-    public AddCreateChoiceResponse(Choice choice, int statusCode){
+    public AddCreateChoiceResponse(int statusCode, Choice choice){
         this.result = choice != null;
         this.statusCode = statusCode;
         this.error = "";

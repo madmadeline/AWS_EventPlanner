@@ -49,25 +49,38 @@ public class ChoiceDAO {
 
     public void addChoice(Choice choice) throws Exception {
         // Inserts alts into alt table
-        ArrayList<Alternative> alts = choice.getAlternatives();
-        AlternativeDAO dao = new AlternativeDAO(logger);
-        for (Alternative alt : alts) {
-            dao.addAlternative(alt);
+        logger.log("In addChoice");
+        if(choice.getAlternatives() != null) {
+            logger.log("Adding alts");
+            ArrayList<Alternative> alts = choice.getAlternatives();
+            AlternativeDAO dao = new AlternativeDAO(logger);
+            for (Alternative alt : alts) {
+                dao.addAlternative(alt);
+            }
+
+            // Adds choice and alt to match table
+            for(Alternative alt : alts){
+                PreparedStatement ps2 = conn.prepareStatement("INSERT INTO ChoiceAltMatch(choiceID, altID) values ("+
+                        choice.getID() + ", " + alt.getID() + ")");
+                ps2.execute();
+            }
         }
 
         // Adds choice to choice table
-        PreparedStatement ps = conn.prepareStatement("INSERT into " + tblName +
-                "(id, description, dateOfCreation, winningAlt) values (" + choice.getID() + ", " +
-                choice.getDescription() + ", " + choice.getTime() + ", null)");
+        logger.log("Creating add choice statement");
+        logger.log(String.valueOf(choice.getID()));
+        //PreparedStatement ps = conn.prepareStatement(
+        //        "Insert into Choice(id, description, dateOfCreation, winningAlt) values (1234, 'test 1', 20201123, null);"
+        //);
+        PreparedStatement ps = conn.prepareStatement(
+                "Insert into " + tblName + "(id, description, dateOfCreation, winningAlt) values (?,?,?,null);"
+        );
+        ps.setString(1, choice.getID());
+        ps.setString(2, choice.getDescription());
+        ps.setTimestamp(3, choice.getTime());
+        logger.log("Executing add choice statement");
         ps.execute();
         ps.close();
-
-        // Adds choice and alt to match table
-        for(Alternative alt : alts){
-            PreparedStatement ps2 = conn.prepareStatement("INSERT INTO ChoiceAltMatch(choiceID, altID) values ("+
-                    choice.getID() + ", " + alt.getID() + ")");
-            ps2.execute();
-        }
     }
 
     /**
@@ -77,7 +90,7 @@ public class ChoiceDAO {
      * @throws Exception failed to get Choice
      */
     private Choice generateChoice(ResultSet rs) throws Exception {
-        int id = Integer.parseInt(rs.getString("id"));
+        String id = rs.getString("id");
         String description = rs.getString("description");
         ArrayList<Alternative> alts = new ArrayList<>();
         AlternativeDAO altDAO = new AlternativeDAO(logger);

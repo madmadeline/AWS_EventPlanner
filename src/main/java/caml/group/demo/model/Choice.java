@@ -6,14 +6,14 @@ import java.sql.Timestamp;
 //import java.time.ZonedDateTime;
 
 public class Choice {
-	final int id;
+	final String id;
 	final String description;
 	final ArrayList<Alternative> alternatives;// = new ArrayList<Alternative>();
 	ArrayList<User> users;
 	Timestamp time;
 	Alternative winner;
 
-	public Choice(int id, String description, ArrayList<Alternative> alternatives, Timestamp time) {
+	public Choice(String id, String description, ArrayList<Alternative> alternatives, Timestamp time) {
 		this.id = id;
 		this.description = description;
 		this.alternatives = alternatives;
@@ -21,7 +21,7 @@ public class Choice {
 		this.winner = null;
 	}
 	
-	public int getID() { return this.id; }
+	public String getID() { return this.id; }
 
 	public ArrayList<Alternative> getAlternatives() {
 		return alternatives;
@@ -49,7 +49,7 @@ public class Choice {
 	 */
 	public User getUser(String id) {
 		for (User user : users) {
-			if (user.getID() == id) { return user; }
+			if (user.getID().equals(id)) { return user; }
 		}
 		return null;
 	}
