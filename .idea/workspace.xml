@@ -25,12 +25,7 @@
     <list default="true" id="435318fd-83df-4186-a773-b1271c74bc22" name="Default" comment="Started work on handler">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/CreateChoiceHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/CreateChoiceHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/ChoiceDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/ChoiceDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/http/AddCreateChoiceRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/http/AddCreateChoiceRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/http/AddCreateChoiceResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/http/AddCreateChoiceResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/model/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/model/Admin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/model/Choice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/model/Choice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/model/Report.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/model/Report.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +132,7 @@
       <option name="credentialProviderId" value="profile:default" />
       <option name="regionId" value="us-east-1" />
       <option name="functionName" value="createChoice" />
-      <option name="input" value="{&#10;  &quot;choiceID&quot;: &quot;1112&quot;,&#10;  &quot;choiceDescription&quot;:&quot;Test 3&quot;,&#10;  &quot;dateOfCreation&quot;: &quot;2020-11-23&quot;&#10;}" />
+      <option name="input" value="{&#10;  &quot;choiceID&quot;: &quot;1112&quot;,&#10;  &quot;choiceDescription&quot;:&quot;Test 3&quot;,&#10;  &quot;dateOfCreation&quot;: &quot;2020-11-23&quot;,&#10;  &quot;test&quot;: [&quot;abc&quot;]&#10;}" />
       <option name="inputIsFile" value="false" />
       <method v="2" />
     </configuration>
@@ -177,7 +172,7 @@
       <workItem from="1605974642067" duration="1236000" />
       <workItem from="1605978639418" duration="13807000" />
       <workItem from="1606058858024" duration="11245000" />
-      <workItem from="1606144350877" duration="6144000" />
+      <workItem from="1606144350877" duration="8695000" />
     </task>
     <task id="LOCAL-00001" summary="Got lambda working">
       <created>1605984655231</created>
@@ -270,7 +265,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606087607230</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Changed choiceid from int to string. Can input choice to table if no alts">
+      <created>1606150786652</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1606150786652</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -302,7 +304,8 @@
     <MESSAGE value="Added inserting choices to database" />
     <MESSAGE value="Updated id to int" />
     <MESSAGE value="Started work on handler" />
-    <option name="LAST_COMMIT_MESSAGE" value="Started work on handler" />
+    <MESSAGE value="Changed choiceid from int to string. Can input choice to table if no alts" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed choiceid from int to string. Can input choice to table if no alts" />
   </component>
   <component name="WindowStateProjectService">
     <state x="3325" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1605982208390">
@@ -313,26 +316,26 @@
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
     <state x="3300" y="275" key="FileChooserDialogImpl/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606005295415" />
-    <state width="1877" height="280" key="GridCell.Tab.0.bottom" timestamp="1606150688079">
+    <state width="1877" height="280" key="GridCell.Tab.0.bottom" timestamp="1606152395223">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
     <state width="1257" height="399" key="GridCell.Tab.0.bottom/2560.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1605975114185" />
-    <state width="1877" height="280" key="GridCell.Tab.0.bottom/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606150688079" />
-    <state width="1877" height="280" key="GridCell.Tab.0.center" timestamp="1606150688079">
+    <state width="1877" height="280" key="GridCell.Tab.0.bottom/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606152395223" />
+    <state width="1877" height="280" key="GridCell.Tab.0.center" timestamp="1606152395222">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
     <state width="1257" height="399" key="GridCell.Tab.0.center/2560.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1605975114185" />
-    <state width="1877" height="280" key="GridCell.Tab.0.center/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606150688079" />
-    <state width="1877" height="280" key="GridCell.Tab.0.left" timestamp="1606150688079">
+    <state width="1877" height="280" key="GridCell.Tab.0.center/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606152395222" />
+    <state width="1877" height="280" key="GridCell.Tab.0.left" timestamp="1606152395222">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
     <state width="1257" height="399" key="GridCell.Tab.0.left/2560.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1605975114184" />
-    <state width="1877" height="280" key="GridCell.Tab.0.left/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606150688079" />
-    <state width="1877" height="280" key="GridCell.Tab.0.right" timestamp="1606150688079">
+    <state width="1877" height="280" key="GridCell.Tab.0.left/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606152395222" />
+    <state width="1877" height="280" key="GridCell.Tab.0.right" timestamp="1606152395222">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
     <state width="1257" height="399" key="GridCell.Tab.0.right/2560.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1605975114185" />
-    <state width="1877" height="280" key="GridCell.Tab.0.right/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606150688079" />
+    <state width="1877" height="280" key="GridCell.Tab.0.right/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606152395222" />
     <state x="3100" y="255" key="IDE.errors.dialog" timestamp="1606005112984">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>

@@ -8,6 +8,9 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceRequest,AddCreateChoiceResponse> {
 //	Model model;
 	LambdaLogger logger;
@@ -19,7 +22,6 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 		logger.log("Retrieved Dao in CreateChoiceHandler");
 		dao.addChoice(choice);
 	}
-	
 	
 	@Override
 	public AddCreateChoiceResponse handleRequest(AddCreateChoiceRequest req, Context context) {
