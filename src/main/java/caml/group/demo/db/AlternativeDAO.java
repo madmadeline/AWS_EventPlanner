@@ -82,7 +82,7 @@ public class AlternativeDAO {
 				" WHERE id=?;");
 		ps.setString(1,  id);
 		ResultSet resultSet = ps.executeQuery(); // cursor that points to database row
-
+		logger.log("Generating alts");
 		while (resultSet.next()) {
 			alt = generateAlternative(resultSet); // should only loop 1x
 		}

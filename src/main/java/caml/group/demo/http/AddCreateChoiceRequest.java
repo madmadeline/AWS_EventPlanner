@@ -17,8 +17,7 @@ public class AddCreateChoiceRequest {
     String alt4Description;
     String alt5ID;
     String alt5Description;
-    int numLikes = 0;
-    int numDislikes = 0;
+    String desiredChoice;
 
     public String getChoiceID() { return choiceID; }
     public void setChoiceID(String id) { this.choiceID = id; }
@@ -58,6 +57,8 @@ public class AddCreateChoiceRequest {
 
     public Timestamp getDateOfCreation() { return dateOfCreation; }
     public void setDateOfCreation(Timestamp timestamp) { this.dateOfCreation = timestamp; }
+
+    public String getDesiredChoice() { return desiredChoice; }
 
     public String toString() { return "Add(" + choiceID + ", " + dateOfCreation + ")"; }
 }
