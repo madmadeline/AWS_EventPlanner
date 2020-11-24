@@ -29,7 +29,7 @@ function processListResponse(result) {
   console.log("res:" + result);
   // Can grab any DIV or SPAN HTML element and can then manipulate its contents dynamically via javascript
   var js = JSON.parse(result);
-  var choiceList = document.getElementById('constantList');
+  var choiceList = document.getElementById('displayChoice');
   
   var output = "";
   for (var i = 0; i < js.list.length; i++) {
@@ -39,11 +39,7 @@ function processListResponse(result) {
     var cid = choiceJson["id"];
     var cdescription = choiceJson["description"];
     var ctime = choiceJson["time"];
-    if (sysvar) {
-    	output = output + "<div id=\"const" + cid + "\"><b>" + cdescription + ":</b> = " + ctime + "<br></div>";
-    } else {
-    	output = output + "<div id=\"const" + cid + "\"><b>" + cdescription + ":</b> = " + ctime + "(<a href='javaScript:requestDelete(\"" + cid + "\")'></a>) <br></div>";
-    }
+    output = output + "<div id=\"const" + cid + "\"><b>" + cdescription + ":</b> = " + ctime + "(<a href='javaScript:requestDelete(\"" + cid + "\")'></a>) <br></div>";
   }
 
   // Update computation result

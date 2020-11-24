@@ -13,3 +13,6 @@ var disapprove_url = base_url + "disapprove"; //POST
 var unselect_url = base_url + "unselect"; //POST
 var complete_url = base_url + "complete"; //POST
 var delete_url = base_url + "delete"; //POST
+
+var create_user_url = base_url + "user"; //post
+var list_users_url = base_url + "user"; //get

@@ -4,7 +4,7 @@ function processCreateUserResponse(result) {
   console.log("result:" + result);
 
 	//TODO: make this function, make create_user_url, update api
-  refreshUsersList();
+  refreshUserList();
 }
 
 function handleCreateUserClick(e) {
