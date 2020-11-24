@@ -139,10 +139,9 @@ public class UserDAO {
 
             // add to User table
             ps = conn.prepareStatement("INSERT INTO " + usrTbl +
-                    " (username,password,isAdmin) values(?,?,?);");
+                    " (username,password) values(?,?);");
             ps.setString(1, user.getID());
             ps.setString(2, user.getPassword());
-            ps.setBoolean(3, user.getClass() == Admin.class);
             ps.execute();
 //            logger.log("Inserted into the User table\n");
 

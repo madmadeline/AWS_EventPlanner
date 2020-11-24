@@ -10,7 +10,6 @@ drop table Alternative;
 create table User(
 username varchar(30),
 password varchar(30),
-isAdmin bool,
 PRIMARY Key(username)
 );
 create table Alternative(

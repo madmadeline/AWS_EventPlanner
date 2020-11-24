@@ -1,9 +1,4 @@
-// TODO if password isn't specified by user when registering, store in db as NULL or ""?
-// 	make default value of password in User table as ""
-
-// TODO delete isAdmin column in User table
-
-// TODO delete login, register functions in Model class
+// TODO delete login and register functions in Model class
 
 package caml.group.demo;
 
