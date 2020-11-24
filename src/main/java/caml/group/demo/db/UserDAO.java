@@ -50,9 +50,13 @@ public class UserDAO {
 
         // check if user is already registered in the choice
         try {
-            ps = conn.prepareStatement("SELECT * FROM " + usrTbl + " INNER JOIN " + choiceUsrTbl
-                    + "on " + usrTbl + ".username=" + choiceUsrTbl + ".username WHERE username=?");
+            ps = conn.prepareStatement("SELECT " + usrTbl + ".username, " + usrTbl + ".password, "
+                    + choiceUsrTbl + ".choiceID FROM " + usrTbl + " INNER JOIN " + choiceUsrTbl
+                    + " on " + usrTbl + ".username=" + choiceUsrTbl + ".username WHERE " + usrTbl
+                    + ".username=? AND " + choiceUsrTbl + ".choiceID=?;");
+            // User.username=ChoiceUserMatch.username;
             ps.setString(1,  name);
+            ps.setString(2, "" + choiceID);
             resultSet = ps.executeQuery(); // cursor that points to database row
 
             // user isn't registered --> register user
@@ -69,7 +73,8 @@ public class UserDAO {
             // user is registered --> get the user
             while (resultSet.next()) {
                 user = rowToUserObject(resultSet, pass); // should only loop 1x
-                logger.log("Retrieved user from the " + usrTbl + " table\n");
+                if (user != null) { logger.log("Retrieved user from the " + usrTbl + " table\n"); }
+                else { logger.log("Incorrect password\n"); }
             }
 
             resultSet.close();
@@ -118,14 +123,20 @@ public class UserDAO {
      * @throws Exception, failed to insert user
      */
     public boolean addUser(User user, int choiceID) throws Exception {
+        PreparedStatement ps;
+
         try {
             // already present?
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + usrTbl
-                    + " WHERE name = ?");
+            ps = conn.prepareStatement("SELECT " + usrTbl + ".username, " + usrTbl + ".password, "
+                    + choiceUsrTbl + ".choiceID FROM " + usrTbl + " INNER JOIN " + choiceUsrTbl
+                    + " on " + usrTbl + ".username=" + choiceUsrTbl + ".username WHERE " + usrTbl
+                    + ".username=? AND " + choiceUsrTbl + ".choiceID=?;");
             ps.setString(1, user.getID());
+            ps.setString(2, ""+choiceID);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.isBeforeFirst()) {
                logger.log("User can't be added because they are already in the table\n");
+               ps.close();
                return false;
             }
 
@@ -136,6 +147,7 @@ public class UserDAO {
             ps.setString(2, user.getPassword());
             ps.setBoolean(3, user.getClass() == Admin.class);
             ps.execute();
+//            logger.log("Inserted into the User table\n");
 
             // add to ChoiceUserMatch table
             ps = conn.prepareStatement("INSERT INTO " + choiceUsrTbl +
@@ -143,7 +155,9 @@ public class UserDAO {
             ps.setString(1, user.getID());
             ps.setInt(2, choiceID);
             ps.execute();
+//            logger.log("Inserted into the ChoiceUserMatch table\n");
 
+            ps.close();
             return true;
 
         } catch (Exception e) {
@@ -191,14 +205,16 @@ public class UserDAO {
 
         try {
             username = resultSet.getString("username");
-            logger.log("row username: " + username + "\n");
+//            logger.log("Row username: " + username + "\n");
         } catch (Exception e) {
             // result set is null, user doesn't exist
-            throw new Exception("User does not exist (rowToUserObject): " + e.getMessage());
+            throw new Exception("User can't be found in the table: " + e.getMessage());
         }
 
+
         correctPassword = resultSet.getString("password");
-        logger.log("row password: " + correctPassword + "\n");
+//        logger.log("Row password: " + correctPassword + "\n");
+//        logger.log("Specified password: " + password + "\n");
         if (correctPassword.equals(password)) { return new User (username, password); }
         return null;
     }

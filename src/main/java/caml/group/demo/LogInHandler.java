@@ -1,3 +1,9 @@
+// TODO right now, can't have same username for diff users in diff choices
+//  make the values in User table not unique
+
+// TODO if password isn't specified by user when registering, store in db as NULL or ""?
+// 	make default value of password in User table as ""
+
 package caml.group.demo;
 
 import caml.group.demo.http.AddLogInRequest;
@@ -24,7 +30,7 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 	 * @throws Exception if the user couldn't be loaded or registered
 	 */
 	public User loadOrInsertUser(String name, String pass, int choiceID) throws Exception {
-		User user = null;
+		User user;
 		logger.log("Attempting to load or insert User into table\n");
 		try { // try getting the User from RDS
 			UserDAO dao = new UserDAO(logger);
@@ -34,14 +40,14 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 			e.printStackTrace();
 			logger.log("Failed to load or insert user\n");
 		}
-		return user;
+		return null;
 	}
 	
 	
 	@Override
 	public AddLogInResponse handleRequest(AddLogInRequest req, Context context) {
 		logger = context.getLogger();
-		logger.log("Loading Java Lambda handler of RequestHandler");
+		logger.log("Loading Java Lambda handler of RequestHandler\n");
 		logger.log(req.toString()); // "Add (username,password)"
 
 		boolean fail = false;

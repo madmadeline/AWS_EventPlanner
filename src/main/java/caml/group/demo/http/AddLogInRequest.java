@@ -24,6 +24,6 @@ public class AddLogInRequest {
 	public void setChoiceID(int choiceID) { this.choiceID = choiceID; }
 
 	public String toString() {
-		return "Add (" + username + "," + password + ") to choice #" + choiceID;
+		return "Request: Add (" + username + "," + password + ") to Choice #" + choiceID + "\n";
 	}
 }
