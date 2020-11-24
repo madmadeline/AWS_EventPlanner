@@ -1,12 +1,9 @@
-// TODO right now, can't have same username for diff users in diff choices
-//  make the values in User table not unique
-
 // TODO if password isn't specified by user when registering, store in db as NULL or ""?
 // 	make default value of password in User table as ""
 
 // TODO delete isAdmin column in User table
 
-// TODO delete login, register funks in Model class
+// TODO delete login, register functions in Model class
 
 package caml.group.demo;
 
@@ -42,6 +39,7 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 	 */
 	public User loadOrInsertUser(String name, String pass, int choiceID) throws Exception {
 		User user;
+
 		logger.log("Attempting to load or insert User into table\n");
 		try { // try getting the User from RDS
 			UserDAO dao = new UserDAO(logger);
