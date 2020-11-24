@@ -4,6 +4,10 @@
 // TODO if password isn't specified by user when registering, store in db as NULL or ""?
 // 	make default value of password in User table as ""
 
+// TODO delete isAdmin column in User table
+
+// TODO delete login, register funks in Model class
+
 package caml.group.demo;
 
 import caml.group.demo.http.AddLogInRequest;
@@ -17,6 +21,13 @@ import caml.group.demo.db.UserDAO;
 //import caml.group.demo.model.Model;
 import caml.group.demo.model.User;
 
+/**
+ * For handling JSON requests for registering and logging in a user to a choice.
+ * List of functions:
+ * 		loadOrInsertUser(String name, String pass, int choiceID) --> User
+ * 		handleRequest(AddLogInRequest req, Context context) --> AddLogInResponse
+ * @author Group Caml
+ */
 public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResponse> {
 //	Model model;
 	LambdaLogger logger;
@@ -24,8 +35,8 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 	
 	/**
 	 * Try to get User from RDS. If the User doesn't exist, insert them.
-	 * @param name, the specified username
-	 * @param pass, the specified password
+	 * @param name The specified username
+	 * @param pass The specified password
 	 * @return the User
 	 * @throws Exception if the user couldn't be loaded or registered
 	 */
@@ -42,8 +53,17 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 		}
 		return null;
 	}
-	
-	
+
+
+	/**
+	 * Handles a log in request and either
+	 * 	1. Registers a new user for the choice,
+	 * 	2. States that the password was incorrect, or
+	 * 	3. Logs in the user
+	 * @param req The log in request
+	 * @param context The request context
+	 * @return the
+	 */
 	@Override
 	public AddLogInResponse handleRequest(AddLogInRequest req, Context context) {
 		logger = context.getLogger();
@@ -85,6 +105,7 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 			response = new AddLogInResponse(user, 200);  // success
 		}
 
+		logger.log(response.toString());
 		return response; 
 	}
     

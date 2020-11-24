@@ -22,9 +22,9 @@ public class AddLogInResponse {
 	
 	public String toString() {
 		if (statusCode / 100 == 2) {  // too cute?
-			return "Result(" + result + ")";
+			return "Response: Result(" + result + ")";
 		} else {
-			return "ErrorResult(" + statusCode + ", err=" + error + ")";
+			return "Response: ErrorResult(" + statusCode + ", err=" + error + ")";
 		}
 	}
 }

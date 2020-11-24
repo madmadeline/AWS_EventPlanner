@@ -10,12 +10,15 @@ import caml.group.demo.model.Admin;
 //import caml.group.demo.model.Model;
 import caml.group.demo.model.User;
 
-
-
 /**
- * Note that CAPITALIZATION matters regarding the table name. If you create with 
- * a capital "User" then it must be "User" in the SQL queries.
- *
+ * For accessing the User table in RDS.
+ * List of functions:
+ *      getUser(String name, String pass, int choiceID) --> User
+ *      deleteUser(User user) --> boolean
+ *      addUser(User user, int choiceID) --> boolean
+ *      getAllUsers() --> List<User>
+ *      rowToUserObject(ResultSet resultSet, String password) --> User
+ * @author Group Caml
  */
 public class UserDAO { 
 	LambdaLogger logger;
@@ -23,6 +26,7 @@ public class UserDAO {
 //	Model model;
 	final String usrTbl = "User";
     final String choiceUsrTbl = "ChoiceUserMatch";
+
 
     public UserDAO(LambdaLogger logger) {
     	this.logger = logger;
@@ -33,13 +37,13 @@ public class UserDAO {
     	}
     }
 
-    // TODO have different error messages for user doesn't exist and incorrect password
+
     /**
      * Returns a User object representing the entry in the User table with the given
      * username and password. If the User isn't in the table, add a new User with the
      * given username and password, and return it.
-     * @param name, the given username
-     * @param pass, the given password
+     * @param name The given username
+     * @param pass The given password
      * @return the User object
      * @throws Exception if the user could not be found or inserted in the table
      */
@@ -85,22 +89,14 @@ public class UserDAO {
             throw new Exception("Failed to get user\n" + e.getMessage());
         }
     }
-    
-//    public boolean updateUser(User user) throws` Exception {
-//        try {
-//        	String query = "UPDATE " + tblName + " SET password=? WHERE username=?;";
-//        	PreparedStatement ps = conn.prepareStatement(query);
-//            ps.setString(1, user.getPassword());
-//            ps.setString(2, user.getID());
-//            int numAffected = ps.executeUpdate();
-//            ps.close();
-//            
-//            return (numAffected == 1);
-//        } catch (Exception e) {
-//            throw new Exception("Failed to update report: " + e.getMessage());
-//        }
-//    }
-    
+
+
+    /**
+     * Deletes the specified user from the User table.
+     * @param user The given User
+     * @return true if the User was deleted, false otherwise
+     * @throws Exception the User can't be found in the table
+     */
     public boolean deleteUser(User user) throws Exception {
         try {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM " + usrTbl
@@ -116,9 +112,10 @@ public class UserDAO {
         }
     }
 
+
     /**
      * Adds the given User object to the User database.
-     * @param user, the given User object
+     * @param user The given User object
      * @return true if the User was added, false otherwise
      * @throws Exception, failed to insert user
      */
@@ -165,6 +162,7 @@ public class UserDAO {
         }
     }
 
+
     /**
      * Returns all Users in the User table as a list of User objects.
      * @return the list of User objects
@@ -190,12 +188,13 @@ public class UserDAO {
             throw new Exception("Failed in getting users: " + e.getMessage());
         }
     }
-    
+
+
     /**
      * Generates a User object that represents the given database row if the
      * password is correct. Else, return null.
-     * @param resultSet, the cursor to the specified database row
-     * @param password, the specified password
+     * @param resultSet The cursor to the specified database row
+     * @param password The specified password
      * @return a User object
      * @throws Exception, user doesn't exist in the database
      */
@@ -213,6 +212,7 @@ public class UserDAO {
 
 
         correctPassword = resultSet.getString("password");
+        // TODO account for case in which password isn't a string, it's NULL
 //        logger.log("Row password: " + correctPassword + "\n");
 //        logger.log("Specified password: " + password + "\n");
         if (correctPassword.equals(password)) { return new User (username, password); }
