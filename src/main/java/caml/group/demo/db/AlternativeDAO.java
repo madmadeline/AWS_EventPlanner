@@ -28,6 +28,7 @@ public class AlternativeDAO {
 		this.logger = logger;
 		try  {
 			conn = DatabaseUtil.connect();
+			logger.log("Connected in alt dao");
 		} catch (Exception e) {
 			conn = null;
 		}
@@ -156,7 +157,7 @@ public class AlternativeDAO {
 	 * @return true if the addition was a success, false otherwise
 	 * @throws Exception, failed to insert alternative
 	 */
-	public boolean addAlternative(Alternative alt) throws Exception {
+	public void addAlternative(Alternative alt) throws Exception {
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE id = ?;");
 			ps.setString(1, alt.getID());
@@ -166,7 +167,6 @@ public class AlternativeDAO {
 			while (resultSet.next()) {
 				generateAlternative(resultSet);
 				resultSet.close();
-				return false;
 			}
 
 			ps = conn.prepareStatement("INSERT INTO " + tblName + 
@@ -176,7 +176,6 @@ public class AlternativeDAO {
 			ps.setInt(3, alt.getTotalDisapprovals());
 			ps.setString(4, alt.getDescription());
 			ps.execute();
-			return true;
 
 		} catch (Exception e) {
 			throw new Exception("Failed to insert user: " + e.getMessage());

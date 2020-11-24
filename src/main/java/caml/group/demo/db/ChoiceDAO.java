@@ -48,24 +48,6 @@ public class ChoiceDAO {
     }
 
     public void addChoice(Choice choice) throws Exception {
-        // Inserts alts into alt table
-        logger.log("In addChoice");
-        if(choice.getAlternatives() != null) {
-            logger.log("Adding alts");
-            ArrayList<Alternative> alts = choice.getAlternatives();
-            AlternativeDAO dao = new AlternativeDAO(logger);
-            for (Alternative alt : alts) {
-                dao.addAlternative(alt);
-            }
-
-            // Adds choice and alt to match table
-            for(Alternative alt : alts){
-                PreparedStatement ps2 = conn.prepareStatement("INSERT INTO ChoiceAltMatch(choiceID, altID) values ("+
-                        choice.getID() + ", " + alt.getID() + ")");
-                ps2.execute();
-            }
-        }
-
         // Adds choice to choice table
         logger.log("Creating add choice statement");
         logger.log(String.valueOf(choice.getID()));
@@ -81,6 +63,19 @@ public class ChoiceDAO {
         logger.log("Executing add choice statement");
         ps.execute();
         ps.close();
+
+        // Inserts alts into alt table
+        logger.log("In addChoice");
+        if(choice.getAlternatives() != null) {
+            logger.log("Adding alts");
+            ArrayList<Alternative> alts = choice.getAlternatives();
+            AlternativeDAO dao = new AlternativeDAO(logger);
+            ChoiceAltMatchDAO dao2 = new ChoiceAltMatchDAO(logger);
+            for (Alternative alt : alts) {
+                dao.addAlternative(alt);
+                dao2.addChoiceAltMatch(choice, alt);
+            }
+        }
     }
 
     /**
