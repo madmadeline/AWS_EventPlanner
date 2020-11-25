@@ -3,6 +3,8 @@ package caml.group.demo;
 import caml.group.demo.db.ChoiceDAO;
 import caml.group.demo.http.AddCreateChoiceRequest;
 import caml.group.demo.http.AddCreateChoiceResponse;
+import caml.group.demo.http.AddFindChoiceRequest;
+import caml.group.demo.http.AddFindChoiceResponse;
 import caml.group.demo.model.Alternative;
 import caml.group.demo.model.Choice;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -11,7 +13,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 import java.util.ArrayList;
 
-public class FindChoiceHandler implements RequestHandler<AddCreateChoiceRequest,AddCreateChoiceResponse> {
+public class FindChoiceHandler implements RequestHandler<AddFindChoiceRequest,AddFindChoiceResponse> {
     LambdaLogger logger;
 
     public Choice getChoice(String id) throws Exception {
@@ -24,7 +26,7 @@ public class FindChoiceHandler implements RequestHandler<AddCreateChoiceRequest,
     }
 
     @Override
-    public AddCreateChoiceResponse handleRequest(AddCreateChoiceRequest req, Context context) {
+    public AddFindChoiceResponse handleRequest(AddFindChoiceRequest req, Context context) {
         logger = context.getLogger();
         logger.log("Loading Java Lambda handler of RequestHandler");
         logger.log(req.toString());
@@ -43,9 +45,9 @@ public class FindChoiceHandler implements RequestHandler<AddCreateChoiceRequest,
             failMessage = "Failed to retrieve choice";
         }
 
-        AddCreateChoiceResponse response;
-        if(fail) response = new AddCreateChoiceResponse(400, failMessage);
-        else response = new AddCreateChoiceResponse(200, choice);
+        AddFindChoiceResponse response;
+        if(fail) response = new AddFindChoiceResponse(400, failMessage);
+        else response = new AddFindChoiceResponse(choice, 200);
 
         return response;
     }
