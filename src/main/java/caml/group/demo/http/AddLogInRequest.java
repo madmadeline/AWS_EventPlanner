@@ -8,7 +8,7 @@ public class AddLogInRequest {
 
 	public AddLogInRequest (String user, String pass, int choiceID) {
 		// username is stored as "username_choiceID" in the User table
-		this.username = user.split("_")[0];
+		this.username = user;
 		this.password = pass;
 		this.choiceID = choiceID;
 	}
