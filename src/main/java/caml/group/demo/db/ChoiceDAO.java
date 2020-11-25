@@ -58,6 +58,17 @@ public class ChoiceDAO {
         return choice;
     }
 
+    public Boolean checkChoice(String id) throws SQLException {
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice where id=?");
+        ps.setString(1, id);
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()){
+            rs.close();
+            return false; // id exists
+        }
+        return true;
+    }
+
     public void addChoice(Choice choice) throws Exception {
         // Adds choice to choice table
         logger.log("Creating add choice statement");

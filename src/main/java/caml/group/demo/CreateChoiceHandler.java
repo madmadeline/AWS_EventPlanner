@@ -9,8 +9,11 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceRequest,AddCreateChoiceResponse> {
 //	Model model;
@@ -23,6 +26,13 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 		logger.log("Retrieved Dao in CreateChoiceHandler");
 		dao.addChoice(choice);
 	}
+
+	public boolean checkChoice(String id) throws Exception {
+		logger.log("Checking choice");
+		ChoiceDAO dao = new ChoiceDAO(logger);
+		logger.log("dao created");
+		return dao.checkChoice(id);
+	}
 	
 	@Override
 	public AddCreateChoiceResponse handleRequest(AddCreateChoiceRequest req, Context context) {
@@ -32,8 +42,21 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 
 		boolean fail = false;
 		String failMessage = "";
-		//Choice choice = new Choice(req.getChoiceID(), req.getChoiceDescription(), null,
-		//		req.getDateOfCreation());
+		String randString;
+
+		while(true){
+			Random rand = new Random();
+			int randInt = rand.nextInt(9000) + 1000;
+			randString = String.valueOf(randInt);
+			try {
+				if(checkChoice(randString)) break;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		Timestamp time = Timestamp.from(Instant.now());
+
 		Alternative alt1 = new Alternative(req.getAlt1ID(), req.getAlt1Description());
 		Alternative alt2 = new Alternative(req.getAlt2ID(), req.getAlt2Description());
 		Alternative alt3 = new Alternative(req.getAlt3ID(), req.getAlt3Description());
@@ -46,8 +69,8 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 		if(req.getAlt4ID() != null) alts.add(alt4);
 		if(req.getAlt5ID() != null) alts.add(alt5);
 
-		Choice choice = new Choice(req.getChoiceID(), req.getChoiceDescription(), alts,
-				req.getDateOfCreation());
+		Choice choice = new Choice(randString, req.getChoiceDescription(), alts,
+				time);
 		if(alts.size() >= 2){
 			try {
 				createChoice(choice);
