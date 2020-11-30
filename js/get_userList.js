@@ -29,9 +29,10 @@ function processUserResponse(result) {
   console.log("res:" + result);
   // Can grab any DIV or SPAN HTML element and can then manipulate its contents dynamically via javascript
   var js = JSON.parse(result);
+  console.log("Parsed: " + result);
   var userList = document.getElementById('userList');
   
-  var output = "";
+  var output = "test";
   for (var i = 0; i < js.list.length; i++) {
     var userJson = js.list[i];
     console.log(userJson);

@@ -2,17 +2,19 @@ function processCreateUserResponse(result) {
   // Can grab any DIV or SPAN HTML element and can then manipulate its
   // contents dynamically via javascript
   console.log("result:" + result);
+	var js = JSON.parse(result);
 
-	//TODO: make this function, make create_user_url, update api
+
   refreshUserList();
 }
 
-function handleCreateUserClick(e) {
+function handleUserClick(e) {
   var form = document.createUserForm;
  
   var data = {};
   data["username"] = form.newUsername.value;
   data["password"] = form.newPassword.value;
+  data["choiceID"] = form.newChoiceID.value;
 
   var js = JSON.stringify(data);
   console.log("JS:" + js);
