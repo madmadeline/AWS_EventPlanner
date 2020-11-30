@@ -20,6 +20,7 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 	LambdaLogger logger;
 	
 	
+
 	public void createChoice(Choice choice) throws Exception {
 		logger.log("In createChoice in CreateChoiceHandler");
 		ChoiceDAO dao = new ChoiceDAO(logger);

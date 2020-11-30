@@ -79,7 +79,7 @@ public class TestUtils {
 
 
                 @SuppressWarnings("unchecked")
-                T result = (T) new S3Event(event.getRecords());
+                T result = (T) new S3EventNotification(event.getRecords());
                 return result;
 
             } else if (clazz == SNSEvent.class) {

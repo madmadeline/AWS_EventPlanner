@@ -52,9 +52,9 @@ public class TestUtils {
         dynamodbEventMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
         dynamodbEventMapper.setPropertyNamingStrategy(new UpperCaseRecordsPropertyNamingStrategy());
         dynamodbEventMapper.registerModule(new TestJacksonMapperModule());
-        dynamodbEventMapper.addMixIn(Record.class, DynamodbEventMixin.RecordMixin.class);
-        dynamodbEventMapper.addMixIn(StreamRecord.class, DynamodbEventMixin.StreamRecordMixin.class);
-        dynamodbEventMapper.addMixIn(AttributeValue.class, DynamodbEventMixin.AttributeValueMixIn.class);
+        dynamodbEventMapper.addMixInAnnotations(Record.class, DynamodbEventMixin.RecordMixin.class);
+        dynamodbEventMapper.addMixInAnnotations(StreamRecord.class, DynamodbEventMixin.StreamRecordMixin.class);
+        dynamodbEventMapper.addMixInAnnotations(AttributeValue.class, DynamodbEventMixin.AttributeValueMixIn.class);
     }
 
     private static final DateTimeFormatter dateTimeFormatter =
@@ -78,7 +78,7 @@ public class TestUtils {
                 S3EventNotification event = S3EventNotification.parseJson(json);
 
                 @SuppressWarnings("unchecked")
-                T result = (T) new S3Event(event.getRecords());
+                T result = (T) new S3EventNotification(event.getRecords());
                 return result;
 
             } else if (clazz == SNSEvent.class) {

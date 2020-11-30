@@ -21,7 +21,7 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER" level="application" />
-    <orderEntry type="jdk" jdkName="JavaSE-1.8" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="library" name="com.amazonaws:aws-lambda-java-core:1.2.1" level="project" />
     <orderEntry type="library" name="com.amazonaws:aws-java-sdk:1.8.11" level="project" />
     <orderEntry type="library" name="com.amazonaws:aws-lambda-java-events-sdk-transformer:2.0.2" level="project" />

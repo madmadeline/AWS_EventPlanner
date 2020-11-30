@@ -18,7 +18,7 @@ public class Model  implements Iterable<Choice>{
 
 	public Model(String adminName, String adminPass) throws ClassNotFoundException, SQLException {
 		this.choices = new ArrayList<Choice>();
-		this.admin = new Admin(adminName, adminPass, this);
+		this.admin = new Admin(this);
 		this.currentUser = null;
 		this.currentChoice = null;
 		choicesToCreate = new Stack<Choice>();
@@ -38,7 +38,9 @@ public class Model  implements Iterable<Choice>{
 	}
 	
 	
-	
+	public boolean userPassCorrect(String user, String pass) {
+		return (user.equals(this.currentUser.id) && pass.equals(this.currentUser.password));
+	}
 	/**
 	 * If no choice is specified and the login credentials match the
 	 * ones for the admin, the admin is logged in. If a choice is
@@ -52,9 +54,8 @@ public class Model  implements Iterable<Choice>{
 	public boolean logIn(String name, String pass) throws SQLException {
 		// no choice is selected
 		if (currentChoice == null) {
-			// admin logged in
-			if (admin.userPassCorrect(name, pass)) { 
-				currentUser = admin; 
+			// valid user logged in
+			if (userPassCorrect(name, pass)) { 
 				return true;
 			} 
 			// invalid login

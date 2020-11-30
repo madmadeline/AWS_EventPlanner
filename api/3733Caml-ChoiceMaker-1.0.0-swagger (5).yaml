@@ -1,4 +1,3 @@
-#current API: 11/22/2020
 swagger: '2.0'
 info:
   description: This is the API for Caml's Soft Eng project
@@ -231,7 +230,58 @@ paths:
               $ref: '#/definitions/Choice'
         400:
           description: invalid input
+  /user:
+    post:
+      tags:
+      - users
+      summary: create a new user
+      operationId: createUser
+      description: creates a new user given a password and a username
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: newUser
+        description: the user to create
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        200:
+          description: user added
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: invalid input
+    get:
+      tags:
+      - users
+      summary: get the list of users
+      operationId: listUsers
+      description: gets a list of all of the users in the db
+      produces:
+      - application/json
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          description: "400 response"
 definitions:
+  User:
+    type: object
+    required:
+    - "username"
+    - "password"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
   Age:
     type: "integer"
   Approval:

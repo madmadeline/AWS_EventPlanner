@@ -33,7 +33,6 @@ public class Choice {
 	public Timestamp getTime(){
 		return time;
 	}
-
 	public Alternative getWinner() { return this.winner; }
 	public void setWinner(Alternative winner) { this.winner = winner; }
 	public ArrayList<User> getUsers() { return this.users; }
