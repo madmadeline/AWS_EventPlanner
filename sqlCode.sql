@@ -55,3 +55,9 @@ altID varchar(10),
 foreign key(choiceID) references Choice(id),
 foreign key(altID) references Alternative(id)
 );
+create table ChoiceUserMatch(
+username varchar(30),
+choiceID varchar(10),
+foreign key(username) references User(username),
+foreign key(choiceID) references Choice(id)
+);

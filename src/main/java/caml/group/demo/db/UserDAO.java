@@ -31,8 +31,11 @@ public class UserDAO {
     public UserDAO(LambdaLogger logger) {
     	this.logger = logger;
     	try  {
+            logger.log("Connecting in UserDAO.java");
     		conn = DatabaseUtil.connect();
+            logger.log("Connection Succeeded in UserDAO.java");
     	} catch (Exception e) {
+    	    logger.log("Connection Failed in UserDAO.java");
     		conn = null;
     	}
     }

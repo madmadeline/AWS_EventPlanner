@@ -67,6 +67,31 @@ public class AlternativeDAO {
 		}
 	}
 
+	/**
+	 * Gets an alternative from the database when given an id
+	 * @param id, id of the requested alt
+	 * @return the requested alt
+	 * @throws Exception, how it fails
+	 */
+	public Alternative getAlternativeByID(String id) throws Exception {
+		Alternative alt = null; // User object representing the database entry
+		//            boolean passwordCorrect = true;
+
+		PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName +
+				" WHERE id=?;");
+		ps.setString(1,  id);
+		ResultSet resultSet = ps.executeQuery(); // cursor that points to database row
+
+		while (resultSet.next()) {
+			alt = generateAlternative(resultSet); // should only loop 1x
+		}
+		resultSet.close();
+		ps.close();
+
+		if (logger != null) { logger.log("retrieved alternative " + id); }
+		return alt;
+	}
+
 	
 	/**
 	 * Adds or removes an approval or disapproval to the row corresponding to 

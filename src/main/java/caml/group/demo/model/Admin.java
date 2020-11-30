@@ -1,4 +1,4 @@
-// Jyalu
+// Jyalu, Brandon
 
 package caml.group.demo.model;
 
@@ -12,29 +12,23 @@ import org.joda.time.DateTime;
 
 import java.time.LocalDateTime;
 
-public class Admin extends User {
+public class Admin{
 	Model model;
 	
-	public Admin(String id, String password) {
-		super(id, password);
-	}
-	
-	public Admin(String id, String password, Model model) {
-		super(id, password);
+	public Admin(Model model) {
+
 		this.model = model;
 	}
 	
 	public void setModel(Model model) { this.model = model; }
 	
 	
-	public boolean userPassCorrect(String user, String pass) {
-		return (user.equals(this.id) && pass.equals(password));
-	}
+	
 	
 	
 	public Report createReport(Choice choice) {
 		boolean isCompleted = false;
-		String choiceID;
+		int choiceID;
 		
 		choiceID = choice.getID();
 		isCompleted = (choice.getWinner() != null);
