@@ -19,13 +19,13 @@ public class CreateChoiceHandler implements RequestHandler<AddLogInRequest,AddLo
 	/**
 	 * Try to get User from RDS.
 	 */
-	public User loadUser(String name, String pass) throws Exception {
+	public User loadUser(String name, String pass, int choiceID) throws Exception {
 		User user = null;
 		try {
 			if (logger != null) { logger.log("in loadUser"); }
 			UserDAO dao = new UserDAO(logger);
 			if (logger != null) { logger.log("retrieved DAO"); }
-			user = dao.getUser(name, pass);
+			user = dao.getUser(name, pass, choiceID);
 			if (logger != null) { logger.log("retrieved user"); }
 			return user;
 		} catch (Exception e) {
@@ -46,12 +46,14 @@ public class CreateChoiceHandler implements RequestHandler<AddLogInRequest,AddLo
 		User user = null;
 		String name = "";
 		String pass = "";
+		int choiceID;
 		
 		try {
 			name = req.getUsername();
+			choiceID = req.getChoiceID();
 			try {
 				pass = req.getPassword();
-				user = loadUser(name, pass);
+				user = loadUser(name, pass, choiceID);
 			} catch (Exception e) {
 				failMessage = req.getPassword() + " is an invalid password.";
 				fail = true;

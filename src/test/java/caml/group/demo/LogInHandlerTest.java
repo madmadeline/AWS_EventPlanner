@@ -33,7 +33,7 @@ public class LogInHandlerTest {
 		return ctx;
 	}
 	
-	/*
+
 	@Before
 	public void init() throws ClassNotFoundException, SQLException {
 		this.model = new Model("admin", "adminPass");
@@ -49,73 +49,73 @@ public class LogInHandlerTest {
 		//Assert.assertEquals(200, response.statusCode);
 	}
 
-	void testFailInput(String incoming, String outgoing) throws IOException, ClassNotFoundException, SQLException {
-		init();
-		LogInHandler handler = new LogInHandler();
-		AddLogInRequest req = new Gson().fromJson(incoming, AddLogInRequest.class);
-		AddLogInResponse response = handler.handleRequest(req, createContext("compute"));
-
-		//Assert.assertEquals(400, response.statusCode);
-	}
-
-	@Test
-	public void testAddUserSimple() throws ClassNotFoundException, SQLException {
-		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"\"}";
-		String RESULT = "true";
-
-		try {
-			testInput(SAMPLE_INPUT_STRING, RESULT);
-		} catch (IOException ioe) {
-			Assert.fail("Invalid:" + ioe.getMessage());
-		}
-	}
+//	void testFailInput(String incoming, String outgoing) throws IOException, ClassNotFoundException, SQLException {
+//		init();
+//		LogInHandler handler = new LogInHandler();
+//		AddLogInRequest req = new Gson().fromJson(incoming, AddLogInRequest.class);
+//		AddLogInResponse response = handler.handleRequest(req, createContext("compute"));
+//
+//		//Assert.assertEquals(400, response.statusCode);
+//	}
+//
+//	@Test
+//	public void testAddUserSimple() throws ClassNotFoundException, SQLException {
+//		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"\"}";
+//		String RESULT = "true";
+//
+//		try {
+//			testInput(SAMPLE_INPUT_STRING, RESULT);
+//		} catch (IOException ioe) {
+//			Assert.fail("Invalid:" + ioe.getMessage());
+//		}
+//	}
+//
+//	@Test
+//	public void testAddUser() throws ClassNotFoundException, SQLException {
+//		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"pass101\"}";
+//		String RESULT = "true";
+//
+//		try {
+//			testInput(SAMPLE_INPUT_STRING, RESULT);
+//		} catch (IOException ioe) {
+//			Assert.fail("Invalid:" + ioe.getMessage());
+//		}
+//	}
+//
+//	@Test
+//	public void testLoadUser() throws ClassNotFoundException, SQLException {
+//		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"pass101\"}";
+//		String RESULT = "true";
+//
+//		try {
+//			testInput(SAMPLE_INPUT_STRING, RESULT);
+//		} catch (IOException ioe) {
+//			Assert.fail("Invalid:" + ioe.getMessage());
+//		}
+//	}
+//
+//	@Test
+//	public void testFailInput() throws ClassNotFoundException, SQLException {
+//		String SAMPLE_INPUT_STRING = "{\"username\": \"\", \"password\": \"pass10001\"}";
+//		String RESULT = "false";
+//
+//		try {
+//			testInput(SAMPLE_INPUT_STRING, RESULT);
+//		} catch (IOException ioe) {
+//			Assert.fail("Invalid:" + ioe.getMessage());
+//		}
+//	}
 	
-	@Test
-	public void testAddUser() throws ClassNotFoundException, SQLException {
-		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"pass101\"}";
-		String RESULT = "true";
+//	@Test
+//	public void testFailInputWrongPass() throws ClassNotFoundException, SQLException {
+//		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"pass10001\"}";
+//		String RESULT = "false";
+//
+//		try {
+//			testInput(SAMPLE_INPUT_STRING, RESULT);
+//		} catch (IOException ioe) {
+//			Assert.fail("Invalid:" + ioe.getMessage());
+//		}
+//	}
 
-		try {
-			testInput(SAMPLE_INPUT_STRING, RESULT);
-		} catch (IOException ioe) {
-			Assert.fail("Invalid:" + ioe.getMessage());
-		}
-	}
-
-	@Test
-	public void testLoadUser() throws ClassNotFoundException, SQLException {
-		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"pass101\"}";
-		String RESULT = "true";
-
-		try {
-			testInput(SAMPLE_INPUT_STRING, RESULT);
-		} catch (IOException ioe) {
-			Assert.fail("Invalid:" + ioe.getMessage());
-		}
-	}
-	
-	@Test
-	public void testFailInput() throws ClassNotFoundException, SQLException {
-		String SAMPLE_INPUT_STRING = "{\"username\": \"\", \"password\": \"pass10001\"}";
-		String RESULT = "false";
-
-		try {
-			testInput(SAMPLE_INPUT_STRING, RESULT);
-		} catch (IOException ioe) {
-			Assert.fail("Invalid:" + ioe.getMessage());
-		}
-	}
-	
-	@Test
-	public void testFailInputWrongPass() throws ClassNotFoundException, SQLException {
-		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"pass10001\"}";
-		String RESULT = "false";
-
-		try {
-			testInput(SAMPLE_INPUT_STRING, RESULT);
-		} catch (IOException ioe) {
-			Assert.fail("Invalid:" + ioe.getMessage());
-		}
-	}
-	*/
 }

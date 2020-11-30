@@ -18,7 +18,12 @@ public class TestContext implements Context {
     private CognitoIdentity identity;
     private String logGroupName = "EXAMPLE";
     private String logStreamName = "EXAMPLE";
-    private LambdaLogger logger = new TestLogger();
+    private LambdaLogger logger = new LambdaLogger() {
+        @Override
+        public void log(String s) {
+            System.err.println(s);
+        }
+    };
     private int memoryLimitInMB = 128;
     private int remainingTimeInMillis = 15000;
     private String functionVersion = "EXAMPLE";
@@ -123,19 +128,20 @@ public class TestContext implements Context {
         invokedFunctionArn = value;
     }
 
-    /**
-     * A simple {@code LambdaLogger} that prints everything to stderr.
-     */
-    private static class TestLogger implements LambdaLogger {
-
-        @Override
-        public void log(String message) {
-            System.err.println(message);
-        }
-
-        public void log(byte[] bytes) {
-            System.err.println("You shouldn't be here");
-        }
-    }
+//    /**
+//     * A simple {@code LambdaLogger} that prints everything to stderr.
+//     */
+//    private static class TestLogger implements LambdaLogger {
+//
+//        public void log(String message) {
+//            System.err.println(message);
+//        }
+//
+//
+//        public void log(byte[] bytes) {
+//
+//            System.err.println("You shouldn't be here");
+//        }
+//    }
 
 }
