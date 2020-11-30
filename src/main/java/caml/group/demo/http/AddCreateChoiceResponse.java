@@ -12,6 +12,9 @@ public class AddCreateChoiceResponse {
     public int statusCode;
     public String error;
     public String choiceID;
+    public String description;
+    public Timestamp time;
+    public ArrayList<Alternative> alts;
 
 
     public AddCreateChoiceResponse(int statusCode, Choice choice){
@@ -20,6 +23,9 @@ public class AddCreateChoiceResponse {
         this.error = "";
         assert choice != null;
         this.choiceID = choice.getID();
+        this.description = choice.getDescription();
+        this.time = choice.getTime();
+        this.alts = choice.getAlternatives();
     }
 
     public AddCreateChoiceResponse(int statusCode, String errorMessage){

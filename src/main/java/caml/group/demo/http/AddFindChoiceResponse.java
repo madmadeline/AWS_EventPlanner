@@ -21,7 +21,7 @@ public class AddFindChoiceResponse {
         this.description = choice.getDescription();
         this.alts = choice.getAlternatives();
         this.time = choice.getTime();
-        this.statusCode = statusCode;
+        this.statusCode = 200;
     }
 
     public AddFindChoiceResponse(int statusCode, String errorMessage){

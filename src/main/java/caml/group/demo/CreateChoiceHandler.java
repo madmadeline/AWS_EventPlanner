@@ -56,12 +56,17 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 		}
 
 		Timestamp time = Timestamp.from(Instant.now());
+		String alt1Append = req.getAlt1ID() + "_" + randString;
+		String alt2Append = req.getAlt2ID() + "_" + randString;
+		String alt3Append = req.getAlt3ID() + "_" + randString;
+		String alt4Append = req.getAlt4ID() + "_" + randString;
+		String alt5Append = req.getAlt5ID() + "_" + randString;
 
-		Alternative alt1 = new Alternative(req.getAlt1ID(), req.getAlt1Description());
-		Alternative alt2 = new Alternative(req.getAlt2ID(), req.getAlt2Description());
-		Alternative alt3 = new Alternative(req.getAlt3ID(), req.getAlt3Description());
-		Alternative alt4 = new Alternative(req.getAlt4ID(), req.getAlt4Description());
-		Alternative alt5 = new Alternative(req.getAlt5ID(), req.getAlt5Description());
+		Alternative alt1 = new Alternative(alt1Append, req.getAlt1Description());
+		Alternative alt2 = new Alternative(alt2Append, req.getAlt2Description());
+		Alternative alt3 = new Alternative(alt3Append, req.getAlt3Description());
+		Alternative alt4 = new Alternative(alt4Append, req.getAlt4Description());
+		Alternative alt5 = new Alternative(alt5Append, req.getAlt5Description());
 		ArrayList<Alternative> alts = new ArrayList<>();
 		if(req.getAlt1ID() != null) alts.add(alt1);
 		if(req.getAlt2ID() != null) alts.add(alt2);
