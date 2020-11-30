@@ -22,12 +22,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="435318fd-83df-4186-a773-b1271c74bc22" name="Default" comment="Added debug statements">
-      <change afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/ChoiceDAO.java" afterDir="false" />
+    <list default="true" id="435318fd-83df-4186-a773-b1271c74bc22" name="Default" comment="telling me to commit workspace.xml">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/http/AddLogInRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/http/AddLogInRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/AlternativeDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/AlternativeDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/caml/group/demo/db/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CS3733CamlGroupProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/CS3733CamlGroupProject.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +39,13 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -60,6 +63,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.Annotations" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
@@ -68,11 +72,11 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../p3" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-java-8.0.22.jar" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -87,21 +91,13 @@
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <module />
     </configuration>
-    <configuration default="true" type="Application" factoryName="Application">
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -160,7 +156,7 @@
       <option name="credentialProviderId" value="profile:default" />
       <option name="regionId" value="us-east-1" />
       <option name="functionName" value="helloWorld" />
-      <option name="input" value="{&#10;  &quot;username&quot;:&quot;korpseman&quot;&#10;}" />
+      <option name="input" value="{&#10;  &quot;username&quot;: &quot;jlrosaum&quot;&#10;}" />
       <option name="inputIsFile" value="false" />
       <method v="2" />
     </configuration>
@@ -189,22 +185,7 @@
       <updated>1605474188924</updated>
       <workItem from="1605894481326" duration="2950000" />
       <workItem from="1605974642067" duration="1236000" />
-      <workItem from="1605978639418" duration="13807000" />
-      <workItem from="1606058858024" duration="3259000" />
-    </task>
-    <task id="LOCAL-00001" summary="Got lambda working">
-      <created>1605984655231</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1605984655231</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Added debug statements">
-      <created>1606008245749</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1606008245749</updated>
+      <workItem from="1605978639418" duration="5671000" />
     </task>
     <task id="LOCAL-00001" summary="updated login functions but can't update lambda anymore :(">
       <created>1606175694250</created>
@@ -241,7 +222,28 @@
       <option name="project" value="LOCAL" />
       <updated>1606262043312</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="got rid of username_choiceID thing, just username now">
+      <created>1606263019947</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1606263019947</updated>
+    </task>
+    <task id="LOCAL-00007" summary="some more changes idk">
+      <created>1606770752050</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1606770752050</updated>
+    </task>
+    <task id="LOCAL-00008" summary="telling me to commit workspace.xml">
+      <created>1606770800577</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1606770800577</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -266,9 +268,11 @@
     <MESSAGE value="added javadocs, see loginhandler for todos" />
     <MESSAGE value="added stuff for unique constraint workaround, see loginhandler for todos" />
     <MESSAGE value="updated user table sql schema --&gt; no isAdmin, default pass is &quot;&quot;" />
-    <MESSAGE value="Got lambda working" />
-    <MESSAGE value="Added debug statements" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added debug statements" />
+    <MESSAGE value="got rid of username_choiceID thing, just username now" />
+    <MESSAGE value="some more changes" />
+    <MESSAGE value="some more changes idk" />
+    <MESSAGE value="telling me to commit workspace.xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="telling me to commit workspace.xml" />
   </component>
   <component name="WindowStateProjectService">
     <state x="122" y="129" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606163062458">
@@ -280,72 +284,71 @@
     </state>
     <state x="574" y="214" key="#com.intellij.ide.util.MemberChooser/0.23.1440.877@0.23.1440.877" timestamp="1606177328769" />
     <state x="3325" y="226" key="#com.intellij.ide.util.MemberChooser/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605982208390" />
-    <state x="43" y="23" key="CommitChangelistDialog2" timestamp="1606262043054">
+    <state x="65" y="23" key="CommitChangelistDialog2" timestamp="1606770800286">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="43" y="23" key="CommitChangelistDialog2/0.23.1440.877@0.23.1440.877" timestamp="1606262043054" />
-    <state x="226" y="100" key="DiffContextDialog" timestamp="1606240247793">
+    <state x="65" y="23" key="CommitChangelistDialog2/0.23.1440.877@0.23.1440.877" timestamp="1606770800286" />
+    <state x="226" y="100" key="DiffContextDialog" timestamp="1606770126712">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="226" y="100" key="DiffContextDialog/0.23.1440.877@0.23.1440.877" timestamp="1606240247793" />
+    <state x="226" y="100" key="DiffContextDialog/0.23.1440.877@0.23.1440.877" timestamp="1606770126712" />
     <state x="3300" y="275" key="FileChooserDialogImpl" timestamp="1605983931036">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
     <state x="3300" y="275" key="FileChooserDialogImpl/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605983931036" />
-    <state width="1229" height="222" key="GridCell.Tab.0.bottom" timestamp="1606261956398">
+    <state width="1229" height="222" key="GridCell.Tab.0.bottom" timestamp="1606285698396">
       <screen x="0" y="23" width="1440" height="877" />
-    <state x="3300" y="275" key="FileChooserDialogImpl" timestamp="1606005295415">
-      <screen x="2560" y="0" width="1920" height="1040" />
     </state>
-    <state x="3300" y="275" key="FileChooserDialogImpl/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606005295415" />
-    <state width="1877" height="280" key="GridCell.Tab.0.bottom" timestamp="1606008262610">
-      <screen x="2560" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1229" height="222" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1606261956398" />
+    <state width="1229" height="222" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1606285698396" />
     <state width="1257" height="399" key="GridCell.Tab.0.bottom/2560.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1605975114185" />
-    <state width="1877" height="280" key="GridCell.Tab.0.bottom/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606008262610" />
-    <state width="1877" height="280" key="GridCell.Tab.0.center" timestamp="1606008262610">
-      <screen x="2560" y="0" width="1920" height="1040" />
+    <state width="1877" height="280" key="GridCell.Tab.0.bottom/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605984369063" />
+    <state width="1229" height="222" key="GridCell.Tab.0.center" timestamp="1606285698394">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1229" height="222" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1606261956395" />
+    <state width="1229" height="222" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1606285698394" />
     <state width="1257" height="399" key="GridCell.Tab.0.center/2560.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1605975114185" />
-    <state width="1877" height="280" key="GridCell.Tab.0.center/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606008262610" />
-    <state width="1877" height="280" key="GridCell.Tab.0.left" timestamp="1606008262610">
-      <screen x="2560" y="0" width="1920" height="1040" />
+    <state width="1877" height="280" key="GridCell.Tab.0.center/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605984369063" />
+    <state width="1229" height="222" key="GridCell.Tab.0.left" timestamp="1606285698393">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1229" height="222" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1606261956394" />
+    <state width="1229" height="222" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1606285698393" />
     <state width="1257" height="399" key="GridCell.Tab.0.left/2560.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1605975114184" />
-    <state width="1877" height="280" key="GridCell.Tab.0.left/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606008262610" />
-    <state width="1877" height="280" key="GridCell.Tab.0.right" timestamp="1606008262610">
-      <screen x="2560" y="0" width="1920" height="1040" />
+    <state width="1877" height="280" key="GridCell.Tab.0.left/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605984369063" />
+    <state width="1229" height="222" key="GridCell.Tab.0.right" timestamp="1606285698395">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1229" height="222" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1606261956396" />
+    <state width="1229" height="222" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1606285698395" />
     <state width="1257" height="399" key="GridCell.Tab.0.right/2560.0.1920.1040/0.0.2560.1400@0.0.2560.1400" timestamp="1605975114185" />
-    <state width="1877" height="280" key="GridCell.Tab.0.right/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606008262610" />
-    <state x="3100" y="255" key="IDE.errors.dialog" timestamp="1606005112984">
-      <screen x="2560" y="0" width="1920" height="1040" />
+    <state width="1877" height="280" key="GridCell.Tab.0.right/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605984369063" />
+    <state x="446" y="230" key="MultipleFileMergeDialog" timestamp="1606771271385">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="3100" y="255" key="IDE.errors.dialog/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606005112984" />
-    <state x="955" y="185" key="SettingsEditor" timestamp="1605984036217">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state x="446" y="230" key="MultipleFileMergeDialog/0.23.1440.877@0.23.1440.877" timestamp="1606771271385" />
+    <state x="153" y="76" key="SettingsEditor" timestamp="1606274575130">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="416" y="63" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1606162608178" />
+    <state x="153" y="76" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1606274575130" />
     <state x="955" y="185" key="SettingsEditor/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605984036217" />
-    <state x="3112" y="253" key="Vcs.Push.Dialog.v2" timestamp="1606008254281">
-      <screen x="2560" y="0" width="1920" height="1040" />
+    <state x="414" y="236" key="Vcs.Push.Dialog.v2" timestamp="1606771156776">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="3112" y="253" key="Vcs.Push.Dialog.v2/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606008254281" />
+    <state x="414" y="236" key="Vcs.Push.Dialog.v2/0.23.1440.877@0.23.1440.877" timestamp="1606771156776" />
+    <state x="3112" y="253" key="Vcs.Push.Dialog.v2/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605734247461" />
     <state x="3224" y="411" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1605981647429">
       <screen x="2560" y="0" width="1920" height="1040" />
     </state>
     <state x="3224" y="411" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605981647429" />
-    <state x="180" y="0" width="1407" height="1027" key="dock-window-1" timestamp="1606060645306">
+    <state x="263" y="157" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1606196810054">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="263" y="157" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.23.1440.877@0.23.1440.877" timestamp="1606196810054" />
+    <state x="252" y="0" width="1424" height="1027" maximized="true" key="dock-window-1" timestamp="1605895013179">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="180" y="0" width="1407" height="1027" key="dock-window-1/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606060645306" />
-    <state x="1536" y="0" width="1040" height="1027" key="dock-window-2" timestamp="1606061103324">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state x="252" y="0" width="1424" height="1027" maximized="true" key="dock-window-1/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1605895013179" />
+    <state x="414" y="181" key="git4idea.branch.GitSmartOperationDialog" timestamp="1606771140090">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="1536" y="0" width="1040" height="1027" key="dock-window-2/2560.0.1920.1040/0.0.2560.1400@2560.0.1920.1040" timestamp="1606061103324" />
+    <state x="414" y="181" key="git4idea.branch.GitSmartOperationDialog/0.23.1440.877@0.23.1440.877" timestamp="1606771140090" />
   </component>
 </project>
