@@ -105,7 +105,7 @@ paths:
         200:
           description: feedback added
           schema:
-            $ref: '#/definitions/Alternative'
+            $ref: '#/definitions/Choice'
         400:
           description: invalid input
   /approve:
@@ -129,7 +129,7 @@ paths:
         200:
           description: approval added
           schema:
-            $ref: '#/definitions/Approval'
+            $ref: '#/definitions/Choice'
         400:
           description: invalid input
   /disapprove:
@@ -153,7 +153,7 @@ paths:
         200:
           description: disapproval added
           schema:
-            $ref: '#/definitions/Alternative'
+            $ref: '#/definitions/Choice'
         400:
           description: invalid input
   /unselect:
@@ -177,7 +177,7 @@ paths:
         200:
           description: approval removed
           schema:
-            $ref: '#/definitions/Alternative'
+            $ref: '#/definitions/Choice'
         400:
           description: invalid input
   /complete:
@@ -289,13 +289,17 @@ definitions:
     required:
     - "userID"
     - "approval"
+    - "alt"
     properties:
       userID:
         type: "string"
       approval:
         type: "string"
+      alt:
+        type: object
+        $ref: '#/definitions/Alternative'
   userId:
-    type: "integer"
+    type: "string"
   Feedback:
     type: object
     required:

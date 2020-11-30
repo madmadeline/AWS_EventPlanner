@@ -14,7 +14,7 @@
 		function initialize() {
 		  
 		   // get all choices
-		   refreshChoicesList();
+		   //refreshChoicesList();
 		}
 		</script>
 		      
@@ -26,32 +26,19 @@
         </h1>
         <div class = "choicesSearch">
             <h2>Create a New Choice:</h2>
-            <form name='createChoiceForm'>
-                <label for = "choiceName">Choice Name:</label><br>
-                <input name = "choiceName" type = "text" id = "choiceName"><br>
-                <label for = "choiceDesc">Choice Description:</label><br>
+            <form name='createChoiceForm' method = "post">
+                <label for = "choiceDesc">Choice Description (limit 60 chars):</label><br>
                 <input name = "choiceDesc" type = "text" id = "choiceDesc"><br>
                 <label for = "numParticipants">Maximum # of Participants:</label><br>
                 <input name = "numParticipants" type = "number" id = "numParticipants"><br>
-                <label for = "alt1">Alternatives (at least 2):</label><br>
-                <input name = "alt1" type = "text" id = "alt1">
-                <label for = "alt1d">Description: </label>
-                <input name = "alt1d" type = "text" id = "alt1d">
-                <br>
-                <input name = "alt2" type = "text" id = "alt2">
-                <label for = "alt2d">Description: </label>
-                <input name = "alt2d" type = "text" id = "alt2d"><br>
-                <input name = "alt3" type = "text" id = "alt3">
-                <label for = "alt3d">Description: </label>
-                <input name = "alt3d" type = "text" id = "alt3d"><br>
-                <input name = "alt4" type = "text" id = "alt4">
-                <label for = "alt4d">Description: </label>
-                <input name = "alt4d" type = "text" id = "alt4d"><br>
-                <input name = "alt5" type = "text" id = "alt5">
-                <label for = "alt5d">Description: </label>
-                <input name = "alt5d" type = "text" id = "alt5d"><br>
+                <label for = "alt1">Alternatives (at least 2, char limit 25):</label><br>
+                <input name = "alt1" type = "text" id = "alt1"><br>
+                <input name = "alt2" type = "text" id = "alt2"><br>
+                <input name = "alt3" type = "text" id = "alt3"><br>
+                <input name = "alt4" type = "text" id = "alt4"><br>
+                <input name = "alt5" type = "text" id = "alt5"><br>
             </form>
-            <input type="button" id="createButton" value="Create Choice" onclick="JavaScript:handleCreateClick(this)">
+            <input type="button" id="createButton" value="Create Choice" onclick = "Javascript:handleCreateClick(this)">
             <div id = "displayChoice"></div>
         </div>
         <div class = "findChoiceDiv">
@@ -62,14 +49,16 @@
             </form>
         </div>
         <div class = "makeNewUser">
-        	<h2>Create an Account:</h2>
-        	<form name='createUserForm'>
-        		<label for = "newUsername">Username:</label>
+        	<h2 id = "registerHeader">Register with Choice: NONE SELECTED</h2>
+        	<form name='createUserForm' method = "post">
+        		<label for = "newUsername">Username (limit 30 chars):</label>
         		<input name="newUsername" type = "text" id = "newUsername"><br>
-        		<label for = "newPassword">Password:</label>
-        		<input name="newPassword" type = "text" id = "newPassword">
+        		<label for = "newPassword">Password (optional):</label>
+        		<input name="newPassword" type = "text" id = "newPassword"><br>
+        		<label for = "newChoiceID">Choice ID:</label>
+        		<input name="newChoiceID" type = "text" id = "newChoiceID">
         	</form>
-        	<input type="button" id="createUserBtn" value="Create User" onclick = "Javascript:handleUserClick(this)">
+        	<input type="button" id="createUserBtn" value="Register" onclick = "Javascript:handleUserClick(this)">
         	<div id = "userList"></div>
         </div>
     </body>

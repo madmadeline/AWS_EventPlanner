@@ -28,7 +28,7 @@ public class Admin{
 	
 	public Report createReport(Choice choice) {
 		boolean isCompleted = false;
-		int choiceID;
+		String choiceID;
 		
 		choiceID = choice.getID();
 		isCompleted = (choice.getWinner() != null);

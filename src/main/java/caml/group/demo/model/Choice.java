@@ -22,6 +22,17 @@ public class Choice {
 	}
 	
 	public String getID() { return this.id; }
+
+	public ArrayList<Alternative> getAlternatives() {
+		return alternatives;
+	}
+
+	public String getDescription(){
+		return description;
+	}
+	public Timestamp getTime(){
+		return time;
+	}
 	public Alternative getWinner() { return this.winner; }
 	public void setWinner(Alternative winner) { this.winner = winner; }
 	public ArrayList<User> getUsers() { return this.users; }
@@ -37,7 +48,7 @@ public class Choice {
 	 */
 	public User getUser(String id) {
 		for (User user : users) {
-			if (user.getID() == id) { return user; }
+			if (user.getID().equals(id)) { return user; }
 		}
 		return null;
 	}

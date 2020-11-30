@@ -28,6 +28,7 @@ public class AlternativeDAO {
 		this.logger = logger;
 		try  {
 			conn = DatabaseUtil.connect();
+			logger.log("Connected in alt dao");
 		} catch (Exception e) {
 			conn = null;
 		}
@@ -81,7 +82,7 @@ public class AlternativeDAO {
 				" WHERE id=?;");
 		ps.setString(1,  id);
 		ResultSet resultSet = ps.executeQuery(); // cursor that points to database row
-
+		logger.log("Generating alts");
 		while (resultSet.next()) {
 			alt = generateAlternative(resultSet); // should only loop 1x
 		}
@@ -156,9 +157,9 @@ public class AlternativeDAO {
 	 * @return true if the addition was a success, false otherwise
 	 * @throws Exception, failed to insert alternative
 	 */
-	public boolean addAlternative(Alternative alt) throws Exception {
+	public void addAlternative(Alternative alt) throws Exception {
 		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE id = ?;");
+			/*PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE id = ?;");
 			ps.setString(1, alt.getID());
 			ResultSet resultSet = ps.executeQuery();
 
@@ -166,17 +167,15 @@ public class AlternativeDAO {
 			while (resultSet.next()) {
 				generateAlternative(resultSet);
 				resultSet.close();
-				return false;
-			}
+			}*/
 
-			ps = conn.prepareStatement("INSERT INTO " + tblName + 
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO " + tblName +
 					" (id,numLikes,numDislikes,description) values(?,?,?,?);");
 			ps.setString(1, alt.getID());
 			ps.setInt(2, alt.getTotalApprovals());
 			ps.setInt(3, alt.getTotalDisapprovals());
 			ps.setString(4, alt.getDescription());
 			ps.execute();
-			return true;
 
 		} catch (Exception e) {
 			throw new Exception("Failed to insert user: " + e.getMessage());

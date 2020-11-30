@@ -2,7 +2,7 @@
 
 //base aws url, all other urls are derived from this.
 //MUST end in a SLASH
-var base_url = "something/";
+var base_url = "https://24afvsw7sh.execute-api.us-east-1.amazonaws.com/alpha/";
 
 var list_choices_url = base_url + "choice"; //GET
 var create_choice_url = base_url + "choice"; //POST
