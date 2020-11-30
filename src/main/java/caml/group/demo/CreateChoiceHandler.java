@@ -67,7 +67,7 @@ public class CreateChoiceHandler implements RequestHandler<AddLogInRequest,AddLo
 		// and has to be processed specifically by the client code.
 		AddLogInResponse response;
 		if (fail) {
-			response = new AddLogInResponse(400, failMessage);
+			response = new AddLogInResponse(user,400, failMessage);
 		} else {
 			response = new AddLogInResponse(user, 200);  // success
 		}

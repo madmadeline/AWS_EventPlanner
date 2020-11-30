@@ -73,27 +73,34 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 
 		try { // get the given username and password
 			name = req.getUsername();
+			if (name.equals("")) {
+				failMessage = "No username was given.";
+				fail = true;
+			} else if (name.length() > 30) {
+				failMessage = "The username is longer than 30 characters.";
+				fail = true;
+			}
 			try {
 				choiceID = req.getChoiceID();
 				try {
 					pass = req.getPassword();
 					user = loadOrInsertUser(name, pass, choiceID); // try to log in
 				} catch (Exception e) { // can't get password from request
-					failMessage = "Invalid password: " + req.getPassword();
+					failMessage = "Invalid password: " + req.getPassword() + ".";
 					fail = true;
 				}
 			} catch (Exception e) { // can't get choice ID from request
-				failMessage = "Invalid choice ID: " + req.getChoiceID();
+				failMessage = "Invalid choice ID: " + req.getChoiceID() + ".";
 			}
 		} catch (Exception e) { // can't get username from request
-			failMessage = "Invalid username: " + req.getUsername();
+			failMessage = "Invalid username: " + req.getUsername() + ".";
 			fail = true;
 		}
 
 		// compute proper response and return. Note that the status code is internal to the HTTP response
 		// and has to be processed specifically by the client code.
 		if (fail) {
-			response = new AddLogInResponse(400, failMessage);
+			response = new AddLogInResponse(user,400, failMessage);
 		} else {
 			response = new AddLogInResponse(user, 200);  // success
 		}
