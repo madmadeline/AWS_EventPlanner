@@ -1,2 +1,4 @@
 /target/
 /CS3733CamlGroupProject.iml
+/.aws-sam/
+/.idea/
