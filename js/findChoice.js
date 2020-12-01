@@ -1,4 +1,7 @@
-function processCreateUserResponse(result) {
+//find a specific choice from the db
+
+
+function processFindResponse(result) {
   // Can grab any DIV or SPAN HTML element and can then manipulate its
   // contents dynamically via javascript
   console.log("result:" + result);
@@ -7,12 +10,15 @@ function processCreateUserResponse(result) {
 
   //check the status code
   if (status == 200){
-	console.log("User created.")
+	console.log("Choice found.")
 	//get the choice info from the parsed json
 	var choiceID = obj.choiceID;
 	var maxTeamSize = obj.maxTeamSize;
 	var description = obj.description;
 	var alts = obj.alts;
+	
+	//update the register form
+	document.createUserForm.newChoiceID.value = choiceID;
 	
 	//update the UI
 	document.createChoiceForm.choiceDesc.value = description;
@@ -32,23 +38,21 @@ function processCreateUserResponse(result) {
 	
   }else{
 	//error
-	console.log("User could not be created.");
+	console.log("Choice could not be found or does not exist.");
   }
 
 }
 
-function handleUserClick(e) {
-  var form = document.createUserForm;
+function handleFindClick(e) {
+  var form = document.findChoiceForm;
  
   var data = {};
-  data["username"] = form.newUsername.value;
-  data["password"] = form.newPassword.value;
-  data["choiceID"] = form.newChoiceID.value;
+  data["choiceID"] = form.findChoice.value;
 
   var js = JSON.stringify(data);
   console.log("JS:" + js);
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", create_user_url, true);
+  xhr.open("POST", find_choice_url, true);
 
   // send the collected data as JSON
   xhr.send(js);
@@ -60,7 +64,7 @@ function handleUserClick(e) {
     if (xhr.readyState == XMLHttpRequest.DONE) {
     	 if (xhr.status == 200) {
 	      console.log ("XHR:" + xhr.responseText);
-	      processCreateUserResponse(xhr.responseText);
+	      processFindResponse(xhr.responseText);
     	 } else {
     		 console.log("actual:" + xhr.responseText)
 			  var js = JSON.parse(xhr.responseText);
@@ -68,7 +72,7 @@ function handleUserClick(e) {
 			  alert (err);
     	 }
     } else {
-      processCreateUserResponse("N/A");
+      processFindResponse("N/A");
     }
   };
 }

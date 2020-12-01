@@ -2,18 +2,36 @@ function processCreateResponse(result) {
   // Can grab any DIV or SPAN HTML element and can then manipulate its
   // contents dynamically via javascript
   console.log("result:" + result);
-
-	//parse json and get the choice id
-	var obj = JSON.parse(result);
-	var choice = obj["choice"];
-	var status = obj["statusCode"];
+  var obj = JSON.parse(result);
+  var status = obj["statusCode"];
 	
 	if (status == 200){
-		//update computation result
-		console.log("success");
+		console.log("Choice created.");
+		
+		//get the choice info from the parsed json
+		var choiceID = obj.choiceID;
+		var description = obj.description;
+		var alts = obj.alts;
+		
+		//update the register form
+		document.createUserForm.newChoiceID.value = choiceID;
+		
+		//print the newly created choice
+		var output = "";
+		var altsOutput = "";
+		
+		//get the alternatives output
+		var len = Object.keys(obj.alts[0]).length;
+		len = len - 1;
+		for (var i = 0; i < len; i++){
+			altsOutput += ("Alternative " + i + "ID: " + alts[i].ID + " Description: " + alts[i].description + "\"><b>");
+		}
+		output = "Choice Description: " + description + " Choice ID: " + choiceID + " Alternatives: " + "\"><b>" + altsOutput;
+		
+		displayChoice.innerHTML = output;
 	}else{
 		//error
-		console.log("failure");
+		console.log("Choice failed to create.");
 	}
 	
 	

@@ -6,6 +6,7 @@
     	<script type = 'text/javascript' src='../js/get_userList.js'></script>
     	<script type = 'text/javascript' src='../js/createChoice.js'></script>
     	<script type = 'text/javascript' src='../js/createUser.js'></script>
+    	<script type = 'text/javascript' src='../js/findChoice.js'></script>
     
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -43,13 +44,13 @@
         </div>
         <div class = "findChoiceDiv">
             <h2>Find a choice by ID:</h2>
-            <form>
-                <input type = "text" id = "findChoice">
-                <button>Find</button>
+            <form name = 'findChoiceForm' method = 'post'>
+                <input name = 'findChoice' type = "text" id = "findChoice">
+                <input type = "button" id = "findButton" value = "Find" onclick = "Javascript:handleFindClick(this)">
             </form>
         </div>
         <div class = "makeNewUser">
-        	<h2 id = "registerHeader">Register with Choice: NONE SELECTED</h2>
+        	<h2 id = "registerHeader">Register with a Choice:</h2>
         	<form name='createUserForm' method = "post">
         		<label for = "newUsername">Username (limit 30 chars):</label>
         		<input name="newUsername" type = "text" id = "newUsername"><br>
