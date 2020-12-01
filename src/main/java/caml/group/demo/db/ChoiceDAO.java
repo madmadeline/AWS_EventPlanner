@@ -39,13 +39,10 @@ public class ChoiceDAO {
         logger.log("getting choice");
         logger.log(id);
         Choice choice = null;
-        //PreparedStatement ps = conn.prepareStatement("Select choiceID, description, dateOfCreation, " +
-        //        "altID From " + tblName + " c Join ChoiceAltMatch m on c.id = m.choiceID " +
-        //        "WHERE id=?");
         PreparedStatement ps = conn.prepareStatement(
-                "Select choiceID, c.description as cDesc, altID, a.description as aDesc, dateOfCreation" +
-                        " From " + tblName + " c Join ChoiceAltMatch m on c.id = m.choiceID " +
-                "join Alternative a on a.id = m.altID WHERE choiceID=?");
+                "Select c.choiceID, c.description as cDesc, altID, a.description as aDesc, dateOfCreation" +
+                        " From " + tblName + " c " +
+                "join Alternative a on a.choiceID = c.choiceID WHERE choiceID=?");
         //PreparedStatement ps = conn.prepareStatement("Select c.id as cID, c.description as cDesc From Choice");
         ps.setString(1, id);
         ResultSet rs = ps.executeQuery();
@@ -59,7 +56,7 @@ public class ChoiceDAO {
     }
 
     public Boolean checkChoice(String id) throws SQLException {
-        PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice where id=?");
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice where choiceID=?");
         ps.setString(1, id);
         ResultSet rs = ps.executeQuery();
         while(rs.next()){
@@ -77,7 +74,7 @@ public class ChoiceDAO {
         //        "Insert into Choice(id, description, dateOfCreation, winningAlt) values (1234, 'test 1', 20201123, null);"
         //);
         PreparedStatement ps = conn.prepareStatement(
-                "Insert into " + tblName + "(id, description, dateOfCreation, winningAlt) values (?,?,?,null);"
+                "Insert into " + tblName + "(choiceID, description, dateOfCreation, winningAlt) values (?,?,?,null);"
         );
         ps.setString(1, choice.getID());
         ps.setString(2, choice.getDescription());
@@ -92,10 +89,10 @@ public class ChoiceDAO {
             logger.log("Adding alts");
             ArrayList<Alternative> alts = choice.getAlternatives();
             AlternativeDAO dao = new AlternativeDAO(logger);
-            ChoiceAltMatchDAO dao2 = new ChoiceAltMatchDAO(logger);
+            //ChoiceAltMatchDAO dao2 = new ChoiceAltMatchDAO(logger);
             for (Alternative alt : alts) {
-                dao.addAlternative(alt);
-                dao2.addChoiceAltMatch(choice, alt);
+                dao.addAlternative(alt, choice.getID());
+                //dao2.addChoiceAltMatch(choice, alt);
             }
         }
     }
