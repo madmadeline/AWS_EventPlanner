@@ -9,6 +9,7 @@ public class Choice {
 	final String id;
 	final String description;
 	final ArrayList<Alternative> alternatives;// = new ArrayList<Alternative>();
+	int maxTeamSize;
 	ArrayList<User> users;
 	Timestamp time;
 	Alternative winner;
@@ -26,6 +27,8 @@ public class Choice {
 	public ArrayList<Alternative> getAlternatives() {
 		return alternatives;
 	}
+
+	public int getMaxTeamSize() { return maxTeamSize; }
 
 	public String getDescription(){
 		return description;

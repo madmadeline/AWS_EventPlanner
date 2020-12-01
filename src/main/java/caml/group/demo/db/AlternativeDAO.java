@@ -157,7 +157,7 @@ public class AlternativeDAO {
 	 * @return true if the addition was a success, false otherwise
 	 * @throws Exception, failed to insert alternative
 	 */
-	public void addAlternative(Alternative alt) throws Exception {
+	public void addAlternative(Alternative alt, String choiceID) throws Exception {
 		try {
 			/*PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE id = ?;");
 			ps.setString(1, alt.getID());
@@ -170,11 +170,12 @@ public class AlternativeDAO {
 			}*/
 
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO " + tblName +
-					" (id,numLikes,numDislikes,description) values(?,?,?,?);");
+					" (altID,numLikes,numDislikes,description,choiceID) values(?,?,?,?,?);");
 			ps.setString(1, alt.getID());
 			ps.setInt(2, alt.getTotalApprovals());
 			ps.setInt(3, alt.getTotalDisapprovals());
 			ps.setString(4, alt.getDescription());
+			ps.setString(5, choiceID);
 			ps.execute();
 
 		} catch (Exception e) {

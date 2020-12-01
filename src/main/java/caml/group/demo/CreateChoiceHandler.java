@@ -92,11 +92,11 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 
 		// compute proper response and return. Note that the status code is internal to the HTTP response
 		// and has to be processed specifically by the client code.
-		AddLogInResponse response;
+		AddCreateChoiceResponse response;
 		if (fail) {
-			response = new AddLogInResponse(user,400, failMessage);
+			response = new AddCreateChoiceResponse(400, failMessage);
 		} else {
-			response = new AddLogInResponse(user, 200);  // success
+			response = new AddCreateChoiceResponse(200, choice);  // success
 		}
 
 		return response;
