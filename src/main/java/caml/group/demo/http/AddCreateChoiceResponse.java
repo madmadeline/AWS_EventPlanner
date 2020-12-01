@@ -14,6 +14,7 @@ public class AddCreateChoiceResponse {
     public String choiceID;
     public String description;
     public Timestamp time;
+    public int maxTeamSize;
     public ArrayList<Alternative> alts;
 
 
@@ -26,6 +27,7 @@ public class AddCreateChoiceResponse {
         this.description = choice.getDescription();
         this.time = choice.getTime();
         this.alts = choice.getAlternatives();
+        this.maxTeamSize = choice.getMaxTeamSize();
     }
 
     public AddCreateChoiceResponse(int statusCode, String errorMessage){
