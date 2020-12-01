@@ -8,7 +8,7 @@ public class Alternative {
 	String description;
 	int totalApprovals;
 	int totalDisapprovals;
-	ArrayList<ArrayList<String>> approversAndDisapprovers; // 0th row approvers 1st row disapprover
+	ArrayList<ArrayList<User>> approversAndDisapprovers; // 0th row approvers 1st row disapprover // change String to user
 	ArrayList<Feedback> feedback;
 	
 
@@ -17,7 +17,7 @@ public class Alternative {
 		this.description = description;
 		this.totalApprovals = 0;
 		this.totalDisapprovals = 0;
-		this.approversAndDisapprovers = new ArrayList<ArrayList<String>>();
+		this.approversAndDisapprovers = new ArrayList<ArrayList<User>>();
 		this.feedback  = new ArrayList<Feedback>();
 	}
 	
@@ -30,11 +30,11 @@ public class Alternative {
 	public int getTotalDisapprovals() { return totalDisapprovals;}
 	public void setTotalDisapprovals(int totalDisapprovs) { totalDisapprovals = totalDisapprovs; }
 	
-	public ArrayList<ArrayList<String>> getApproversAndDisapprovers() { return approversAndDisapprovers;}
-	public void addApprover(String username) { approversAndDisapprovers.get(0).add(username); }
-	public void removeApprover(String username) { approversAndDisapprovers.get(0).remove(username); }
-	public void addDisapprover(String username) { approversAndDisapprovers.get(1).add(username); }
-	public void removeDisapprover(String username) { approversAndDisapprovers.get(1).remove(username); }
+	public ArrayList<ArrayList<User>> getApproversAndDisapprovers() { return approversAndDisapprovers;}
+	public void addApprover(User username) { approversAndDisapprovers.get(0).add(username); }
+	public void removeApprover(User username) { approversAndDisapprovers.get(0).remove(username); }
+	public void addDisapprover(User username) { approversAndDisapprovers.get(1).add(username); }
+	public void removeDisapprover(User username) { approversAndDisapprovers.get(1).remove(username); }
 	
 	public ArrayList<Feedback> getFeedback() { return feedback;}
 	
