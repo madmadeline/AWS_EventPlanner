@@ -22,26 +22,24 @@ paths:
   /choice:
     get:
       tags:
-      - admins
-      summary: gets all of the choices from the db
-      operationId: getChoices
-      description: The admin can display a report of the choices found in the database.
+      - users
+      summary: finds a choice
+      operationId: findChoice
+      description: finds a specific choice in the db given its id
       produces:
       - application/json
       responses:
         200:
-          description: "200 response"
+          description: choice found
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Choice'
+            $ref: '#/definitions/Choice'
         400:
-          description: "400 response"
+          description: choice not found
     post:
       tags:
       - users
       summary: creates a choice
-      operationId: addChoice
+      operationId: createChoice
       description: Adds a new choice to the database
       consumes:
       - application/json
@@ -60,6 +58,24 @@ paths:
             $ref: '#/definitions/Choice'
         400:
           description: invalid input, object invalid
+  /report:
+    get:
+      tags:
+      - admins
+      summary: gets all of the choices from the db
+      operationId: getChoices
+      description: The admin can display a report of the choices found in the database.
+      produces:
+      - application/json
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Choice'
+        400:
+          description: "400 response"
   /participate:
     post:
       tags:
@@ -252,25 +268,11 @@ paths:
           description: user added
           schema:
             $ref: '#/definitions/User'
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
         400:
           description: invalid input
-    get:
-      tags:
-      - users
-      summary: get the list of users
-      operationId: listUsers
-      description: gets a list of all of the users in the db
-      produces:
-      - application/json
-      responses:
-        200:
-          description: "200 response"
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/User'
-        400:
-          description: "400 response"
 definitions:
   User:
     type: object
