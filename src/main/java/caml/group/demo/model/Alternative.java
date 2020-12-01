@@ -8,7 +8,7 @@ public class Alternative {
 	String description;
 	int totalApprovals;
 	int totalDisapprovals;
-	ArrayList<ArrayList<User>> approversAndDisapprovers; // 0th row approvers 1st row disapprover // change String to user
+	ArrayList<ArrayList<User>> approversAndDisapprovers; // 0th row approvers 1st row disapprover // changed String to User
 	ArrayList<Feedback> feedback;
 	
 
