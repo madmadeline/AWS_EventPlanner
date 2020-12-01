@@ -40,9 +40,9 @@ public class ChoiceDAO {
         logger.log(id);
         Choice choice = null;
         PreparedStatement ps = conn.prepareStatement(
-                "Select c.choiceID, c.description as cDesc, altID, a.description as aDesc, dateOfCreation" +
-                        " From " + tblName + " c " +
-                "join Alternative a on a.choiceID = c.choiceID WHERE choiceID=?");
+                "Select c.choiceID, c.description as cDesc, altID, a.description as aDesc, dateOfCreation " +
+                        "From " + tblName + " c " +
+                "join Alternative a on a.choiceID = c.choiceID WHERE c.choiceID=?");
         //PreparedStatement ps = conn.prepareStatement("Select c.id as cID, c.description as cDesc From Choice");
         ps.setString(1, id);
         ResultSet rs = ps.executeQuery();
