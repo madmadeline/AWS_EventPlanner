@@ -7,8 +7,8 @@ public class Alternative {
 	String id;
 	String description;
 	int totalApprovals;
-	int totalDisapprovals;
-	ArrayList<ArrayList<User>> approversAndDisapprovers; // 0th row approvers 1st row disapprover // changed String to User
+	int totalDisapprovals; 
+	ArrayList<Rating> ratings; // ArrayList of Rating. Rating holds 2 values User object and RatingType object - approve/disapprove
 	ArrayList<Feedback> feedback;
 	
 
@@ -17,7 +17,7 @@ public class Alternative {
 		this.description = description;
 		this.totalApprovals = 0;
 		this.totalDisapprovals = 0;
-		this.approversAndDisapprovers = new ArrayList<ArrayList<User>>();
+		this.ratings = new ArrayList<Rating>();
 		this.feedback  = new ArrayList<Feedback>();
 	}
 	
@@ -30,11 +30,10 @@ public class Alternative {
 	public int getTotalDisapprovals() { return totalDisapprovals;}
 	public void setTotalDisapprovals(int totalDisapprovs) { totalDisapprovals = totalDisapprovs; }
 	
-	public ArrayList<ArrayList<User>> getApproversAndDisapprovers() { return approversAndDisapprovers;}
-	public void addApprover(User username) { approversAndDisapprovers.get(0).add(username); }
-	public void removeApprover(User username) { approversAndDisapprovers.get(0).remove(username); }
-	public void addDisapprover(User username) { approversAndDisapprovers.get(1).add(username); }
-	public void removeDisapprover(User username) { approversAndDisapprovers.get(1).remove(username); }
+	public ArrayList<Rating> getRatings() { return ratings;}
+	public void addRator(Rating rator) { ratings.add(rator); } // fyi rator is noun and rater is verb
+	public void removeRator(Rating rator) { ratings.remove(rator); }
+	
 	
 	public ArrayList<Feedback> getFeedback() { return feedback;}
 	
