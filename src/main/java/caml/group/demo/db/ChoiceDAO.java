@@ -34,18 +34,28 @@ public class ChoiceDAO {
      * @return the Choice object
      * @throws SQLException, exception thrown on fail
      */
-    public Choice getChoice(String id) throws Exception {
+    public Choice getChoice(String id) throws SQLException {
         logger.log("Getting choice\n");
 //        logger.log(id);
         Choice choice = null;
-        PreparedStatement ps = conn.prepareStatement(
-                "Select c.choiceID, c.description as cDesc, altID, a.description as aDesc, dateOfCreation, " +
-                        "maxTeamSize From " + tblName + " c " +
-                "join Alternative a on a.choiceID = c.choiceID WHERE c.choiceID=?");
-        //PreparedStatement ps = conn.prepareStatement("Select c.id as cID, c.description as cDesc From Choice");
-        ps.setString(1, id);
-        ResultSet rs = ps.executeQuery();
-//        logger.log("Generating choice");
+        PreparedStatement ps;
+        ResultSet rs;
+
+        try {
+            ps = conn.prepareStatement(
+                    "Select c.choiceID, c.description as cDesc, altID, a.description as aDesc, dateOfCreation, " +
+                            "maxTeamSize From " + tblName + " c " +
+                            "join Alternative a on a.choiceID = c.choiceID WHERE c.choiceID=?");
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+
+            if (!rs.isBeforeFirst()) { // choice doesn't exist
+                logger.log("Invalid choice ID");
+                return null;
+            }
+        } catch(SQLException e){
+            throw new SQLException("Database error" + e.getMessage());
+        }
         choice = generateChoice(rs);
 
         rs.close();
@@ -119,7 +129,7 @@ public class ChoiceDAO {
      * @return a Choice object
      * @throws Exception failed to get Choice
      */
-    private Choice generateChoice(ResultSet rs) throws Exception {
+    private Choice generateChoice(ResultSet rs) throws SQLException {
         ArrayList<Alternative> alts = new ArrayList<>();
 //        logger.log("Generating choice from result set");
         String id = "";

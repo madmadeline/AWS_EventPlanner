@@ -10,7 +10,6 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 import caml.group.demo.db.UserDAO;
-//import caml.group.demo.model.Model;
 import caml.group.demo.model.User;
 
 /**
@@ -21,37 +20,17 @@ import caml.group.demo.model.User;
  * @author Group Caml
  */
 public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResponse> {
-//	Model model;
 	LambdaLogger logger;
-	
-	
-	/**
-	 * Try to get User from RDS. If the User doesn't exist, insert them.
-	 * @param name The specified username
-	 * @param pass The specified password
-	 * @return the User
-	 * @throws Exception if the user couldn't be loaded or registered
-	 */
-	public User logInOrRegister(String name, String pass, int choiceID) throws Exception {
-		User user;
-		logger.log("Attempting to log in or register User\n");
-		try { // try getting the User from RDS
-			UserDAO dao = new UserDAO(logger);
-			user = dao.loadOrInsertUser(name, pass, choiceID);
-			return user;
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.log("Failed to load or insert user\n");
-		}
-		return null;
-	}
-
 
 	/**
 	 * Handles a log in request and either
 	 * 	1. Registers a new user for the choice,
-	 * 	2. States that the password was incorrect, or
-	 * 	3. Logs in the user
+	 * 	2. Logs in the user, or
+	 * 	3. Throws an error because either:
+	 * 		a. No username was given
+	 * 		b. The username was too long
+	 * 		c. The password was incorrect
+	 * 		d. There is no Choice with the given ID
 	 * @param req The log in request
 	 * @param context The request context
 	 * @return the
@@ -67,7 +46,7 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 		User user = null;
 		String name;
 		String pass;
-		int choiceID = 0;
+		int choiceID;
 		AddLogInResponse response;
 		Choice choice = null;
 
@@ -81,26 +60,32 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 				fail = true;
 			}
 			try {
+				// make sure that the choice ID is valid
 				choiceID = req.getChoiceID();
 				ChoiceDAO cdao = new ChoiceDAO(logger);
 				choice = cdao.getChoice(""+choiceID);
+
+				// try to log in
 				try {
 					pass = req.getPassword();
-					user = logInOrRegister(name, pass, choiceID); // try to log in
-				} catch (Exception e) { // can't get password from request
+					if (pass.length() > 30) {
+						failMessage = "The password is longer than 30 characters.";
+						fail = true;
+					}
+					UserDAO dao = new UserDAO(logger);
+					user = dao.loadOrInsertUser(name, pass, choiceID);
+				} catch (Exception e) {
 					failMessage = "Invalid password: " + req.getPassword() + ".";
 					fail = true;
 				}
-			} catch (Exception e) { // can't get choice ID from request
+			} catch (Exception e) {
 				failMessage = "Invalid choice ID: " + req.getChoiceID() + ".";
 			}
-		} catch (Exception e) { // can't get username from request
+		} catch (Exception e) {
 			failMessage = "Invalid username: " + req.getUsername() + ".";
 			fail = true;
 		}
 
-		// compute proper response and return. Note that the status code is internal to the HTTP response
-		// and has to be processed specifically by the client code.
 		response = new AddLogInResponse(400, failMessage);
 
 		if (!fail) {
@@ -114,6 +99,4 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 		logger.log(response.toString());
 		return response; 
 	}
-    
-
 }

@@ -9,16 +9,16 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
 import caml.group.demo.model.User;
 
-import javax.xml.transform.Result;
-
 /**
  * For accessing the User table in RDS.
  * List of functions:
  *      loadOrInsertUser(String name, String pass, int choiceID) --> User
+ *      rowToUserObject(ResultSet resultSet, String password) --> User
+ *      userIDExists(String uID) --> boolean
+ *      generateUserID() --> String
  *      deleteUser(User user) --> boolean
  *      addUser(User user, int choiceID) --> boolean
  *      getAllUsers() --> List<User>
- *      rowToUserObject(ResultSet resultSet, String password) --> User
  * @author Group Caml
  */
 public class UserDAO { 
@@ -48,14 +48,26 @@ public class UserDAO {
      * @param name The given username
      * @param pass The given password
      * @return the User object
-     * @throws Exception if the user could not be found or inserted in the table
+     * @throws SQLException if the user could not be found or inserted in the table
      */
     public User loadOrInsertUser(String name, String pass, int choiceID) throws SQLException {
         User user = null; // User object representing the database entry
         PreparedStatement ps;
         ResultSet resultSet;
-//        System.out.println("inside loadOrInsertUser");
-        // check if user is already registered in the choice
+
+        // check if username is over character limit
+        if (name.length() >= 30) {
+            logger.log("The username is too long");
+            return null;
+        }
+//
+        // check if password is over character limit
+        if (pass.length() >= 30) {
+            logger.log("The password is too long");
+            return null;
+        }
+
+        // check if user is already in the table
         try {
             ps = conn.prepareStatement("SELECT * FROM " + usrTbl + " WHERE " + usrTbl
                     + ".username=? AND " + usrTbl + ".choiceID=?;");
@@ -63,13 +75,15 @@ public class UserDAO {
             ps.setString(2, "" + choiceID);
             resultSet = ps.executeQuery(); // cursor that points to database row
 
-//            System.out.println("result set " + resultSet);
-            // user isn't registered --> register user
+            // user isn't in the table --> insert user
             if (!resultSet.isBeforeFirst()) {
+//                System.out.println("user isn't in the table");
                 user = new User(generateUserID(), name, pass);
+//                System.out.println("got new user");
                 try {
                     addUser(user, choiceID);
                 } catch (SQLException e) {
+//                    System.out.println("Tried to add user");
                     throw new SQLException("Couldn't add user" + e.getMessage());
                 }
                 resultSet.close();
@@ -77,8 +91,9 @@ public class UserDAO {
                 return user;
             }
 
-            // user is registered --> get the user
+            // user is in the table --> load the user
             while (resultSet.next()) {
+//                System.out.println("user is in the table");
                 user = rowToUserObject(resultSet, pass); // should only loop 1x
                 if (user != null) { logger.log("Retrieved user from the " + usrTbl + " table\n"); }
                 else { logger.log("Incorrect password\n"); }
@@ -93,27 +108,33 @@ public class UserDAO {
         }
     }
 
+
     /**
-     * Returns whether or not the given user ID is already in the User table.
-     * @param uID The given user ID
-     * @return true if the table has the id, false otherwise
+     * Generates a User object that represents the given database row if the
+     * password is correct. Else, return null.
+     * @param resultSet The cursor to the specified database row
+     * @param password The specified password
+     * @return a User object
+     * @throws SQLException, user doesn't exist in the database
      */
-    public boolean userIDExists(String uID) throws SQLException {
-        PreparedStatement ps;
-        ResultSet rs;
+    private User rowToUserObject(ResultSet resultSet, String password) throws SQLException {
+        String uID;
+        String username;
+        String correctPassword;
 
         try {
-//            System.out.println("in userIDExists");
-            ps = conn.prepareStatement("SELECT * FROM " + usrTbl + " WHERE " + usrTbl
-                    + ".userID=?;");
-            ps.setString(1, uID);
-            rs = ps.executeQuery(); // cursor that points to database row
-//            System.out.println("after userIDExists");
-            return (!rs.isBeforeFirst()); // TODO make sure this works
-        } catch (Exception e) {
-            throw new SQLException("Failed to view User table: " + e.getMessage());
+            username = resultSet.getString("username");
+            uID = resultSet.getString("userID");
+//            logger.log("Row username: " + username + "\n");
+        } catch (SQLException e) {
+            // result set is null, user doesn't exist
+            throw new SQLException("User can't be found in the table: " + e.getMessage());
         }
 
+        correctPassword = resultSet.getString("password");
+
+        if (correctPassword.equals(password)) { return new User (uID, username, password); }
+        return null;
     }
 
 
@@ -129,7 +150,7 @@ public class UserDAO {
             int randInt = rand.nextInt(9000) + 1000;
             randString = String.valueOf(randInt);
             try {
-                if(userIDExists(randString)) break;
+                if(!userIDExists(randString)) break;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -139,21 +160,56 @@ public class UserDAO {
     }
 
 
+    // TESTED
+    /**
+     * Returns whether or not the given user ID is already in the User table.
+     * @param uID The given user ID
+     * @return true if the table has the id, false otherwise
+     */
+    public boolean userIDExists(String uID) throws SQLException {
+        PreparedStatement ps;
+        ResultSet rs;
+
+        try {
+//            System.out.println("in userIDExists " + uID);
+            ps = conn.prepareStatement("SELECT * FROM " + usrTbl + " WHERE " + usrTbl
+                    + ".userID=?;");
+            ps.setString(1, uID);
+            rs = ps.executeQuery(); // cursor that points to database row
+            return (rs.isBeforeFirst());
+        } catch (Exception e) {
+            throw new SQLException("Failed to view User table: " + e.getMessage());
+        }
+
+    }
+
+
+    // TESTED
     /**
      * Deletes the specified user from the User table.
      * @param user The given User
+     * @param choiceID The given choice ID
      * @return true if the User was deleted, false otherwise
      * @throws Exception the User can't be found in the table
      */
-    public boolean deleteUser(User user) throws Exception {
+    public boolean deleteUser(User user, int choiceID) throws Exception {
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM " + usrTbl
+                + " WHERE userID=? AND username=? AND password=? AND choiceID=?;");
+        ps.setString(1, user.getID());
+        ps.setString(2, user.getName());
+        ps.setString(3, user.getPassword());
+        ps.setString(4, ""+choiceID);
+
         try {
-            PreparedStatement ps = conn.prepareStatement("DELETE FROM " + usrTbl
-                    + " WHERE name = ?;");
-            ps.setString(1, user.getName());
-            int numAffected = ps.executeUpdate();
-            ps.close();
-            
-            return (numAffected == 1);
+            int numDeleted = ps.executeUpdate();
+            if (numDeleted != 1) {
+                logger.log("User can't be deleted because they aren't in the table\n");
+                ps.close();
+                return false;
+            }
+
+            logger.log("Successfully deleted the user from the table");
+            return true;
 
         } catch (Exception e) {
             throw new Exception("Failed to delete user: " + e.getMessage());
@@ -161,14 +217,29 @@ public class UserDAO {
     }
 
 
+    // TESTED
     /**
      * Adds the given User object to the User database.
-     * @param user The given User object
+     * @param user The given User object (valid)
+     * @param choiceID The given choice ID (valid)
      * @return true if the User was added, false otherwise
-     * @throws Exception, failed to insert user
+     * @throws SQLException, failed to insert user
      */
     public boolean addUser(User user, int choiceID) throws SQLException {
         PreparedStatement ps;
+
+        // check if a username was actually given
+        if (user.getName().equals("") || user.getName() == null) {
+            logger.log("No username was specified\n");
+            return false;
+        }
+
+        // check if the choiceID is valid
+        ChoiceDAO cdao = new ChoiceDAO(logger);
+        if (cdao.getChoice(""+choiceID) == null) {
+            return false;
+        }
+
 
         try {
             // already present?
@@ -226,39 +297,6 @@ public class UserDAO {
         } catch (Exception e) {
             throw new Exception("Failed in getting users: " + e.getMessage());
         }
-    }
-
-
-    /**
-     * Generates a User object that represents the given database row if the
-     * password is correct. Else, return null.
-     * @param resultSet The cursor to the specified database row
-     * @param password The specified password
-     * @return a User object
-     * @throws Exception, user doesn't exist in the database
-     */
-    private User rowToUserObject(ResultSet resultSet, String password) throws SQLException {
-        String uID;
-        String username;
-        String correctPassword;
-
-        try {
-            username = resultSet.getString("username");
-            uID = resultSet.getString("userID");
-//            logger.log("Row username: " + username + "\n");
-        } catch (SQLException e) {
-            // result set is null, user doesn't exist
-            throw new SQLException("User can't be found in the table: " + e.getMessage());
-        }
-
-
-        correctPassword = resultSet.getString("password");
-        // TODO account for case in which password isn't a string, it's NULL
-//        logger.log("Row password: " + correctPassword + "\n");
-//        logger.log("Specified password: " + password + "\n");
-
-        if (correctPassword.equals(password)) { return new User (uID, username, password); }
-        return null;
     }
 
 }

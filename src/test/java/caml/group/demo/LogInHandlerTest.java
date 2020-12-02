@@ -51,18 +51,21 @@ public class LogInHandlerTest {
 
 		Assert.assertTrue(response.result);
 		Assert.assertEquals(200, response.statusCode);
+		Assert.assertEquals(req.getUsername(), response.username);
+		Assert.assertEquals(req.getPassword(), response.password);
+		Assert.assertEquals(""+req.getChoiceID(), response.choice.getID());
 	}
 
 	void testFailInput(String incoming, String outgoing) throws IOException, ClassNotFoundException, SQLException {
 		LogInHandler handler = new LogInHandler();
 		AddLogInRequest req = new Gson().fromJson(incoming, AddLogInRequest.class);
-		AddLogInResponse response = handler.handleRequest(req, createContext("compute"));
+		AddLogInResponse response = handler.handleRequest(req, createContext("post"));
 
-		//Assert.assertEquals(400, response.statusCode);
+		Assert.assertEquals(400, response.statusCode);
 	}
 
 	@Test
-	public void testAddUserSimple() throws Exception {
+	public void testAddUserAndPass() throws Exception {
 		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"Hello\"," +
 				"\"choiceID\": \"1234\"}";
 
@@ -72,19 +75,20 @@ public class LogInHandlerTest {
 			Assert.fail("Invalid:" + ioe.getMessage());
 		}
 	}
-/*
+
 	@Test
-	public void testAddUser() throws ClassNotFoundException, SQLException {
-		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"pass101\"}";
-		String RESULT = "true";
+	public void testAddUserNoPass() throws Exception {
+		String SAMPLE_INPUT_STRING = "{\"username\": \"jane doe\", \"password\": \"\"," +
+				"\"choiceID\": \"1234\"}";
+
 
 		try {
-			testInput(SAMPLE_INPUT_STRING, RESULT);
+			testInput(SAMPLE_INPUT_STRING);
 		} catch (IOException ioe) {
 			Assert.fail("Invalid:" + ioe.getMessage());
 		}
 	}
-
+/*
 	@Test
 	public void testLoadUser() throws ClassNotFoundException, SQLException {
 		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"pass101\"}";
