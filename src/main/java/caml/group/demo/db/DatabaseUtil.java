@@ -17,7 +17,7 @@ public class DatabaseUtil {
 	public final static String multiQueries = "?allowMultiQueries=true";
 	   
 	// Make sure matches Schema created from MySQL WorkBench
-	public final static String dbName = "project";            
+	public final static String dbName = "project";
 	
 	// pooled across all usages.
 	static Connection conn;
@@ -25,7 +25,7 @@ public class DatabaseUtil {
 	/**
 	 * Singleton access to DB connection to share resources effectively across multiple accesses.
 	 */
-	protected static Connection connect() throws Exception {
+	public static Connection connect() throws Exception {
 		if (conn != null) { return conn; }
 		
 		// this is resistant to any SQL-injection attack.
@@ -58,7 +58,7 @@ public class DatabaseUtil {
 					"Theo1020");
 			return conn;
 		} catch (Exception ex) {
-			System.err.println("DB-ERRORraed:" + schemaName + "," + dbUsername + "," + dbPassword + "," + rdsMySqlDatabaseUrl);
+			System.err.println("DB-ERROR read:" + schemaName + "," + dbUsername + "," + dbPassword + "," + rdsMySqlDatabaseUrl);
 			throw new Exception("Failed in database connection");
 		}
 	}

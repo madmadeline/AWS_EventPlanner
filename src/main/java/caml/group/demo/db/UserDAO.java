@@ -3,17 +3,18 @@ package caml.group.demo.db;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
-import caml.group.demo.model.Admin;
-//import caml.group.demo.model.Model;
 import caml.group.demo.model.User;
+
+import javax.xml.transform.Result;
 
 /**
  * For accessing the User table in RDS.
  * List of functions:
- *      getUser(String name, String pass, int choiceID) --> User
+ *      loadOrInsertUser(String name, String pass, int choiceID) --> User
  *      deleteUser(User user) --> boolean
  *      addUser(User user, int choiceID) --> boolean
  *      getAllUsers() --> List<User>
@@ -25,17 +26,16 @@ public class UserDAO {
 	java.sql.Connection conn;
 //	Model model;
 	final String usrTbl = "User";
-    final String choiceUsrTbl = "ChoiceUserMatch";
 
 
     public UserDAO(LambdaLogger logger) {
     	this.logger = logger;
     	try  {
-            logger.log("Connecting in UserDAO.java");
+//            logger.log("Connecting in UserDAO.java");
     		conn = DatabaseUtil.connect();
-            logger.log("Connection Succeeded in UserDAO.java");
+//            logger.log("Connection Succeeded in UserDAO.java");
     	} catch (Exception e) {
-    	    logger.log("Connection Failed in UserDAO.java");
+    	    logger.log("Failed to connect to User table\n");
     		conn = null;
     	}
     }
@@ -50,28 +50,28 @@ public class UserDAO {
      * @return the User object
      * @throws Exception if the user could not be found or inserted in the table
      */
-    public User getUser(String name, String pass, int choiceID) throws Exception {
+    public User loadOrInsertUser(String name, String pass, int choiceID) throws SQLException {
         User user = null; // User object representing the database entry
         PreparedStatement ps;
         ResultSet resultSet;
-
+//        System.out.println("inside loadOrInsertUser");
         // check if user is already registered in the choice
         try {
-            ps = conn.prepareStatement("SELECT " + usrTbl + ".username, " + usrTbl + ".password, "
-                    + choiceUsrTbl + ".choiceID FROM " + usrTbl + " INNER JOIN " + choiceUsrTbl
-                    + " on " + usrTbl + ".username=" + choiceUsrTbl + ".username WHERE " + usrTbl
-                    + ".username=? AND " + choiceUsrTbl + ".choiceID=?;");
-            // User.username=ChoiceUserMatch.username;
+            ps = conn.prepareStatement("SELECT * FROM " + usrTbl + " WHERE " + usrTbl
+                    + ".username=? AND " + usrTbl + ".choiceID=?;");
             ps.setString(1,  name);
             ps.setString(2, "" + choiceID);
             resultSet = ps.executeQuery(); // cursor that points to database row
 
+//            System.out.println("result set " + resultSet);
             // user isn't registered --> register user
             if (!resultSet.isBeforeFirst()) {
-                user = new User(name, pass);
-                addUser(user, choiceID);
-                logger.log("Registered new user\n");
-
+                user = new User(generateUserID(), name, pass);
+                try {
+                    addUser(user, choiceID);
+                } catch (SQLException e) {
+                    throw new SQLException("Couldn't add user" + e.getMessage());
+                }
                 resultSet.close();
                 ps.close();
                 return user;
@@ -88,9 +88,54 @@ public class UserDAO {
             ps.close();
             return user;
 
-        } catch (Exception e) {
-            throw new Exception("Failed to get user\n" + e.getMessage());
+        } catch (SQLException e) {
+            throw new SQLException("Failed to get user\n" + e.getMessage());
         }
+    }
+
+    /**
+     * Returns whether or not the given user ID is already in the User table.
+     * @param uID The given user ID
+     * @return true if the table has the id, false otherwise
+     */
+    public boolean userIDExists(String uID) throws SQLException {
+        PreparedStatement ps;
+        ResultSet rs;
+
+        try {
+//            System.out.println("in userIDExists");
+            ps = conn.prepareStatement("SELECT * FROM " + usrTbl + " WHERE " + usrTbl
+                    + ".userID=?;");
+            ps.setString(1, uID);
+            rs = ps.executeQuery(); // cursor that points to database row
+//            System.out.println("after userIDExists");
+            return (!rs.isBeforeFirst()); // TODO make sure this works
+        } catch (Exception e) {
+            throw new SQLException("Failed to view User table: " + e.getMessage());
+        }
+
+    }
+
+
+    /**
+     * Gets a unique number ID that's not already in the User table.
+     * @return the user ID
+     */
+    private String generateUserID() {
+        String randString;
+
+        while(true){
+            Random rand = new Random();
+            int randInt = rand.nextInt(9000) + 1000;
+            randString = String.valueOf(randInt);
+            try {
+                if(userIDExists(randString)) break;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+//        System.out.println("generated a user ID");
+        return randString;
     }
 
 
@@ -104,7 +149,7 @@ public class UserDAO {
         try {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM " + usrTbl
                     + " WHERE name = ?;");
-            ps.setString(1, user.getID());
+            ps.setString(1, user.getName());
             int numAffected = ps.executeUpdate();
             ps.close();
             
@@ -122,17 +167,15 @@ public class UserDAO {
      * @return true if the User was added, false otherwise
      * @throws Exception, failed to insert user
      */
-    public boolean addUser(User user, int choiceID) throws Exception {
+    public boolean addUser(User user, int choiceID) throws SQLException {
         PreparedStatement ps;
 
         try {
             // already present?
-            ps = conn.prepareStatement("SELECT " + usrTbl + ".username, " + usrTbl + ".password, "
-                    + choiceUsrTbl + ".choiceID FROM " + usrTbl + " INNER JOIN " + choiceUsrTbl
-                    + " on " + usrTbl + ".username=" + choiceUsrTbl + ".username WHERE " + usrTbl
-                    + ".username=? AND " + choiceUsrTbl + ".choiceID=?;");
-            ps.setString(1, user.getID());
-            ps.setString(2, ""+choiceID);
+            ps = conn.prepareStatement("SELECT * FROM " + usrTbl + " WHERE " + usrTbl
+                    + ".username=? AND " + usrTbl + ".choiceID=?;");
+            ps.setString(1, user.getName());
+            ps.setString(2, "" + choiceID);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.isBeforeFirst()) {
                logger.log("User can't be added because they are already in the table\n");
@@ -142,25 +185,19 @@ public class UserDAO {
 
             // add to User table
             ps = conn.prepareStatement("INSERT INTO " + usrTbl +
-                    " (username,password) values(?,?);");
-            ps.setString(1, user.getID());
-            ps.setString(2, user.getPassword());
+                    " (userID,username,password,choiceID) values(?,?,?,?);");
+            ps.setString(1, "" + user.getID());
+            ps.setString(2, user.getName());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, "" + choiceID);
             ps.execute();
-//            logger.log("Inserted into the User table\n");
-
-            // add to ChoiceUserMatch table
-            ps = conn.prepareStatement("INSERT INTO " + choiceUsrTbl +
-                    " (username,choiceID) values(?,?);");
-            ps.setString(1, user.getID());
-            ps.setInt(2, choiceID);
-            ps.execute();
-//            logger.log("Inserted into the ChoiceUserMatch table\n");
+            logger.log("Inserted the user into the User table\n");
 
             ps.close();
             return true;
 
-        } catch (Exception e) {
-            throw new Exception("Failed to insert user: " + e.getMessage());
+        } catch (SQLException e) {
+            throw new SQLException("Failed to insert user: " + e.getMessage());
         }
     }
 
@@ -200,16 +237,18 @@ public class UserDAO {
      * @return a User object
      * @throws Exception, user doesn't exist in the database
      */
-    private User rowToUserObject(ResultSet resultSet, String password) throws Exception {
+    private User rowToUserObject(ResultSet resultSet, String password) throws SQLException {
+        String uID;
         String username;
         String correctPassword;
 
         try {
             username = resultSet.getString("username");
+            uID = resultSet.getString("userID");
 //            logger.log("Row username: " + username + "\n");
-        } catch (Exception e) {
+        } catch (SQLException e) {
             // result set is null, user doesn't exist
-            throw new Exception("User can't be found in the table: " + e.getMessage());
+            throw new SQLException("User can't be found in the table: " + e.getMessage());
         }
 
 
@@ -217,7 +256,8 @@ public class UserDAO {
         // TODO account for case in which password isn't a string, it's NULL
 //        logger.log("Row password: " + correctPassword + "\n");
 //        logger.log("Specified password: " + password + "\n");
-        if (correctPassword.equals(password)) { return new User (username, password); }
+
+        if (correctPassword.equals(password)) { return new User (uID, username, password); }
         return null;
     }
 

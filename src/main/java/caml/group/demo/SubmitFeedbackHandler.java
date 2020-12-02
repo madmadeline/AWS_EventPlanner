@@ -13,14 +13,12 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.amazonaws.util.json.Jackson;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import caml.group.demo.model.Model;
 
 public class SubmitFeedbackHandler implements RequestStreamHandler {
-	Model model;
 	LambdaLogger logger;
 	
-	public SubmitFeedbackHandler(Model model) {
-		this.model = model;
+	public SubmitFeedbackHandler(LambdaLogger logger) {
+		this.logger = logger;
 	}
 
 	@Override
@@ -72,7 +70,7 @@ public class SubmitFeedbackHandler implements RequestStreamHandler {
 		if (error) {
 			statusCode = 400;
 		} else {
-			model.getCurrentUser().submitFeedback(feedback);
+//			model.getCurrentUser().submitFeedback(feedback);
 	    	statusCode = 200;
 		}
     	

@@ -13,20 +13,15 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.amazonaws.util.json.Jackson;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import caml.group.demo.model.Admin;
 import caml.group.demo.model.Choice;
-import caml.group.demo.model.Model;
 import caml.group.demo.model.Report;
 
 public class DeleteReportHandler implements RequestStreamHandler {
-	Model model;
-	Admin admin;
 	LambdaLogger logger;
 
 
-	public DeleteReportHandler(Model model) {
-		this.model = model;
-		this.admin = model.getAdmin();
+	public DeleteReportHandler(LambdaLogger logger) {
+		this.logger = logger;
 	}
 	
 
@@ -79,7 +74,7 @@ public class DeleteReportHandler implements RequestStreamHandler {
 		if (error) {
 			statusCode = 400;
 		} else {
-			numReportsDeleted = admin.deleteReports(nDays);
+//			numReportsDeleted = admin.deleteReports(nDays);
 			statusCode = 200;
 		}
 

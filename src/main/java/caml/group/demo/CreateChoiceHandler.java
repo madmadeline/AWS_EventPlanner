@@ -3,6 +3,7 @@ package caml.group.demo;
 import caml.group.demo.db.ChoiceDAO;
 import caml.group.demo.http.AddCreateChoiceRequest;
 import caml.group.demo.http.AddCreateChoiceResponse;
+import caml.group.demo.http.AddLogInResponse;
 import caml.group.demo.model.Alternative;
 import caml.group.demo.model.Choice;
 import com.amazonaws.services.lambda.runtime.Context;

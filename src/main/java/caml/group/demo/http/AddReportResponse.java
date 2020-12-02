@@ -13,7 +13,7 @@ public class AddReportResponse {
     public AddReportResponse(ArrayList<Choice> choices, int statusCode){
         this.result = true;
         this.choices = choices;
-        this.statusCode = 200;
+        this.statusCode = statusCode;
     }
 
     public AddReportResponse(int statusCode, String errorMessage){
