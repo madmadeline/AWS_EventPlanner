@@ -76,7 +76,7 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 		if(req.getAlt5ID() != null) alts.add(alt5);
 
 		Choice choice = new Choice(randString, req.getChoiceDescription(), alts,
-				time);
+				time, req.getMaxTeamSize());
 		if(alts.size() >= 2){
 			try {
 				createChoice(choice);

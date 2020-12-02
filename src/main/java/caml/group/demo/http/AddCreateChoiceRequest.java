@@ -7,6 +7,7 @@ public class AddCreateChoiceRequest {
     String choiceID;
     String choiceDescription;
     Timestamp dateOfCreation;
+    int maxTeamSize;
     String alt1ID;
     String alt1Description;
     String alt2ID;
@@ -18,6 +19,9 @@ public class AddCreateChoiceRequest {
     String alt5ID;
     String alt5Description;
     String desiredChoice;
+
+    public int getMaxTeamSize() { return maxTeamSize; }
+    public void setMaxTeamSize(int teamSize) { this.maxTeamSize = teamSize; }
 
     public String getChoiceID() { return choiceID; }
     public void setChoiceID(String id) { this.choiceID = id; }

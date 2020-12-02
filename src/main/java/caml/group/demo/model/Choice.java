@@ -21,6 +21,15 @@ public class Choice {
 		this.time = time;
 		this.winner = null;
 	}
+
+	public Choice(String id, String description, ArrayList<Alternative> alternatives, Timestamp time, int teamSize) {
+		this.id = id;
+		this.description = description;
+		this.alternatives = alternatives;
+		this.time = time;
+		this.winner = null;
+		this.maxTeamSize = teamSize;
+	}
 	
 	public String getID() { return this.id; }
 
@@ -29,6 +38,7 @@ public class Choice {
 	}
 
 	public int getMaxTeamSize() { return maxTeamSize; }
+	public void setMaxTeamSize(int teamSize){ this.maxTeamSize = teamSize; }
 
 	public String getDescription(){
 		return description;
