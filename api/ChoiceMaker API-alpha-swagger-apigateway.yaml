@@ -1,0 +1,242 @@
+---
+swagger: "2.0"
+info:
+  description: "This is the API for Caml's Soft Eng project"
+  version: "1.0.0"
+  title: "ChoiceMaker API"
+host: "24afvsw7sh.execute-api.us-east-1.amazonaws.com"
+basePath: "/alpha"
+schemes:
+- "https"
+paths:
+  /choice:
+    get:
+      operationId: "getChoices"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ArrayOfChoice"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        400:
+          description: "400 response"
+      x-amazon-apigateway-integration:
+        type: "aws"
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:341217184294:function:findChoice/invocations"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+    post:
+      operationId: "addChoice"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "Choice"
+        required: true
+        schema:
+          $ref: "#/definitions/Choice"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Choice"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        400:
+          description: "400 response"
+      x-amazon-apigateway-integration:
+        type: "aws"
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:341217184294:function:createChoice/invocations"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+    options:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        type: "mock"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+  /user:
+    post:
+      operationId: "createUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "User"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/User"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        400:
+          description: "400 response"
+      x-amazon-apigateway-integration:
+        type: "aws"
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:341217184294:function:login/invocations"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+    options:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        type: "mock"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+  /report:
+    get:
+      tags:
+      - admins
+      summary: gets all of the choices from the db
+      operationId: getChoices
+      description: The admin can display a report of the choices found in the database.
+      produces:
+      - application/json
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Choice'
+        400:
+          description: "400 response"
+definitions:
+  Choice:
+    type: "object"
+    required:
+    - "alternatives"
+    - "description"
+    - "id"
+    - "time"
+    properties:
+      id:
+        type: "integer"
+      description:
+        type: "string"
+      alternatives:
+        type: "array"
+        items:
+          $ref: "#/definitions/Alternative"
+      time:
+        type: "object"
+        properties: {}
+  Alternative:
+    type: "object"
+    required:
+    - "description"
+    - "feedback"
+    - "totalApprovals"
+    - "totalDisapprovals"
+    properties:
+      description:
+        type: "string"
+      totalApprovals:
+        type: "integer"
+      totalDisapprovals:
+        type: "integer"
+      feedback:
+        type: "array"
+        items:
+          $ref: "#/definitions/Feedback"
+  User:
+    type: "object"
+    required:
+    - "password"
+    - "username"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+  Feedback:
+    type: "object"
+    required:
+    - "message"
+    - "timestamp"
+    - "userID"
+    properties:
+      message:
+        type: "string"
+      timestamp:
+        type: "object"
+        properties: {}
+      userID:
+        type: "string"
+  ArrayOfChoice:
+    type: "array"
+    items:
+      $ref: "#/definitions/Choice"

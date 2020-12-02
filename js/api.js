@@ -6,6 +6,7 @@ var base_url = "https://24afvsw7sh.execute-api.us-east-1.amazonaws.com/alpha/";
 
 var find_choice_url = base_url + "choice"; //GET
 var create_choice_url = base_url + "choice"; //POST
+var get_report_url = base_url + "report"; //GET
 var participate_url = base_url + "participate"; //POST
 var feedback_url = base_url + "feedback"; //POST
 var approve_url = base_url + "approve"; //POST

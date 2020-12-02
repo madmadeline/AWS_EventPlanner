@@ -54,6 +54,18 @@ public class ChoiceDAO {
         logger.log("Returning choice");
         return choice;
     }
+    
+    public ArrayList<Choice> getReport() throws Exception{
+    	logger.log("creating report");
+    	ArrayList<Choice> choices = null;
+    	
+    	//what to do in here?
+    	PreparedStatement ps = conn.prepareStatement("");
+    	ps.close();
+    	
+    	logger.log("returning report.");
+    	return choices;
+    }
 
     public Boolean checkChoice(String id) throws SQLException {
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice where choiceID=?");
