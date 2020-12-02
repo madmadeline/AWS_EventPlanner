@@ -12,6 +12,7 @@ public class AddFindChoiceResponse {
     public String error;
     public String choiceID;
     public String description;
+    public int maxTeamSize;
     public Timestamp time;
     public ArrayList<Alternative> alts;
 
@@ -22,6 +23,7 @@ public class AddFindChoiceResponse {
         this.alts = choice.getAlternatives();
         this.time = choice.getTime();
         this.statusCode = 200;
+        this.maxTeamSize = choice.getMaxTeamSize();
     }
 
     public AddFindChoiceResponse(int statusCode, String errorMessage){

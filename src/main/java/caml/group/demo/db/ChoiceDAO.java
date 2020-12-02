@@ -40,8 +40,8 @@ public class ChoiceDAO {
         logger.log(id);
         Choice choice = null;
         PreparedStatement ps = conn.prepareStatement(
-                "Select c.choiceID, c.description as cDesc, altID, a.description as aDesc, dateOfCreation " +
-                        "From " + tblName + " c " +
+                "Select c.choiceID, c.description as cDesc, altID, a.description as aDesc, dateOfCreation, " +
+                        "maxTeamSize From " + tblName + " c " +
                 "join Alternative a on a.choiceID = c.choiceID WHERE c.choiceID=?");
         //PreparedStatement ps = conn.prepareStatement("Select c.id as cID, c.description as cDesc From Choice");
         ps.setString(1, id);
@@ -74,11 +74,12 @@ public class ChoiceDAO {
         //        "Insert into Choice(id, description, dateOfCreation, winningAlt) values (1234, 'test 1', 20201123, null);"
         //);
         PreparedStatement ps = conn.prepareStatement(
-                "Insert into " + tblName + "(choiceID, description, dateOfCreation, winningAlt) values (?,?,?,null);"
+                "Insert into " + tblName + "(choiceID, description, dateOfCreation, winningAlt, maxTeamSize) values (?,?,?,null,?);"
         );
         ps.setString(1, choice.getID());
         ps.setString(2, choice.getDescription());
         ps.setTimestamp(3, choice.getTime());
+        ps.setInt(4, choice.getMaxTeamSize());
         logger.log("Executing add choice statement");
         ps.execute();
         ps.close();
@@ -111,6 +112,7 @@ public class ChoiceDAO {
         Timestamp time = null;
         String aID = "";
         String aDesc = "";
+        int teamSize = 0;
 
         while(rs.next()){
             id = rs.getString("choiceID");
@@ -123,6 +125,8 @@ public class ChoiceDAO {
             logger.log("got aID");
             aDesc = rs.getString("aDesc");
             logger.log("got aDesc");
+            teamSize = rs.getInt("maxTeamSize");
+            logger.log("got maxTeamSize");
             Alternative alt = new Alternative(aID, aDesc);
             logger.log("made alt");
             alts.add(alt);
@@ -131,6 +135,6 @@ public class ChoiceDAO {
 
         rs.close();
 
-        return new Choice(id, description, alts, time);
+        return new Choice(id, description, alts, time, teamSize);
     }
 }
