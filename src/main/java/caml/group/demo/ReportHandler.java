@@ -19,7 +19,7 @@ public class ReportHandler implements RequestHandler<AddReportRequest,AddReportR
         logger.log("Getting dao");
         ChoiceDAO dao = new ChoiceDAO(logger);
         logger.log("Got dao. Getting choice");
-        choices = dao.getReport();
+        choices = dao.getAllChoices();
         return choices;
     }
 	
@@ -36,10 +36,10 @@ public class ReportHandler implements RequestHandler<AddReportRequest,AddReportR
 
         try{
             choices = getReport();
-            for (int i = 0; i < choices.size(); i++) {
+           // for (int i = 0; i < choices.size(); i++) {
             	//print the choice
-            	logger.log(choices.get(i).getDescription());
-            }
+           // 	logger.log(choices.get(i).getDescription());
+           // }
         } catch (Exception e) {
             fail = true;
             failMessage = "Failed to generate report";

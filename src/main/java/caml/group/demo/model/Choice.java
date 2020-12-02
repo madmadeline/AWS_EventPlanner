@@ -30,6 +30,15 @@ public class Choice {
 		this.winner = null;
 		this.maxTeamSize = teamSize;
 	}
+
+	public Choice(String id, String description, Timestamp time, int teamSize) {
+		this.id = id;
+		this.description = description;
+		this.alternatives = null;
+		this.time = time;
+		this.winner = null;
+		this.maxTeamSize = teamSize;
+	}
 	
 	public String getID() { return this.id; }
 

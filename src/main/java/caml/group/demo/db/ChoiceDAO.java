@@ -55,12 +55,16 @@ public class ChoiceDAO {
         return choice;
     }
     
-    public ArrayList<Choice> getReport() throws Exception{
+    public ArrayList<Choice> getAllChoices() throws Exception{
     	logger.log("creating report");
     	ArrayList<Choice> choices = null;
     	
     	//what to do in here?
-    	PreparedStatement ps = conn.prepareStatement("");
+    	PreparedStatement ps = conn.prepareStatement("Select * From Choice");
+    	ResultSet rs = ps.executeQuery();
+    	logger.log("Generating report");
+    	choices = generateReport(rs);
+    	rs.close();
     	ps.close();
     	
     	logger.log("returning report.");
@@ -148,5 +152,18 @@ public class ChoiceDAO {
         rs.close();
 
         return new Choice(id, description, alts, time, teamSize);
+    }
+
+    private ArrayList<Choice> generateReport(ResultSet rs) throws Exception {
+        ArrayList<Choice> choices = new ArrayList<>();
+
+        while(rs.next()){
+            logger.log("Getting choice data");
+            Choice choice = new Choice(rs.getString("choiceID"), rs.getString("description"),
+                    rs.getTimestamp("dateOfCreation"), rs.getInt("maxTeamSize"));
+            choices.add(choice);
+        }
+
+        return choices;
     }
 }
