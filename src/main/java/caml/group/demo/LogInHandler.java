@@ -1,10 +1,10 @@
-// TODO delete login and register functions in Model class
-
 package caml.group.demo;
 
+import caml.group.demo.db.ChoiceDAO;
 import caml.group.demo.http.AddLogInRequest;
 import caml.group.demo.http.AddLogInResponse;
 
+import caml.group.demo.model.Choice;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -16,7 +16,7 @@ import caml.group.demo.model.User;
 /**
  * For handling JSON requests for registering and logging in a user to a choice.
  * List of functions:
- * 		loadOrInsertUser(String name, String pass, int choiceID) --> User
+ * 		logInOrRegister(String name, String pass, int choiceID) --> User
  * 		handleRequest(AddLogInRequest req, Context context) --> AddLogInResponse
  * @author Group Caml
  */
@@ -32,13 +32,12 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 	 * @return the User
 	 * @throws Exception if the user couldn't be loaded or registered
 	 */
-	public User loadOrInsertUser(String name, String pass, int choiceID) throws Exception {
+	public User logInOrRegister(String name, String pass, int choiceID) throws Exception {
 		User user;
-
-		logger.log("Attempting to load or insert User into table\n");
+		logger.log("Attempting to log in or register User\n");
 		try { // try getting the User from RDS
 			UserDAO dao = new UserDAO(logger);
-			user = dao.getUser(name, pass, choiceID);
+			user = dao.loadOrInsertUser(name, pass, choiceID);
 			return user;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -68,8 +67,9 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 		User user = null;
 		String name;
 		String pass;
-		int choiceID;
+		int choiceID = 0;
 		AddLogInResponse response;
+		Choice choice = null;
 
 		try { // get the given username and password
 			name = req.getUsername();
@@ -82,9 +82,11 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 			}
 			try {
 				choiceID = req.getChoiceID();
+				ChoiceDAO cdao = new ChoiceDAO(logger);
+				choice = cdao.getChoice(""+choiceID);
 				try {
 					pass = req.getPassword();
-					user = loadOrInsertUser(name, pass, choiceID); // try to log in
+					user = logInOrRegister(name, pass, choiceID); // try to log in
 				} catch (Exception e) { // can't get password from request
 					failMessage = "Invalid password: " + req.getPassword() + ".";
 					fail = true;
@@ -99,10 +101,14 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 
 		// compute proper response and return. Note that the status code is internal to the HTTP response
 		// and has to be processed specifically by the client code.
-		if (fail) {
-			response = new AddLogInResponse(user,400, failMessage);
-		} else {
-			response = new AddLogInResponse(user, 200);  // success
+		response = new AddLogInResponse(400, failMessage);
+
+		if (!fail) {
+			try {
+				response = new AddLogInResponse(user, choice,200);  // success
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		logger.log(response.toString());

@@ -8,19 +8,12 @@ import java.sql.Timestamp;
 public class Choice {
 	final String id;
 	final String description;
-	final ArrayList<Alternative> alternatives;// = new ArrayList<Alternative>();
-	int maxTeamSize;
-	ArrayList<User> users;
 	Timestamp time;
 	Alternative winner;
+	final ArrayList<Alternative> alternatives;// = new ArrayList<Alternative>();
+	ArrayList<User> users;
+	final int maxTimeSize;
 
-	public Choice(String id, String description, ArrayList<Alternative> alternatives, Timestamp time) {
-		this.id = id;
-		this.description = description;
-		this.alternatives = alternatives;
-		this.time = time;
-		this.winner = null;
-	}
 
 	public Choice(String id, String description, ArrayList<Alternative> alternatives, Timestamp time, int teamSize) {
 		this.id = id;
@@ -28,7 +21,7 @@ public class Choice {
 		this.alternatives = alternatives;
 		this.time = time;
 		this.winner = null;
-		this.maxTeamSize = teamSize;
+		this.maxTimeSize = teamSize;
 	}
 
 	public Choice(String id, String description, Timestamp time, int teamSize) {
@@ -37,17 +30,17 @@ public class Choice {
 		this.alternatives = null;
 		this.time = time;
 		this.winner = null;
-		this.maxTeamSize = teamSize;
+		this.maxTimeSize = teamSize;
 	}
 	
 	public String getID() { return this.id; }
-
+	public int getMaxTimeSize() { return this.maxTimeSize; };
 	public ArrayList<Alternative> getAlternatives() {
 		return alternatives;
 	}
 
-	public int getMaxTeamSize() { return maxTeamSize; }
-	public void setMaxTeamSize(int teamSize){ this.maxTeamSize = teamSize; }
+	public int getMaxTeamSize() { return maxTimeSize; }
+//	public void setMaxTeamSize(int teamSize){ this.maxTeamSize = teamSize; }
 
 	public String getDescription(){
 		return description;

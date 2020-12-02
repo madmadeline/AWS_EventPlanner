@@ -11,7 +11,6 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 public class ChoiceDAO {
     LambdaLogger logger;
     java.sql.Connection conn;
-    Model model;
     final String tblName = "Choice";
 
     public ChoiceDAO(LambdaLogger logger){
@@ -36,8 +35,8 @@ public class ChoiceDAO {
      * @throws SQLException, exception thrown on fail
      */
     public Choice getChoice(String id) throws Exception {
-        logger.log("getting choice");
-        logger.log(id);
+        logger.log("Getting choice\n");
+//        logger.log(id);
         Choice choice = null;
         PreparedStatement ps = conn.prepareStatement(
                 "Select c.choiceID, c.description as cDesc, altID, a.description as aDesc, dateOfCreation, " +
@@ -46,12 +45,12 @@ public class ChoiceDAO {
         //PreparedStatement ps = conn.prepareStatement("Select c.id as cID, c.description as cDesc From Choice");
         ps.setString(1, id);
         ResultSet rs = ps.executeQuery();
-        logger.log("Generating choice");
+//        logger.log("Generating choice");
         choice = generateChoice(rs);
 
         rs.close();
         ps.close();
-        logger.log("Returning choice");
+//        logger.log("Returning choice");
         return choice;
     }
     
@@ -122,7 +121,7 @@ public class ChoiceDAO {
      */
     private Choice generateChoice(ResultSet rs) throws Exception {
         ArrayList<Alternative> alts = new ArrayList<>();
-        logger.log("In gen choice");
+//        logger.log("Generating choice from result set");
         String id = "";
         String description = "";
         Timestamp time = null;
@@ -132,25 +131,24 @@ public class ChoiceDAO {
 
         while(rs.next()){
             id = rs.getString("choiceID");
-            logger.log("Got cID");
+//            logger.log("Got cID");
             description = rs.getString("cDesc");
-            logger.log("Got cDesc");
+//            logger.log("Got cDesc");
             time = rs.getTimestamp("dateOfCreation");
-            logger.log("got time");
+//            logger.log("got time");
             aID = rs.getString("altID");
-            logger.log("got aID");
+//            logger.log("got aID");
             aDesc = rs.getString("aDesc");
             logger.log("got aDesc");
             teamSize = rs.getInt("maxTeamSize");
             logger.log("got maxTeamSize");
             Alternative alt = new Alternative(aID, aDesc);
-            logger.log("made alt");
+//            logger.log("made alt");
             alts.add(alt);
-            logger.log("added alt to alts");
+//            logger.log("added alt to alts");
         }
 
         rs.close();
-
         return new Choice(id, description, alts, time, teamSize);
     }
 

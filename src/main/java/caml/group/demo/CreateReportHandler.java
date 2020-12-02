@@ -13,20 +13,15 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.amazonaws.util.json.Jackson;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import caml.group.demo.model.Admin;
-import caml.group.demo.model.Model;
 import caml.group.demo.model.Report;
 import caml.group.demo.model.Choice;
 
 public class CreateReportHandler implements RequestStreamHandler {
-	Model model;
-	Admin admin;
 	LambdaLogger logger;
 
 
-	public CreateReportHandler(Model model) {
-		this.model = model;
-		this.admin = model.getAdmin();
+	public CreateReportHandler(LambdaLogger logger) {
+		this.logger = logger;
 	}
 
 
@@ -83,8 +78,6 @@ public class CreateReportHandler implements RequestStreamHandler {
 		if (error) {
 			statusCode = 400;
 		} else {
-			Choice choice = model.getCurrentChoice();
-			report = admin.createReport(choice);
 			// TODO insert report into database
 			statusCode = 200;
 		}

@@ -6,9 +6,7 @@ import java.util.List;
 
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
-import caml.group.demo.model.Admin;
 import caml.group.demo.model.Alternative;
-import caml.group.demo.model.Model;
 import caml.group.demo.model.User;
 
 
@@ -21,7 +19,6 @@ import caml.group.demo.model.User;
 public class AlternativeDAO { 
 	LambdaLogger logger;
 	java.sql.Connection conn;
-	Model model;
 	final String tblName = "Alternative";   // Exact capitalization
 
 	public AlternativeDAO(LambdaLogger logger) {
