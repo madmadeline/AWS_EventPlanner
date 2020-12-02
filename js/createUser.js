@@ -12,12 +12,12 @@ function processCreateUserResponse(result) {
 	var choiceID = obj.choiceID;
 	var maxTeamSize = obj.maxTeamSize;
 	var description = obj.description;
-	var alts = obj.alts;
+	//var alts = obj.alts;
 	
 	//update the UI
 	document.createChoiceForm.choiceDesc.value = description;
 	document.createChoiceForm.numParticipants.value = maxTeamSize;
-	document.createChoiceForm.alt1.value = alts[0];
+	/*document.createChoiceForm.alt1.value = alts[0];
 	document.createChoiceForm.alt2.value = alts[1];
 	//all other alts are optional, so check length
 	if (alts.length > 2){
@@ -28,8 +28,16 @@ function processCreateUserResponse(result) {
 	}
 	if (alts.length > 4){
 		document.createChoiceForm.alt5.value = alts[4];
-	}
+	}*/
 	
+	//display the alternative approval UI and list the alternatives (with buttons!)
+	document.getElementById("alternativeApproval").style.visibility = "visible";
+	var display = document.getElementById("altList");
+	var altList = "";
+	
+	
+	
+	display.innerHTML = altList;
   }else{
 	//error
 	console.log("User could not be created.");

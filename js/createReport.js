@@ -22,6 +22,7 @@ function processReportResponse(result){
 	console.log("res: " + result);
 	var obj = JSON.parse(result);
 	var reportList = document.getElementById("reportList");
+	var choices = obj.choices;
 	var output = "";
 	
 	//check the status code
@@ -29,7 +30,23 @@ function processReportResponse(result){
 		//choices found, display them
 		//must display the choice description, choice ID, choice date of creation, and completion status.
 		console.log("Report success.");
-		reportList.innerHTML = "Status code success. edit the js now!";
+		var isComplete = false;
+		/*if (choices[i].winner == NULL){
+			isComplete = false;
+		}else{
+			isComplete = true;
+		}*/
+		var output = "";
+		//for loop goes through the list of choices
+		for (var i = 0; i < choices.length; i++){
+			var date = new Date(choices[i].time);
+			//print the choice descriptions
+			output += "Choice: " + choices[i].description + "<br />" +
+					  "ID: " + choices[i].ID + "<br />" +
+					  "Creation Date: " + date.toString() + "<br />"+
+					  "Completed?: " + isComplete + "<br />" + "<br />";
+		}
+		reportList.innerHTML = output;
 	}else{
 		//choices not found, or error
 		console.log("Error generating report.");

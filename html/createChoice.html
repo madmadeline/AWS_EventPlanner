@@ -44,10 +44,11 @@
         </div>
         <div class = "findChoiceDiv">
             <h2>Find a choice by ID:</h2>
-            <form name = 'findChoiceForm' method = 'post'>
+            <form name = 'findChoiceForm' method = 'get'>
                 <input name = 'findChoice' type = "text" id = "findChoice">
                 <input type = "button" id = "findButton" value = "Find" onclick = "Javascript:handleFindClick(this)">
             </form>
+            <div id = "findChoiceResult"></div>
         </div>
         <div class = "makeNewUser">
         	<h2 id = "registerHeader">Register with a Choice:</h2>
@@ -61,6 +62,10 @@
         	</form>
         	<input type="button" id="createUserBtn" value="Register" onclick = "Javascript:handleUserClick(this)">
         	<div id = "userList"></div>
+        </div>
+        <div class = "alternativeApproval">
+        	<h2 id = "approvalHeader">Approve an Alternative:</h2>
+        	<div id = "altList"></div>
         </div>
     </body>
 </html>

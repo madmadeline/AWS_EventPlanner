@@ -111,3 +111,7 @@ thead, tfoot{
 #choicesTbl{
     margin-top: 20px;
 }
+
+.alternativeApproval{
+	visibility: hidden;
+}

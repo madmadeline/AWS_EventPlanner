@@ -39,6 +39,7 @@ function processFindResponse(result) {
   }else{
 	//error
 	console.log("Choice could not be found or does not exist.");
+	document.getElementById("findChoiceResult").innerHTML = "Choice does not exist.";
   }
 
 }
@@ -52,7 +53,7 @@ function handleFindClick(e) {
   var js = JSON.stringify(data);
   console.log("JS:" + js);
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", find_choice_url, true);
+  xhr.open("GET", find_choice_url, true);
 
   // send the collected data as JSON
   xhr.send(js);

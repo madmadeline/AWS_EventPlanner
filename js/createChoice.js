@@ -11,7 +11,11 @@ function processCreateResponse(result) {
 		//get the choice info from the parsed json
 		var choiceID = obj.choiceID;
 		var description = obj.description;
-		var alts = obj.alts;
+		var alt1 = obj.alt1;
+		var alt2 = obj.alt2;
+		var alt3 = obj.alt3;
+		var alt4 = obj.alt4;
+		var alt5 = obj.alt5;
 		
 		//update the register form
 		document.createUserForm.newChoiceID.value = choiceID;
@@ -21,49 +25,14 @@ function processCreateResponse(result) {
 		var altsOutput = "";
 		
 		//get the alternatives output
-		var len = Object.keys(obj.alts[0]).length;
-		len = len - 1;
-		for (var i = 0; i < len; i++){
-			altsOutput += ("Alternative " + i + "ID: " + alts[i].ID + " Description: " + alts[i].description + "\"><b>");
-		}
-		output = "Choice Description: " + description + " Choice ID: " + choiceID + " Alternatives: " + "\"><b>" + altsOutput;
+		altsOutput = alt1 + "<br />" + alt2 + "<br />" + alt3 + "<br />" + alt4 + "<br />" + alt5 + "<br />";
+		output = "Choice Description: " + description + "<br />" + "Choice ID:" + choiceID + "<br />" + "Alternatives: " + "<br />" + altsOutput;
 		
 		displayChoice.innerHTML = output;
 	}else{
 		//error
 		console.log("Choice failed to create.");
 	}
-	
-	
-	/* OLD JS=======================================================================
-	var id = obj.choiceID; //the choice id
-	
-	//change the innerHTML of the register choice thing
-	var head = document.getElementById("registerHeader");
-	head.innerHTML = "Register with Choice: " + id;
-	
-		var displayChoice = document.getElementById('displayChoice');
-
-	var len = Object.keys(obj.alts[0]).length;
-
-	var output = "";
-	//print the info about the alternatives
-	
-	var altOutput = "";
-	for(var i = 0; i < len - 1; i++){
-		console.log("GET ALTS: " + obj.alts[i].description);
-		altOutput += ("Alternative " + i +  " ID: " + obj.alts[i].ID +  " Description: " + obj.alts[i].description + "\n");
-	}
-		
-    output = "Choice Description: " + obj.description + " Choice ID: " + obj.choiceID + " Alternatives:\n" + altOutput;
-
-
-  // Update computation result
-  displayChoice.innerHTML = output;
-
-	console.log("ID: " + obj.choiceID);
-
-  refreshChoicesList();*/
 }
 
 function handleCreateClick(e) {
@@ -72,7 +41,12 @@ function handleCreateClick(e) {
   var data = {};
   data["choiceDescription"] = form.choiceDesc.value;
   data["maxTeamSize"] = form.numParticipants.value;
-  data["alternatives"] = [form.alt1.value, form.alt2.value, form.alt3.value, form.alt4.value, form.alt5.value];
+  data["alt1ID"] = form.alt1.value;
+  data["alt2ID"] = form.alt2.value;
+  data["alt3ID"] = form.alt3.value;
+  data["alt4ID"] = form.alt4.value;
+  data["alt5ID"] = form.alt5.value;
+
 
   var js = JSON.stringify(data);
   console.log("JS:" + js);
