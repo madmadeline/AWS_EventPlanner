@@ -64,6 +64,10 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 				choiceID = req.getChoiceID();
 				ChoiceDAO cdao = new ChoiceDAO(logger);
 				choice = cdao.getChoice(""+choiceID);
+				if (choice == null ) {
+					failMessage = "Invalid Choice ID";
+					fail = true;
+				}
 
 				// try to log in
 				try {
@@ -72,8 +76,10 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 						failMessage = "The password is longer than 30 characters.";
 						fail = true;
 					}
-					UserDAO dao = new UserDAO(logger);
-					user = dao.loadOrInsertUser(name, pass, choiceID);
+					if (!fail) {
+						UserDAO dao = new UserDAO(logger);
+						user = dao.loadOrInsertUser(name, pass, choiceID);
+					}
 				} catch (Exception e) {
 					failMessage = "Invalid password: " + req.getPassword() + ".";
 					fail = true;

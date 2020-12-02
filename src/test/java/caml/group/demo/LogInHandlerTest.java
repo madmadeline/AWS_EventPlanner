@@ -39,8 +39,6 @@ public class LogInHandlerTest {
 	}
 
 
-
-
 	void testInput(String incoming) throws Exception {
 		java.sql.Connection conn;
 		conn = DatabaseUtil.connect();
@@ -88,6 +86,33 @@ public class LogInHandlerTest {
 			Assert.fail("Invalid:" + ioe.getMessage());
 		}
 	}
+
+	@Test
+	public void testAddUserInvalidChoiceID() throws Exception {
+		String SAMPLE_INPUT_STRING = "{\"username\": \"jane doe\", \"password\": \"\"," +
+				"\"choiceID\": \"9999\"}";
+
+
+		try {
+			testFailInput(SAMPLE_INPUT_STRING, "hi");
+		} catch (IOException ioe) {
+			Assert.fail("Invalid:" + ioe.getMessage());
+		}
+	}
+
+	@Test
+	public void testLoadUserAndPass() throws Exception {
+		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"Hello\"," +
+				"\"choiceID\": \"1234\"}";
+
+		try {
+			testInput(SAMPLE_INPUT_STRING);
+		} catch (IOException ioe) {
+			Assert.fail("Invalid:" + ioe.getMessage());
+		}
+	}
+
+
 /*
 	@Test
 	public void testLoadUser() throws ClassNotFoundException, SQLException {
