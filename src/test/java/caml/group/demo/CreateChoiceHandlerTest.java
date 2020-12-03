@@ -104,7 +104,7 @@ public class CreateChoiceHandlerTest {
     public void createChoice1Alt() throws Exception {
         String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Whaddaya cook with tomatoes??\"," +
                 "\"maxTeamSize\":\"2\"," +
-                "\"alt1ID\":\"spicy tomato soup\",\"alt1Description\":\"spicy tomato soup\"" +
+                "\"alt3ID\":\"spicy tomato soup\",\"alt3Description\":\"spicy tomato soup\"" +
                 "}";
         try {
             testFailInput(SAMPLE_INPUT_STRING, "Failed. Not enough alternatives");
@@ -124,6 +124,22 @@ public class CreateChoiceHandlerTest {
                 "}";
         try {
             testInput(SAMPLE_INPUT_STRING);
+        } catch (IOException ioe) {
+            Assert.fail("Invalid:" + ioe.getMessage());
+        }
+    }
+
+    @Test
+    public void createChoiceTestDuplicateAlts() throws Exception {
+        String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Test\"," +
+                "\"maxTeamSize\":\"2\"," +
+                "\"alt1ID\":\"a\",\"alt1Description\":\"a\"," +
+                "\"alt2ID\":\"a\",\"alt2Description\":\"a\"" +
+//                "\"alt3ID\":\"chili mac\",\"alt3Description\":\"chili mac\"," +
+//                "\"alt4ID\":\"tomato and egg\",\"alt4Description\":\"tomato and egg\"" +
+                "}";
+        try {
+            testFailInput(SAMPLE_INPUT_STRING, "Either the choice description, an alternative description exceeds the 60 character limit, or you have a duplicate alternative");
         } catch (IOException ioe) {
             Assert.fail("Invalid:" + ioe.getMessage());
         }

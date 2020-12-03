@@ -83,8 +83,9 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 			try {
 				boolean result = createChoice(choice);
 				if (!result) {
-					failMessage = "Either the choice description or an alternative " +
-							"description exceeds the 60 character limit";
+					failMessage = "Either the choice description, an alternative " +
+							"description exceeds the 60 character limit, or you have " +
+							"a duplicate alternative";
 					fail = true;
 				}
 			} catch (Exception e) {

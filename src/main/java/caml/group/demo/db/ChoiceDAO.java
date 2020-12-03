@@ -163,10 +163,12 @@ public class ChoiceDAO {
             logger.log("Adding alts");
             ArrayList<Alternative> alts = choice.getAlternatives();
             AlternativeDAO dao = new AlternativeDAO(logger);
+            boolean result;
             //ChoiceAltMatchDAO dao2 = new ChoiceAltMatchDAO(logger);
             for (Alternative alt : alts) {
                 logger.log("alt " + alt.getDescription());
-                boolean result = dao.addAlternative(alt, choice.getID());
+                result = dao.addAlternative(alt, choice.getID());
+
                 if (!result) {
                     return false;
                 }

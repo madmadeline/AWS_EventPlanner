@@ -183,6 +183,8 @@ public class AlternativeDAO {
 	 * @throws Exception, failed to insert alternative
 	 */
 	public boolean addAlternative(Alternative alt, String choiceID) throws Exception {
+		int result = 0;
+
 		try {
 			/*PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE id = ?;");
 			ps.setString(1, alt.getID());
@@ -206,9 +208,15 @@ public class AlternativeDAO {
 			ps.setInt(3, alt.getTotalDisapprovals());
 			ps.setString(4, alt.getDescription());
 			ps.setString(5, choiceID);
-			ps.execute();
+			try {
+				result = ps.executeUpdate();
+			} catch (Exception e) {
+				logger.log("Duplicate alternative");
+				return false;
+			}
+
 			logger.log("Finished inserting alternative");
-			return true;
+			return result == 1;
 		} catch (Exception e) {
 			throw new Exception("Failed to insert alternative: " + e.getMessage());
 		}
