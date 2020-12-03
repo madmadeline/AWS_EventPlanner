@@ -30,18 +30,18 @@ public class Alternative {
 
 	public int getTotalDisapprovals() { 
 		int answer = 0;
-		for(Rating rate : ratings) {
-			if(rate.getIsDisapproval()) { answer++; }
-		}
+//		for(Rating rate : ratings) {
+//			if(rate.getIsDisapproval()) { answer++; }
+//		}
 		totalDisapprovals = answer;
 		return totalDisapprovals;
 	}
 
 	public int getTotalApprovals() { 
 		int answer = 0;
-		for(Rating rate : ratings) {
-			if(rate.getIsApproval()) { answer++; }
-		}
+//		for(Rating rate : ratings) {
+//			if(rate.getIsApproval()) { answer++; }
+//		}
 		totalApprovals = answer;
 		return totalApprovals;
 	}
@@ -54,15 +54,15 @@ public class Alternative {
 	public void addRating(Rating rator) { ratings.add(rator); } // fyi rator is noun and rater is verb
 	public void removeRating(Rating rator) { ratings.remove(rator); }
 
-	public void changeRating(Rating rator) { 
-		int currentID = rator.getUserID();
-		for(Rating rater : ratings) {
-			if(helpEquals(rater.getUserID(), currentID)) { 
-				removeRating(rater); 
-			}
-		}
-		ratings.add(rator); 
-	}
+//	public void changeRating(Rating rator) {
+//		int currentID = rator.getUserID();
+//		for(Rating rater : ratings) {
+//			if(helpEquals(rater.getUserID(), currentID)) {
+//				removeRating(rater);
+//			}
+//		}
+//		ratings.add(rator);
+//	}
 
 	public boolean helpEquals(int a, int b) {
 		Integer var1 = Integer.valueOf(a);

@@ -31,9 +31,9 @@ public class User {
 		
 	}
 	
-	public void rate(RatingType r) {
-		
-	}
+//	public void rate(RatingType r) {
+//
+//	}
 	
 	
 }
