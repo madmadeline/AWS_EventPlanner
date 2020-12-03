@@ -20,6 +20,10 @@ function processFindResponse(result) {
 	//update the register form
 	document.createUserForm.newChoiceID.value = choiceID;
 	
+	//send the json to the invisible div for sneaky js access
+	var payload = document.getElementById("payload");
+	payload.innerHTML = result;
+	
 	//update the UI
 	document.createChoiceForm.choiceDesc.value = description;
 	document.createChoiceForm.numParticipants.value = maxTeamSize;
@@ -46,7 +50,7 @@ function processFindResponse(result) {
 
 }
 
-function handleFindClick(e) {
+function handleFindClick() {
   var form = document.findChoiceForm;
  
   var data = {};

@@ -5,6 +5,7 @@ function processApprovalResponse(result){
 	if (status == 200){
 		console.log("approval successfully responded");
 		//update interface to show new approval/disapproval
+		handleFindClick();
 	}else{
 		console.log("approval failed to respond.");
 	}
@@ -24,17 +25,17 @@ function handleApprovalClick(b, index){
 	var p = JSON.parse(payload);
 	var alts = p.alts;
 	
-	data["alt"] = alts[index];
+	data["altID"] = alts[index].ID;
 	
 	var confirm = document.getElementById("approvalConfirm");
 	if (b){
 		//send approval
 		confirm.innerHTML = "An approval was sent."
-		data["approval"] = 10;
+		data["approval"] = "A";
 	}else{
 		//send disapproval
 		confirm.innerHTML = "A disapproval was sent."
-		data["approval"] = 1;
+		data["approval"] = "D";
 	}
 	
 	
