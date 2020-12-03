@@ -9,7 +9,7 @@ public class AddSubmitFeedbackResponse {
     public String altID;
     public String userID;
     public String feedback;
-    public boolean rating;
+    public char rating;
 
     public AddSubmitFeedbackResponse(int statusCode, Feedback feedback){
         this.result = feedback != null;

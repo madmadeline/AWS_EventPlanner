@@ -4,7 +4,7 @@ public class AddSubmitFeedbackRequest {
     String altID;
     String userID;
     String feedback;
-    boolean rating;
+    char rating;
 
     public String getAltID() {
         return altID;
@@ -18,7 +18,7 @@ public class AddSubmitFeedbackRequest {
         return userID;
     }
 
-    public boolean getRating(){
+    public char getRating(){
         return rating;
     }
 
@@ -30,7 +30,7 @@ public class AddSubmitFeedbackRequest {
         this.feedback = feedback;
     }
 
-    public void setRating(boolean rating) {
+    public void setRating(char rating) {
         this.rating = rating;
     }
 
