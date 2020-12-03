@@ -7,32 +7,28 @@
     	<script type = 'text/javascript' src='../js/createChoice.js'></script>
     	<script type = 'text/javascript' src='../js/createUser.js'></script>
     	<script type = 'text/javascript' src='../js/findChoice.js'></script>
+    	<script type = 'text/javascript' src='../js/sendApproval.js'></script>
+    	<script type = 'text/javascript' src='../js/refreshChoice.js'></script>
     
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       
-      	<script type="text/javascript">
-		function initialize() {
-		  
-		   // get all choices
-		   //refreshChoicesList();
-		}
-		</script>
 		      
       </head>
 
-    <body onload="initialize()">
+    <body>
         <h1>
             CHOICEMAKER
         </h1>
+        
         <div class = "choicesSearch">
             <h2>Create a New Choice:</h2>
             <form name='createChoiceForm' method = "post">
-                <label for = "choiceDesc">Choice Description (limit 60 chars):</label><br>
+                <label for = "choiceDesc">Choice Description (char limit 60):</label><br>
                 <input name = "choiceDesc" type = "text" id = "choiceDesc"><br>
                 <label for = "numParticipants">Maximum # of Participants:</label><br>
                 <input name = "numParticipants" type = "number" id = "numParticipants"><br>
-                <label for = "alt1">Alternatives (at least 2, char limit 25):</label><br>
+                <label for = "alt1">Alternatives (at least 2, char limit 30):</label><br>
                 <input name = "alt1" type = "text" id = "alt1"><br>
                 <input name = "alt2" type = "text" id = "alt2"><br>
                 <input name = "alt3" type = "text" id = "alt3"><br>
@@ -42,6 +38,7 @@
             <input type="button" id="createButton" value="Create Choice" onclick = "Javascript:handleCreateClick(this)">
             <div id = "displayChoice"></div>
         </div>
+        
         <div class = "findChoiceDiv">
             <h2>Find a choice by ID:</h2>
             <form name = 'findChoiceForm' method = 'get'>
@@ -50,6 +47,7 @@
             </form>
             <div id = "findChoiceResult"></div>
         </div>
+        
         <div class = "makeNewUser">
         	<h2 id = "registerHeader">Register with a Choice:</h2>
         	<form name='createUserForm' method = "post">
@@ -63,9 +61,22 @@
         	<input type="button" id="createUserBtn" value="Register" onclick = "Javascript:handleUserClick(this)">
         	<div id = "userList"></div>
         </div>
-        <div class = "alternativeApproval">
+        
+        <div id = "alternativeApproval">
         	<h2 id = "approvalHeader">Approve an Alternative:</h2>
+        	Signed in as:
+        	<div id = "usernameDisplay"></div>
+        	for Choice ID:
+        	<div id = "currentChoice"></div>
+        	<div id = "approvalConfirm"></div>
         	<div id = "altList"></div>
+        	<input type = "button" id = "refreshAltsBtn" value = "Refresh" onclick = "Javascript:handleFindClick(this)">
         </div>
+        
+        <div id = "currentChoicePayload">
+        	<h2>Payload Display Cheat (make invisible before submission):</h2>
+        	<div id = "payload"></div>
+        </div>
+        
     </body>
 </html>

@@ -198,7 +198,6 @@ definitions:
     type: "object"
     required:
     - "description"
-    - "feedback"
     - "totalApprovals"
     - "totalDisapprovals"
     properties:
@@ -208,10 +207,6 @@ definitions:
         type: "integer"
       totalDisapprovals:
         type: "integer"
-      feedback:
-        type: "array"
-        items:
-          $ref: "#/definitions/Feedback"
   User:
     type: "object"
     required:
@@ -221,20 +216,6 @@ definitions:
       username:
         type: "string"
       password:
-        type: "string"
-  Feedback:
-    type: "object"
-    required:
-    - "message"
-    - "timestamp"
-    - "userID"
-    properties:
-      message:
-        type: "string"
-      timestamp:
-        type: "object"
-        properties: {}
-      userID:
         type: "string"
   ArrayOfChoice:
     type: "array"

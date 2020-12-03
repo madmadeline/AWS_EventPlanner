@@ -36,6 +36,8 @@ function processFindResponse(result) {
 		document.createChoiceForm.alt5.value = alts[4];
 	}
 	
+	refreshChoice(result);
+	
   }else{
 	//error
 	console.log("Choice could not be found or does not exist.");

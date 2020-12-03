@@ -69,16 +69,16 @@ button{
 
 #approveBtn{
     background-color: green;
-    width: 100px;
-    height: 100px;
-    margin-top: 50px;
+    width: 25px;
+    height: 25px;
+    margin-top: 5px;
 }
 
 #disapproveBtn{
     background-color: red;
-    width: 100px;
-    height: 100px;
-    margin-top: 50px;
+    width: 25px;
+    height: 25px;
+    margin-top: 5px;
 }
 
 #loginBtn{
@@ -112,6 +112,6 @@ thead, tfoot{
     margin-top: 20px;
 }
 
-.alternativeApproval{
+#alternativeApproval{
 	visibility: hidden;
 }
