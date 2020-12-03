@@ -9,6 +9,67 @@ basePath: "/alpha"
 schemes:
 - "https"
 paths:
+  /approve:
+    post:
+      operationId: "addApprove"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "Approval"
+        required: true
+        schema:
+          $ref: "#/definitions/Approval"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Choice"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        400:
+          description: "400 response"
+      x-amazon-apigateway-integration:
+        type: "aws"
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:341217184294:function:helloWorld/invocations"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+    options:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        type: "mock"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
   /choice:
     get:
       operationId: "getChoices"
@@ -71,8 +132,6 @@ paths:
     options:
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -90,6 +149,57 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+  /report:
+    get:
+      operationId: "getReport"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/ArrayOfChoice"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        400:
+          description: "400 response"
+      x-amazon-apigateway-integration:
+        type: "aws"
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:341217184294:function:reporter/invocations"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+    options:
+      consumes:
+      - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        type: "mock"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
         requestTemplates:
@@ -132,8 +242,6 @@ paths:
     options:
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
       responses:
         200:
           description: "200 response"
@@ -156,24 +264,6 @@ paths:
         requestTemplates:
           application/json: "{\"statusCode\": 200}"
         passthroughBehavior: "when_no_match"
-  /report:
-    get:
-      tags:
-      - admins
-      summary: gets all of the choices from the db
-      operationId: getChoices
-      description: The admin can display a report of the choices found in the database.
-      produces:
-      - application/json
-      responses:
-        200:
-          description: "200 response"
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Choice'
-        400:
-          description: "400 response"
 definitions:
   Choice:
     type: "object"
@@ -198,7 +288,6 @@ definitions:
     type: "object"
     required:
     - "description"
-    - "feedback"
     - "totalApprovals"
     - "totalDisapprovals"
     properties:
@@ -208,10 +297,6 @@ definitions:
         type: "integer"
       totalDisapprovals:
         type: "integer"
-      feedback:
-        type: "array"
-        items:
-          $ref: "#/definitions/Feedback"
   User:
     type: "object"
     required:
@@ -222,20 +307,13 @@ definitions:
         type: "string"
       password:
         type: "string"
-  Feedback:
+  Approval:
     type: "object"
     required:
-    - "message"
-    - "timestamp"
-    - "userID"
+    - "approval"
     properties:
-      message:
-        type: "string"
-      timestamp:
-        type: "object"
-        properties: {}
-      userID:
-        type: "string"
+      approval:
+        type: "boolean"
   ArrayOfChoice:
     type: "array"
     items:

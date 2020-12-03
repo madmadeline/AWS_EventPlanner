@@ -20,6 +20,10 @@ function processFindResponse(result) {
 	//update the register form
 	document.createUserForm.newChoiceID.value = choiceID;
 	
+	//send the json to the invisible div for sneaky js access
+	var payload = document.getElementById("payload");
+	payload.innerHTML = result;
+	
 	//update the UI
 	document.createChoiceForm.choiceDesc.value = description;
 	document.createChoiceForm.numParticipants.value = maxTeamSize;
@@ -36,14 +40,17 @@ function processFindResponse(result) {
 		document.createChoiceForm.alt5.value = alts[4];
 	}
 	
+	refreshChoice(result);
+	
   }else{
 	//error
 	console.log("Choice could not be found or does not exist.");
+	document.getElementById("findChoiceResult").innerHTML = "Choice does not exist.";
   }
 
 }
 
-function handleFindClick(e) {
+function handleFindClick() {
   var form = document.findChoiceForm;
  
   var data = {};
@@ -52,7 +59,7 @@ function handleFindClick(e) {
   var js = JSON.stringify(data);
   console.log("JS:" + js);
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", find_choice_url, true);
+  xhr.open("GET", find_choice_url, true);
 
   // send the collected data as JSON
   xhr.send(js);
