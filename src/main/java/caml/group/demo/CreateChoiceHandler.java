@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceRequest,AddCreateChoiceResponse> {
 //	Model model;
@@ -45,9 +46,9 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 
 		boolean fail = false;
 		String failMessage = "";
-		String randString;
+		String randString = UUID.randomUUID().toString();
 
-		while(true){
+		/*while(true){
 			Random rand = new Random();
 			int randInt = rand.nextInt(9000) + 1000;
 			randString = String.valueOf(randInt);
@@ -56,14 +57,14 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 
 		Timestamp time = Timestamp.from(Instant.now());
-		String alt1Append = req.getAlt1ID() + "_" + randString;
-		String alt2Append = req.getAlt2ID() + "_" + randString;
-		String alt3Append = req.getAlt3ID() + "_" + randString;
-		String alt4Append = req.getAlt4ID() + "_" + randString;
-		String alt5Append = req.getAlt5ID() + "_" + randString;
+		String alt1Append = UUID.randomUUID().toString();
+		String alt2Append = UUID.randomUUID().toString();
+		String alt3Append = UUID.randomUUID().toString();
+		String alt4Append = UUID.randomUUID().toString();
+		String alt5Append = UUID.randomUUID().toString();
 
 		Alternative alt1 = new Alternative(alt1Append, req.getAlt1Description());
 		Alternative alt2 = new Alternative(alt2Append, req.getAlt2Description());

@@ -19,14 +19,14 @@ public class AlternativeDAOTest {
         altDAO = new AlternativeDAO(logger);
     }
 
-    @Test
+    /*@Test
     public void testAddAlternative() throws Exception {
         init();
         String choiceID = "4510";
         String altDesc = "FuzzyBrownBlanket";
         Alternative alt = new Alternative(altDesc+"_"+choiceID,altDesc);
         altDAO.addAlternative(alt,choiceID);
-    }
+    }*/
 
 
 

@@ -21,7 +21,7 @@ public class UserDAOTest {
         userDAO = new UserDAO(logger);
     }
 
-    @Test
+    /*@Test
     public void testAddUser() {
         User user = new User("1000", "testAddUser","pass:testAddUser");
         boolean result;
@@ -262,7 +262,7 @@ public class UserDAOTest {
     @Test
     public void testRowToUserObject() {
 
-    }
+    }*/
 
 
 }
