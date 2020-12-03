@@ -69,7 +69,7 @@ public class ChoiceDAO {
      * @throws Exception Database error idk
      */
     public ArrayList<Choice> getAllChoices() throws Exception{
-    	logger.log("creating report");
+    	logger.log("Creating report");
     	ArrayList<Choice> choices;
     	
     	//what to do in here?
@@ -193,15 +193,24 @@ public class ChoiceDAO {
         logger.log("Deleting Choice " + choice.getID() + ": " + choice.getDescription());
         PreparedStatement ps;
 
-        // Deletes alts from alt table
+        // Delete users from user table
+        try {
+            ps = conn.prepareStatement("Delete from User where choiceID=?;");
+            ps.setString(1, choice.getID());
+            ps.executeUpdate();
+            logger.log("Deleted all Users");
+        } catch (Exception e) {
+            throw new Exception ("Couldn't delete user " + e.getMessage());
+        }
+
+        // Delete alts from alt table
         AlternativeDAO dao = new AlternativeDAO(logger);
         ArrayList<Alternative> alts = dao.getAllAlternativesByChoiceID(choice.getID());
 
-        for (Alternative alt : alts) {
-            dao.deleteAlternative(alt);
-        }
+        for (Alternative alt : alts) { dao.deleteAlternative(alt); }
         logger.log("Deleted alternatives");
 
+        // Delete the choice from the choice table
         try {
             ps = conn.prepareStatement(
                     "delete from " + tblName + " where choiceID=? and description=?;"
@@ -260,7 +269,7 @@ public class ChoiceDAO {
         ArrayList<Choice> choices = new ArrayList<>();
 
         while(rs.next()){
-            logger.log("Getting choice data");
+            logger.log("Getting choice data for choice " + rs.getString("choiceID"));
             Choice choice = new Choice(rs.getString("choiceID"), rs.getString("description"),
                     rs.getTimestamp("dateOfCreation"), rs.getInt("maxTeamSize"));
             choices.add(choice);
