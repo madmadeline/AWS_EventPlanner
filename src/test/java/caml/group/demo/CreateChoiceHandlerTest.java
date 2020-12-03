@@ -51,19 +51,19 @@ public class CreateChoiceHandlerTest {
         ArrayList<Alternative> alts = response.alts;
         int altsLen = alts.size();
 
-//        System.out.println(req.getAlt1ID());
-//        System.out.println(req.getAlt1Description());
+//        System.out.println("id " + req.getAlt1ID());
+//        System.out.println("desc " + req.getAlt1Description());
 
         if (req.getAlt1ID() != null) {
-            Assert.assertEquals(req.getAlt1ID(), alts.get(index).getID().split("_")[0]);
-            Assert.assertEquals(req.getAlt1Description(), alts.get(index).getID().split("_")[0]);
+//            Assert.assertEquals(req.getAlt1ID(), alts.get(index).getID().split("_")[0]);
+            Assert.assertEquals(req.getAlt1Description(), alts.get(index).getDescription());
 //            System.out.println("first");
             index++;
         }
 
         if (req.getAlt2ID() != null) {
-            Assert.assertEquals(req.getAlt2ID(), alts.get(index).getID().split("_")[0]);
-            Assert.assertEquals(req.getAlt2Description(), alts.get(index).getID().split("_")[0]);
+//            Assert.assertEquals(req.getAlt2ID(), alts.get(index).getID().split("_")[0]);
+            Assert.assertEquals(req.getAlt2Description(), alts.get(index).getDescription());
 //            System.out.println("second");
             index++;
         }
@@ -71,23 +71,23 @@ public class CreateChoiceHandlerTest {
 
         if (altsLen > 2 || req.getAlt3ID() != null) {
 //            System.out.println("third");
-            Assert.assertEquals(req.getAlt3ID(), alts.get(index).getID().split("_")[0]);
+//            Assert.assertEquals(req.getAlt3ID(), alts.get(index).getID().split("_")[0]);
             Assert.assertEquals(req.getAlt3Description(),
-                    alts.get(index).getID().split("_")[0]);
+                    alts.get(index).getDescription());
             index++;
         }
         if (altsLen > 3 || req.getAlt4ID() != null) {
 //            System.out.println("fourth");
-            Assert.assertEquals(req.getAlt4ID(), alts.get(index).getID().split("_")[0]);
+//            Assert.assertEquals(req.getAlt4ID(), alts.get(index).getID().split("_")[0]);
             Assert.assertEquals(req.getAlt4Description(),
-                    alts.get(index).getID().split("_")[0]);
+                    alts.get(index).getDescription());
             index++;
         }
         if (altsLen > 4 || req.getAlt5ID() != null) {
 //            System.out.println("fifth");
-            Assert.assertEquals(req.getAlt5ID(), alts.get(index).getID().split("_")[0]);
+//            Assert.assertEquals(req.getAlt5ID(), alts.get(index).getID().split("_")[0]);
             Assert.assertEquals(req.getAlt5Description(),
-                    alts.get(index).getID().split("_")[0]);
+                    alts.get(index).getDescription());
         }
     }
 
@@ -100,7 +100,7 @@ public class CreateChoiceHandlerTest {
         Assert.assertEquals(outgoing, response.error);
     }
 
-    /*@Test
+    @Test
     public void createChoice1Alt() throws Exception {
         String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Whaddaya cook with tomatoes??\"," +
                 "\"maxTeamSize\":\"2\"," +
@@ -139,9 +139,7 @@ public class CreateChoiceHandlerTest {
 //                "\"alt4ID\":\"tomato and egg\",\"alt4Description\":\"tomato and egg\"" +
                 "}";
         try {
-            testFailInput(SAMPLE_INPUT_STRING, "Either the choice description, an " +
-                    "alternative description exceeds the 60 character limit, or you have a duplicate " +
-                    "alternative");
+            testInput(SAMPLE_INPUT_STRING);
         } catch (IOException ioe) {
             Assert.fail("Invalid:" + ioe.getMessage());
         }
@@ -200,5 +198,5 @@ public class CreateChoiceHandlerTest {
         } catch (IOException ioe) {
             Assert.fail("Invalid:" + ioe.getMessage());
         }
-    }*/
+    }
 }
