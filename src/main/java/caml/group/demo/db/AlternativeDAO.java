@@ -25,7 +25,7 @@ public class AlternativeDAO {
 		this.logger = logger;
 		try  {
 			conn = DatabaseUtil.connect();
-			logger.log("Connected in alt dao");
+			logger.log("Connected to database in AlternativeDAO");
 		} catch (Exception e) {
 			conn = null;
 		}
@@ -65,6 +65,30 @@ public class AlternativeDAO {
 		}
 	}
 
+	public ArrayList<Alternative> getAllAlternativesByChoiceID(String choiceID) throws Exception {
+		ArrayList<Alternative> alts = new ArrayList<Alternative>();
+
+		try {
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName +
+					" WHERE choiceID=?;");
+			ps.setString(1,  choiceID);
+			ResultSet resultSet = ps.executeQuery(); // cursor that points to database row
+
+			while (resultSet.next()) {
+				alts.add(generateAlternative(resultSet));
+			}
+			resultSet.close();
+			ps.close();
+
+			logger.log("Retrieved all alternatives");
+			return alts;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("Failed in getting alternatives: " + e.getMessage());
+		}
+	}
+
 	/**
 	 * Gets an alternative from the database when given an id
 	 * @param id, id of the requested alt
@@ -76,7 +100,7 @@ public class AlternativeDAO {
 		//            boolean passwordCorrect = true;
 
 		PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName +
-				" WHERE id=?;");
+				" WHERE altID=?;");
 		ps.setString(1,  id);
 		ResultSet resultSet = ps.executeQuery(); // cursor that points to database row
 		logger.log("Generating alts");
@@ -114,7 +138,7 @@ public class AlternativeDAO {
 		
 		
 		try {
-			String query = "UPDATE " + tblName + " SET "+ column + "=? WHERE id=?;";
+			String query = "UPDATE " + tblName + " SET "+ column + "=? WHERE altID=?;";
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setInt(1, newNum);
 			ps.setString(2, alt.getID());
@@ -127,7 +151,8 @@ public class AlternativeDAO {
 		}
 	}
 
-	
+
+	// TESTED
 	/**
 	 * Deletes the specified alternative from the Alternative table.
 	 * @param alt, the given Alternative object
@@ -136,7 +161,7 @@ public class AlternativeDAO {
 	 */
 	public boolean deleteAlternative(Alternative alt) throws Exception {
 		try {
-			PreparedStatement ps = conn.prepareStatement("DELETE FROM " + tblName + " WHERE id = ?;");
+			PreparedStatement ps = conn.prepareStatement("DELETE FROM " + tblName + " WHERE altID=?;");
 			ps.setString(1, alt.getID());
 			int numAffected = ps.executeUpdate();
 			ps.close();
@@ -148,13 +173,16 @@ public class AlternativeDAO {
 		}
 	}
 
+
+
+	// TESTED
 	/**
 	 * Adds the given Alternative object to the Alternative table.
 	 * @param alt, the given Alternative object
 	 * @return true if the addition was a success, false otherwise
 	 * @throws Exception, failed to insert alternative
 	 */
-	public void addAlternative(Alternative alt, String choiceID) throws Exception {
+	public boolean addAlternative(Alternative alt, String choiceID) throws Exception {
 		try {
 			/*PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE id = ?;");
 			ps.setString(1, alt.getID());
@@ -166,6 +194,11 @@ public class AlternativeDAO {
 				resultSet.close();
 			}*/
 
+			if (alt.getDescription().length() > 60) {
+				logger.log("Alt desc too long");
+				return false;
+			}
+
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO " + tblName +
 					" (altID,numLikes,numDislikes,description,choiceID) values(?,?,?,?,?);");
 			ps.setString(1, alt.getID());
@@ -174,9 +207,10 @@ public class AlternativeDAO {
 			ps.setString(4, alt.getDescription());
 			ps.setString(5, choiceID);
 			ps.execute();
-
+			logger.log("Finished inserting alternative");
+			return true;
 		} catch (Exception e) {
-			throw new Exception("Failed to insert user: " + e.getMessage());
+			throw new Exception("Failed to insert alternative: " + e.getMessage());
 		}
 	}
 
@@ -213,7 +247,7 @@ public class AlternativeDAO {
 	 * @throws Exception, failed to get user
 	 */
 	private Alternative generateAlternative(ResultSet resultSet) throws Exception {
-		String id  = resultSet.getString("id");
+		String id  = resultSet.getString("altID");
 		String desc = resultSet.getString("description");
 
 		return new Alternative (id, desc);

@@ -39,7 +39,7 @@ public class Choice {
 		return alternatives;
 	}
 
-	public int getMaxTeamSize() { return maxTimeSize; }
+//	public int getMaxTeamSize() { return maxTimeSize; }
 //	public void setMaxTeamSize(int teamSize){ this.maxTeamSize = teamSize; }
 
 	public String getDescription(){

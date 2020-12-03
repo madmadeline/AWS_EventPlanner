@@ -259,10 +259,10 @@ public class UserDAOTest {
         }
     }
 
-//    @Test
-//    public void testRowToUserObject() {
-//
-//    }
-//
-//
+    @Test
+    public void testRowToUserObject() {
+
+    }
+
+
 }
