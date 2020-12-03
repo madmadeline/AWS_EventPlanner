@@ -3,6 +3,7 @@ package caml.group.demo.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.sql.Timestamp;
+
 //import java.time.ZonedDateTime;
 
 public class Choice {
@@ -39,7 +40,7 @@ public class Choice {
 		return alternatives;
 	}
 
-	public int getMaxTeamSize() { return maxTimeSize; }
+//	public int getMaxTeamSize() { return maxTimeSize; }
 //	public void setMaxTeamSize(int teamSize){ this.maxTeamSize = teamSize; }
 
 	public String getDescription(){

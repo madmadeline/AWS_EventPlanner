@@ -1,9 +1,7 @@
 package caml.group.demo.db;
 
-import java.awt.image.DataBuffer;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 import caml.group.demo.model.*;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -27,25 +25,35 @@ public class ChoiceDAO {
     }
 
 
-
+    // TESTED
     /**
      * Returns a Choice object that is the requested entry from the Choice table
      * @param id, the given id of the desired choice
      * @return the Choice object
      * @throws SQLException, exception thrown on fail
      */
-    public Choice getChoice(String id) throws Exception {
+    public Choice getChoice(String id) throws SQLException {
         logger.log("Getting choice\n");
 //        logger.log(id);
-        Choice choice = null;
-        PreparedStatement ps = conn.prepareStatement(
-                "Select c.choiceID, c.description as cDesc, altID, a.description as aDesc, dateOfCreation, " +
-                        "maxTeamSize From " + tblName + " c " +
-                "join Alternative a on a.choiceID = c.choiceID WHERE c.choiceID=?");
-        //PreparedStatement ps = conn.prepareStatement("Select c.id as cID, c.description as cDesc From Choice");
-        ps.setString(1, id);
-        ResultSet rs = ps.executeQuery();
-//        logger.log("Generating choice");
+        Choice choice;
+        PreparedStatement ps;
+        ResultSet rs;
+
+        try {
+            ps = conn.prepareStatement(
+                    "Select c.choiceID, c.description as cDesc, altID, a.description as aDesc, dateOfCreation, " +
+                            "maxTeamSize From " + tblName + " c " +
+                            "join Alternative a on a.choiceID = c.choiceID WHERE c.choiceID=?");
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+
+            if (!rs.isBeforeFirst()) { // choice doesn't exist
+                logger.log("Invalid choice ID");
+                return null;
+            }
+        } catch(SQLException e){
+            throw new SQLException("Database error" + e.getMessage());
+        }
         choice = generateChoice(rs);
 
         rs.close();
@@ -53,10 +61,16 @@ public class ChoiceDAO {
 //        logger.log("Returning choice");
         return choice;
     }
-    
+
+
+    /**
+     * Gets every single choice in the Choice table.
+     * @return The list of choices
+     * @throws Exception Database error idk
+     */
     public ArrayList<Choice> getAllChoices() throws Exception{
     	logger.log("creating report");
-    	ArrayList<Choice> choices = null;
+    	ArrayList<Choice> choices;
     	
     	//what to do in here?
     	PreparedStatement ps = conn.prepareStatement("Select * From Choice");
@@ -70,34 +84,78 @@ public class ChoiceDAO {
     	return choices;
     }
 
-    public Boolean checkChoice(String id) throws SQLException {
+    // TESTED
+    /**
+     * Checks to see if the given choice ID can be used for a new choice.
+     * @param id The given ID
+     * @return true if a choice with the ID doesn't exist, false if
+     * a choice with the ID already exists
+     * @throws SQLException Database connection error
+     */
+    public boolean checkChoice(String id) throws SQLException {
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice where choiceID=?");
         ps.setString(1, id);
         ResultSet rs = ps.executeQuery();
-        while(rs.next()){
+        if (rs.next()){
             rs.close();
             return false; // id exists
         }
         return true;
     }
 
-    public void addChoice(Choice choice) throws Exception {
-        // Adds choice to choice table
-        logger.log("Creating add choice statement");
-        logger.log(String.valueOf(choice.getID()));
-        //PreparedStatement ps = conn.prepareStatement(
-        //        "Insert into Choice(id, description, dateOfCreation, winningAlt) values (1234, 'test 1', 20201123, null);"
-        //);
-        PreparedStatement ps = conn.prepareStatement(
-                "Insert into " + tblName + "(choiceID, description, dateOfCreation, winningAlt, maxTeamSize) values (?,?,?,null,?);"
-        );
-        ps.setString(1, choice.getID());
-        ps.setString(2, choice.getDescription());
-        ps.setTimestamp(3, choice.getTime());
-        ps.setInt(4, choice.getMaxTeamSize());
-        logger.log("Executing add choice statement");
-        ps.execute();
-        ps.close();
+
+    // TESTED
+    /**
+     * Adds the given choice to the Choice table. Assume that the
+     * choice has 2-5 alternatives.
+     * @param choice The given choice
+     * @throws Exception Couldn't add the choice
+     */
+    public boolean addChoice(Choice choice) throws Exception {
+        logger.log("Adding Choice " + choice.getID() + ": " + choice.getDescription());
+        PreparedStatement ps;
+
+        // check if description is over character limit
+        if (choice.getDescription().length() >= 60) {
+            logger.log("The choice description is too long");
+            return false;
+        }
+
+        // make sure that the choice isn't already in the table
+        // (this will only come up in testing)
+        try {
+            ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE " + tblName
+                    + ".choiceID=?;");
+            ps.setString(1, choice.getID());
+            ResultSet resultSet = ps.executeQuery(); // cursor that points to database row
+
+            // choice is already in the table
+            if (resultSet.isBeforeFirst()) {
+//                System.out.println("choice isn't in the table");
+                resultSet.close();
+                ps.close();
+                logger.log("The choice is already in the table");
+                return false;
+            }
+        } catch (Exception e) {
+            throw new Exception ("Error " + e.getMessage());
+        }
+
+        try {
+            ps = conn.prepareStatement(
+                    "Insert into " + tblName + "(choiceID, description, dateOfCreation, winningAlt, maxTeamSize) values (?,?,?,null,?);"
+            );
+            ps.setString(1, choice.getID());
+            ps.setString(2, choice.getDescription());
+            ps.setTimestamp(3, choice.getTime());
+            ps.setInt(4, choice.getMaxTimeSize());
+            logger.log("Executing add choice statement");
+            ps.execute();
+            ps.close();
+        } catch (Exception e) {
+            throw new Exception ("Couldn't add choice " + e.getMessage());
+        }
+
 
         // Inserts alts into alt table
         logger.log("In addChoice");
@@ -105,11 +163,57 @@ public class ChoiceDAO {
             logger.log("Adding alts");
             ArrayList<Alternative> alts = choice.getAlternatives();
             AlternativeDAO dao = new AlternativeDAO(logger);
+            boolean result;
             //ChoiceAltMatchDAO dao2 = new ChoiceAltMatchDAO(logger);
             for (Alternative alt : alts) {
-                dao.addAlternative(alt, choice.getID());
+                logger.log("alt " + alt.getDescription());
+                result = dao.addAlternative(alt, choice.getID());
+
+                if (!result) {
+                    return false;
+                }
                 //dao2.addChoiceAltMatch(choice, alt);
             }
+        }
+        logger.log("Exiting add choice");
+        return true;
+    }
+
+    // TESTED
+    /**
+     * Deletes the given choice from the Choice table. Also deletes
+     * any alternatives associated with the choice from the
+     * Alternative table.
+     * @param choice The given choice
+     * @return True if the choice/alternatives were deleted,
+     * false otherwise
+     * @throws Exception The choice couldn't be deleted
+     */
+    public boolean deleteChoice(Choice choice) throws Exception {
+        logger.log("Deleting Choice " + choice.getID() + ": " + choice.getDescription());
+        PreparedStatement ps;
+
+        // Deletes alts from alt table
+        AlternativeDAO dao = new AlternativeDAO(logger);
+        ArrayList<Alternative> alts = dao.getAllAlternativesByChoiceID(choice.getID());
+
+        for (Alternative alt : alts) {
+            dao.deleteAlternative(alt);
+        }
+        logger.log("Deleted alternatives");
+
+        try {
+            ps = conn.prepareStatement(
+                    "delete from " + tblName + " where choiceID=? and description=?;"
+            );
+            ps.setString(1, choice.getID());
+            ps.setString(2, choice.getDescription());
+            int numAffected = ps.executeUpdate();
+            logger.log("Deleted choice");
+            ps.close();
+            return numAffected == 1;
+        } catch (Exception e) {
+            throw new Exception ("Couldn't delete choice " + e.getMessage());
         }
     }
 
@@ -117,16 +221,16 @@ public class ChoiceDAO {
      * Generates a Choice object that represents several rows of ChoiceAltMatch
      * @param rs, the cursor to the specified row in Choice
      * @return a Choice object
-     * @throws Exception failed to get Choice
+     * @throws SQLException failed to get Choice
      */
-    private Choice generateChoice(ResultSet rs) throws Exception {
+    private Choice generateChoice(ResultSet rs) throws SQLException {
         ArrayList<Alternative> alts = new ArrayList<>();
 //        logger.log("Generating choice from result set");
         String id = "";
         String description = "";
         Timestamp time = null;
-        String aID = "";
-        String aDesc = "";
+        String aID;
+        String aDesc;
         int teamSize = 0;
 
         while(rs.next()){

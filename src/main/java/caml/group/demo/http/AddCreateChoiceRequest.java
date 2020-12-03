@@ -64,5 +64,5 @@ public class AddCreateChoiceRequest {
 
     public String getDesiredChoice() { return desiredChoice; }
 
-    public String toString() { return "Add(" + choiceID + ", " + dateOfCreation + ")"; }
+    public String toString() { return "Add(" + choiceDescription + ")"; }
 }
