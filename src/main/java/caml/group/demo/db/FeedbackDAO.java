@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import caml.group.demo.model.User;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
 import caml.group.demo.model.Feedback;
@@ -34,15 +35,6 @@ public class FeedbackDAO {
     }
 
 
-    /**
-     * Returns a User object representing the entry in the User table with the given
-     * username and password. If the User isn't in the table, add a new User with the
-     * given username and password, and return it.
-     * @param name The given username
-     * @param pass The given password
-     * @return the User object
-     * @throws SQLException if the user could not be found or inserted in the table
-     */
     public Feedback loadOrInsertFeedback(String altID, boolean approved, String message, Timestamp timeStamp, String userID) throws SQLException {
         Feedback feedback = null; // User object representing the database entry
         PreparedStatement ps;
@@ -170,39 +162,6 @@ public class FeedbackDAO {
             throw new SQLException("Failed to view User table: " + e.getMessage());
         }
 
-    }
-
-
-    // TESTED
-    /**
-     * Deletes the specified user from the User table.
-     * @param user The given User
-     * @param choiceID The given choice ID
-     * @return true if the User was deleted, false otherwise
-     * @throws Exception the User can't be found in the table
-     */
-    public boolean deleteUser(User user, int choiceID) throws Exception {
-        PreparedStatement ps = conn.prepareStatement("DELETE FROM " + feedbackTbl
-                + " WHERE userID=? AND username=? AND password=? AND choiceID=?;");
-        ps.setString(1, user.getID());
-        ps.setString(2, user.getName());
-        ps.setString(3, user.getPassword());
-        ps.setString(4, ""+choiceID);
-
-        try {
-            int numDeleted = ps.executeUpdate();
-            if (numDeleted != 1) {
-                logger.log("User can't be deleted because they aren't in the table\n");
-                ps.close();
-                return false;
-            }
-
-            logger.log("Successfully deleted the user from the table");
-            return true;
-
-        } catch (Exception e) {
-            throw new Exception("Failed to delete user: " + e.getMessage());
-        }
     }
 
 
