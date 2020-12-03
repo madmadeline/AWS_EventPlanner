@@ -3,10 +3,10 @@ package caml.group.demo.model;
 
 
 public class Rating {
-	RatingType rating;
+	Boolean rating; // true approve and false disapprove
 	int userID;
 	
-	public Rating(RatingType rating, int userID) {
+	public Rating(Boolean rating, int userID) {
 		this.rating = rating;
 		this.userID = userID;
 	}
