@@ -139,7 +139,9 @@ public class CreateChoiceHandlerTest {
 //                "\"alt4ID\":\"tomato and egg\",\"alt4Description\":\"tomato and egg\"" +
                 "}";
         try {
-            testFailInput(SAMPLE_INPUT_STRING, "Either the choice description, an alternative description exceeds the 60 character limit, or you have a duplicate alternative");
+            testFailInput(SAMPLE_INPUT_STRING, "Either the choice description, an " +
+                    "alternative description exceeds the 60 character limit, or you have a duplicate " +
+                    "alternative");
         } catch (IOException ioe) {
             Assert.fail("Invalid:" + ioe.getMessage());
         }
@@ -174,8 +176,9 @@ public class CreateChoiceHandlerTest {
                 "\"alt5Description\":\"i don't care about tomatoes i just wanna sleep and rest a bit\"" +
                 "}";
         try {
-            testFailInput(SAMPLE_INPUT_STRING, "Either the choice description or an alternative " +
-                    "description exceeds the 60 character limit");
+            testFailInput(SAMPLE_INPUT_STRING, "Either the choice description, an " +
+                    "alternative description exceeds the 60 character limit, or you have a duplicate " +
+                    "alternative");
         } catch (IOException ioe) {
             Assert.fail("Invalid:" + ioe.getMessage());
         }
@@ -191,8 +194,9 @@ public class CreateChoiceHandlerTest {
                 "\"alt3ID\":\"chili mac\",\"alt3Description\":\"chili mac\"" +
                 "}";
         try {
-            testFailInput(SAMPLE_INPUT_STRING, "Either the choice description or an alternative " +
-                    "description exceeds the 60 character limit");
+            testFailInput(SAMPLE_INPUT_STRING, "Either the choice description, an " +
+                    "alternative description exceeds the 60 character limit, or you have a duplicate " +
+                    "alternative");
         } catch (IOException ioe) {
             Assert.fail("Invalid:" + ioe.getMessage());
         }
