@@ -117,10 +117,12 @@ public class ChoiceDAO {
             AlternativeDAO dao = new AlternativeDAO(logger);
             //ChoiceAltMatchDAO dao2 = new ChoiceAltMatchDAO(logger);
             for (Alternative alt : alts) {
+                logger.log("Alt being added");
                 dao.addAlternative(alt, choice.getID());
                 //dao2.addChoiceAltMatch(choice, alt);
             }
         }
+        logger.log("Added all alts");
     }
 
     /**

@@ -81,6 +81,7 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 		if(alts.size() >= 2){
 			try {
 				createChoice(choice);
+				logger.log("Choice created");
 			} catch (Exception e) {
 				failMessage = "Failed to create choice";
 				fail = true;

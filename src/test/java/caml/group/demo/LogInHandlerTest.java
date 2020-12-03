@@ -62,7 +62,7 @@ public class LogInHandlerTest {
 		Assert.assertEquals(400, response.statusCode);
 	}
 
-	@Test
+	/*@Test
 	public void testAddUserAndPass() throws Exception {
 		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"Hello\"," +
 				"\"choiceID\": \"1234\"}";
