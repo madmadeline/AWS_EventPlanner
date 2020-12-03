@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class UserDAOTest {
     UserDAO userDAO;
 
-   /* @Before
+    @Before
     public void init() throws Exception {
         DatabaseUtil.connect();
         TestContext ctx = new TestContext();
@@ -259,10 +259,10 @@ public class UserDAOTest {
         }
     }
 
-//    @Test
-//    public void testRowToUserObject() {
-//
-//    }
-//
-//*/
+    @Test
+    public void testRowToUserObject() {
+
+    }
+
+
 }

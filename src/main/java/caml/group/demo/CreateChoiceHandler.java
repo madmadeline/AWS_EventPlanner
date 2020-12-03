@@ -21,14 +21,15 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 	LambdaLogger logger;
 	
 	
-
-	public void createChoice(Choice choice) throws Exception {
+	// TESTED
+	public boolean createChoice(Choice choice) throws Exception {
 		logger.log("In createChoice in CreateChoiceHandler");
 		ChoiceDAO dao = new ChoiceDAO(logger);
 		logger.log("Retrieved Dao in CreateChoiceHandler");
-		dao.addChoice(choice);
+		return dao.addChoice(choice);
 	}
 
+	// TESTED
 	public boolean checkChoice(String id) throws Exception {
 		logger.log("Checking choice");
 		ChoiceDAO dao = new ChoiceDAO(logger);
@@ -80,22 +81,32 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 				time, req.getMaxTeamSize());
 		if(alts.size() >= 2){
 			try {
-				createChoice(choice);
-				logger.log("Choice created");
+				boolean result = createChoice(choice);
+				if (!result) {
+					failMessage = "Either the choice description, an alternative " +
+							"description exceeds the 60 character limit, or you have " +
+							"a duplicate alternative";
+					fail = true;
+				}
 			} catch (Exception e) {
+//				logger.log("failed here");
 				failMessage = "Failed to create choice";
 				fail = true;
 			}
 		}
 		else{
+//			logger.log("failed here 2");
 			failMessage = "Failed. Not enough alternatives";
 			fail = true;
 		}
 
+//		logger.log("fail " + fail);
 		// compute proper response and return. Note that the status code is internal to the HTTP response
 		// and has to be processed specifically by the client code.
 		AddCreateChoiceResponse response;
+
 		if (fail) {
+			logger.log(failMessage);
 			response = new AddCreateChoiceResponse(400, failMessage);
 		} else {
 			response = new AddCreateChoiceResponse(200, choice);  // success

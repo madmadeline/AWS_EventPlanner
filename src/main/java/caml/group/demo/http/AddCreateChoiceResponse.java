@@ -27,7 +27,7 @@ public class AddCreateChoiceResponse {
         this.description = choice.getDescription();
         this.time = choice.getTime();
         this.alts = choice.getAlternatives();
-        this.maxTeamSize = choice.getMaxTeamSize();
+        this.maxTeamSize = choice.getMaxTimeSize();
     }
 
     public AddCreateChoiceResponse(int statusCode, String errorMessage){
