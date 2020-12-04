@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 public class Feedback {
 	final String altID;
 	final String userID;
-	char approved;
+	char approved;  // the approval char is 'a' and the disapproval char is 'd'
 	String message;
 	Timestamp timestamp;
 
@@ -32,5 +32,30 @@ public class Feedback {
 	public void setTimeStamp(Timestamp timestamp) { timestamp = timestamp; }
 	
 	
+	public boolean isApproved(char approved) {
+		char a = 'a';
+		if(sameChar(a, approved)) {
+			return true;
+		}
+		else { return false;}
+	}
+	
+	public boolean isDisapproved(char approved) {
+		char d = 'd';
+		if(sameChar(d, approved)) {
+			return true;
+		}
+		else { return false;}
+	}
+	
+	public boolean sameChar(char a, char b) {
+		int compare = Character.compare(a, b);
+		if(compare == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	
 }

@@ -1,6 +1,7 @@
 package caml.group.demo.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -30,18 +31,18 @@ public class Alternative {
 
 	public int getTotalDisapprovals() { 
 		int answer = 0;
-//		for(Rating rate : ratings) {
-//			if(rate.getIsDisapproval()) { answer++; }
-//		}
+		for(Feedback rate : feedback) {
+			if(rate.isDisapproved(rate.getApproved())) { answer++; }
+		}
 		totalDisapprovals = answer;
 		return totalDisapprovals;
 	}
 
 	public int getTotalApprovals() { 
 		int answer = 0;
-//		for(Rating rate : ratings) {
-//			if(rate.getIsApproval()) { answer++; }
-//		}
+		for(Feedback rate : feedback) {
+			if(rate.isApproved(rate.getApproved())) { answer++; }
+		}
 		totalApprovals = answer;
 		return totalApprovals;
 	}
@@ -50,19 +51,29 @@ public class Alternative {
 	public void setTotalDisapprovals(int totalDisapprovs) { totalDisapprovals = totalDisapprovs; }
 
 	public ArrayList<Rating> getRatings() { return ratings;}
-	
+
 	public void addRating(Rating rator) { ratings.add(rator); } // fyi rator is noun and rater is verb
 	public void removeRating(Rating rator) { ratings.remove(rator); }
 
-//	public void changeRating(Rating rator) {
-//		int currentID = rator.getUserID();
-//		for(Rating rater : ratings) {
-//			if(helpEquals(rater.getUserID(), currentID)) {
-//				removeRating(rater);
-//			}
-//		}
-//		ratings.add(rator);
-//	}
+	//	public void changeRating(Rating rator) {
+	//		int currentID = rator.getUserID();
+	//		for(Rating rater : ratings) {
+	//			if(helpEquals(rater.getUserID(), currentID)) {
+	//				removeRating(rater);
+	//			}
+	//		}
+	//		ratings.add(rator);
+	//	}
+
+	public boolean sameChar(char a, char b) {
+		int compare = Character.compare(a, b);
+		if(compare == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
 	public boolean helpEquals(int a, int b) {
 		Integer var1 = Integer.valueOf(a);
@@ -75,7 +86,10 @@ public class Alternative {
 			return false;
 		}
 	}
+
 	public ArrayList<Feedback> getFeedback() { return feedback;}
 
+	// iterators
+	public Iterator<Feedback> feedbackIterator() { return feedback.iterator(); }
 
 }
