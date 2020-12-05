@@ -115,3 +115,7 @@ thead, tfoot{
 #alternativeApproval{
 	visibility: hidden;
 }
+
+#refreshAltsBtn{
+	margin-top: 20px;
+}

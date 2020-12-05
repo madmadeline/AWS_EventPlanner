@@ -4,6 +4,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script type = 'text/javascript' src='../js/createReport.js'></script>
         <script type = 'text/javascript' src='../js/api.js'></script>
+        <script type = 'text/javascript' src='../js/deleteChoices.js'></script>
       </head>
         <h1>CHOICEMAKER - ADMIN PAGE</h1>
         <div class = "container">
@@ -14,11 +15,12 @@
         </div>
         <div class = "deleteChoices">
             <h2>Delete Old Choices:</h2>
-            <form>
-                <label for = "deleteForm">Delete choices older than:</label>
-                <input type = "number" id = "deleteForm"> <br>days. (cannot be undone.)
+            <form id = "deleteForm">
+                <label for = "deleteDays">Delete choices older than:</label>
+                <input type = "number" id = "deleteDays" name = "deleteDays"> <br>days. (cannot be undone.)
             </form>
-            <button>Delete</button>
+            <input type = "button" id = "deleteChoicesBtn" value = "Delete" onclick = "Javascript:handleDeleteClick()">
+            <div id = "deleteResult"></div>
         </div>
         </div>
     </body>

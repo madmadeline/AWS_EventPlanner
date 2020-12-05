@@ -2,8 +2,6 @@
     <head>
     
     	<script type = 'text/javascript' src='../js/api.js'></script>
-    	<script type = 'text/javascript' src='../js/get_choicesList.js'></script>
-    	<script type = 'text/javascript' src='../js/get_userList.js'></script>
     	<script type = 'text/javascript' src='../js/createChoice.js'></script>
     	<script type = 'text/javascript' src='../js/createUser.js'></script>
     	<script type = 'text/javascript' src='../js/findChoice.js'></script>
@@ -20,6 +18,8 @@
         <h1>
             CHOICEMAKER
         </h1>
+        
+        <a href="https://3733camlgroupproject.s3.amazonaws.com/html/adminLanding.html">Admin Page</a>
         
         <div class = "choicesSearch">
             <h2>Create a New Choice:</h2>
@@ -41,7 +41,7 @@
         
         <div class = "findChoiceDiv">
             <h2>Find a choice by ID:</h2>
-            <form name = 'findChoiceForm' method = 'get'>
+            <form name = 'findChoiceForm' method = "post">
                 <input name = 'findChoice' type = "text" id = "findChoice">
                 <input type = "button" id = "findButton" value = "Find" onclick = "Javascript:handleFindClick()">
             </form>
@@ -66,11 +66,10 @@
         	<h2 id = "approvalHeader">Approve an Alternative:</h2>
         	Signed in as:
         	<div id = "usernameDisplay"></div>
-        	for Choice ID:
         	<div id = "currentChoice"></div>
         	<div id = "approvalConfirm"></div>
         	<div id = "altList"></div>
-        	<input type = "button" id = "refreshAltsBtn" value = "Refresh" onclick = "Javascript:handleFindClick(this)">
+        	<input type = "button" id = "refreshAltsBtn" value = "Refresh" onclick = "Javascript:handleFindClick()">
         </div>
         
         <div id = "currentChoicePayload">
