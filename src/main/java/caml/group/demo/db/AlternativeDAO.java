@@ -134,15 +134,17 @@ public class AlternativeDAO {
 			newNum = alt.getTotalDisapprovals();
 		}
 		
-		if (isAdd) { newNum++; }
-		else { newNum--; }
+		/*if (isAdd) { newNum++; }
+		else { newNum--; }*/
 		
 		
 		try {
-			String query = "UPDATE " + tblName + " SET "+ column + "=? WHERE altID=?;";
+			//String query = "UPDATE " + tblName + " SET "+ column + "=? WHERE altID=?;";
+			String query = "UPDATE Alternative SET numLikes=?, numDislikes=? where altID=?;";
 			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setInt(1, newNum);
-			ps.setString(2, alt.getID());
+			ps.setInt(1, alt.getTotalApprovals());
+			ps.setInt(2, alt.getTotalDisapprovals());
+			ps.setString(3, alt.getID());
 			int numAffected = ps.executeUpdate();
 			ps.close();
 

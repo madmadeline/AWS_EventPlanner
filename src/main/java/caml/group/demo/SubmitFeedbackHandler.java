@@ -54,7 +54,7 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 			alternative.setTotalApprovals(alternative.getTotalApprovals() + 1);
 			feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
 					feedback.getTimeStamp());
-			if (oldApproval != 'D') {
+			if (oldApproval == 'D') {
 				logger.log("Getting rid of old disapproval");
 				alternative.setTotalDisapprovals(alternative.getTotalDisapprovals() - 1);
 			}
@@ -65,14 +65,14 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 		// disapprove alternative
 		else if (feedback.getApproved() == 'D' && oldApproval != 'D') {
 			logger.log("Adding disapproval");
-			alternative.setTotalApprovals(alternative.getTotalDisapprovals() + 1);
+			alternative.setTotalDisapprovals(alternative.getTotalDisapprovals() + 1);
 			feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
 					feedback.getTimeStamp());
-			if (oldApproval != 'A') {
+			if (oldApproval == 'A') {
 				logger.log("Getting rid of old approval");
 				alternative.setTotalApprovals(alternative.getTotalApprovals() - 1);
 			}
-			alternativeDAO.updateAlternative(alternative, true, false);
+			alternativeDAO.updateAlternative(alternative, false, true);
 			return true;
 		}
 		else if (feedbackDAO.feedbackExists(feedback.getAltID(), feedback.getUserID())) {

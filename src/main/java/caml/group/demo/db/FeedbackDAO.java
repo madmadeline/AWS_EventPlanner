@@ -179,13 +179,12 @@ public class FeedbackDAO {
                // update the feedback row
                 ps = conn.prepareStatement("UPDATE " + feedbackTbl + " SET " +
                         " message=?, timeStamp=?, approved=? WHERE altID=? AND userID=? AND" +
-                        "approved!=?;");
+                        " approved IS NOT NULL;");
                 ps.setString(1, message);
                 ps.setTimestamp(2, timeStamp);
                 ps.setString(3, "" + approved);
                 ps.setString(4, altID);
                 ps.setString(5, userID);
-                ps.setString(6, "" + approved);
                 try {
                     result = ps.executeUpdate();
                 } catch (Exception e) {
