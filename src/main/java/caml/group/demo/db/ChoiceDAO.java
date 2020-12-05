@@ -148,7 +148,7 @@ public class ChoiceDAO {
             ps.setString(1, choice.getID());
             ps.setString(2, choice.getDescription());
             ps.setTimestamp(3, choice.getTime());
-            ps.setInt(4, choice.getMaxTimeSize());
+            ps.setInt(4, choice.getMaxTeamSize());
             logger.log("Executing add choice statement");
             ps.execute();
             ps.close();

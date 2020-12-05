@@ -26,5 +26,6 @@ public class AddSubmitFeedbackResponse {
         this.result = false;
         this.statusCode = statusCode;
         this.error = errorMessage;
+        this.rating = 'F';
     }
 }

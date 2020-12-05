@@ -23,7 +23,7 @@ public class AddFindChoiceResponse {
         this.alts = choice.getAlternatives();
         this.time = choice.getTime();
         this.statusCode = 200;
-        this.maxTeamSize = choice.getMaxTimeSize();
+        this.maxTeamSize = choice.getMaxTeamSize();
     }
 
     public AddFindChoiceResponse(int statusCode, String errorMessage){
