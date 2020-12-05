@@ -97,10 +97,10 @@ public class LogInHandlerTest {
 		choiceDAO.addChoice(choice);
 	}
 
-	@After
+	/*@After
 	public void deleteChoice() throws Exception {
 		choiceDAO.deleteChoice(choice);
-	}
+	}*/
 
 	// passed dec 3 2:39pm
 //	@Test

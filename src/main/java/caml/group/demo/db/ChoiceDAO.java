@@ -189,41 +189,21 @@ public class ChoiceDAO {
      * false otherwise
      * @throws Exception The choice couldn't be deleted
      */
-    public boolean deleteChoice(Choice choice) throws Exception {
-        logger.log("Deleting Choice " + choice.getID() + ": " + choice.getDescription());
-        PreparedStatement ps;
+    public ArrayList<Choice> deleteChoice(Timestamp timestamp) throws Exception {
+        logger.log("Deleting choices from before " + timestamp);
 
-        // Delete users from user table
-        try {
-            ps = conn.prepareStatement("Delete from User where choiceID=?;");
-            ps.setString(1, choice.getID());
-            ps.executeUpdate();
-            logger.log("Deleted all Users");
-        } catch (Exception e) {
-            throw new Exception ("Couldn't delete user " + e.getMessage());
-        }
+        PreparedStatement ps = conn.prepareStatement("SELECT * from Choice Where dateOfCreation<=?");
+        ps.setTimestamp(1,timestamp);
+        ResultSet rs = ps.executeQuery();
+        ArrayList<Choice> choices = generateReport(rs);
+        ps.close();
 
-        // Delete alts from alt table
-        AlternativeDAO dao = new AlternativeDAO(logger);
-        ArrayList<Alternative> alts = dao.getAllAlternativesByChoiceID(choice.getID());
+        PreparedStatement ps2 = conn.prepareStatement("DELETE From Choice where dateOfCreation<=?");
+        ps2.setTimestamp(1, timestamp);
+        ps2.execute();
+        ps2.close();
 
-        for (Alternative alt : alts) { dao.deleteAlternative(alt); }
-        logger.log("Deleted alternatives");
-
-        // Delete the choice from the choice table
-        try {
-            ps = conn.prepareStatement(
-                    "delete from " + tblName + " where choiceID=? and description=?;"
-            );
-            ps.setString(1, choice.getID());
-            ps.setString(2, choice.getDescription());
-            int numAffected = ps.executeUpdate();
-            logger.log("Deleted choice");
-            ps.close();
-            return numAffected == 1;
-        } catch (Exception e) {
-            throw new Exception ("Couldn't delete choice " + e.getMessage());
-        }
+        return  choices;
     }
 
     /**
