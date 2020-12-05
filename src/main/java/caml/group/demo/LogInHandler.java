@@ -61,7 +61,7 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 			}
 			try {
 				// make sure that the choice ID is valid
-				choiceID = req.getChoiceID();
+				choiceID = String.valueOf(req.getChoiceID());
 				ChoiceDAO cdao = new ChoiceDAO(logger);
 				choice = cdao.getChoice(""+choiceID);
 				if (choice == null ) {

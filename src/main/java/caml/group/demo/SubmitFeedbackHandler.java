@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 
@@ -23,10 +24,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRequest,AddSubmitFeedbackResponse> {
 	LambdaLogger logger;
 
-	public void submitFeedback(Feedback feedback){
+	public void submitFeedback(Feedback feedback) throws SQLException {
 		logger.log("In submitFeedback in SubmitFeedback Handler");
 		FeedbackDAO dao = new FeedbackDAO(logger);
 		logger.log("Retrieved dao");
+		dao.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+				feedback.getTimeStamp());
 	}
 
 	@Override
@@ -48,6 +51,9 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 			failMessage = "Failed to submit feedback";
 		}
 
-		return null;
+		AddSubmitFeedbackResponse response;
+		if(fail) response = new AddSubmitFeedbackResponse(400, failMessage);
+		else response = new AddSubmitFeedbackResponse(200, feedback);
+		return response;
     }
 }
