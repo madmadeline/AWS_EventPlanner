@@ -175,6 +175,7 @@ public class FeedbackDAO {
 
             // the feedback is already present in the table
             if (resultSet.isBeforeFirst()) {
+                logger.log("Updating feedback row");
                // update the feedback row
                 ps = conn.prepareStatement("UPDATE " + feedbackTbl + " SET " +
                         " message=?, timeStamp=?, approved=? WHERE altID=? AND userID=? AND" +
@@ -198,6 +199,7 @@ public class FeedbackDAO {
             }
 
             // add to the Feedback table
+            logger.log("Adding to the Feedback table");
             ps = conn.prepareStatement("INSERT INTO " + feedbackTbl +
                     " (altID,userID,message,timeStamp,approved) values(?,?,?,?,?);"); // ps is closed ignore error
             ps.setString(1, altID);
@@ -273,5 +275,41 @@ public class FeedbackDAO {
         }
     }
 
-	
+
+    /**
+     * Checks to see if the feedback with the given alt ID and user ID already
+     * has an approval in it.
+     * @param altID The given alt ID
+     * @param userID The given user ID
+     * @return The approval
+     *      'A' if approval,
+     *      'D' if disapproval,
+     *      '0' if null or feedback doesn't exist)
+     * @throws Exception
+     */
+    public char getApproval(String altID, String userID) throws Exception {
+        logger.log("Getting approval");
+        PreparedStatement ps;
+
+        ps = conn.prepareStatement("SELECT * FROM " + feedbackTbl + " WHERE " +
+                "altID=? AND userID=? AND approved IS NOT NULL;");
+        ps.setString(1, altID);
+        ps.setString(2, userID);
+
+        if (feedbackExists(altID, userID)) {
+            try {
+                ResultSet resultSet = ps.executeQuery();
+                if (resultSet.next()) {
+                    logger.log("Feedback does have approval");
+                    return resultSet.getString("approved").toCharArray()[0];
+                } else {
+                    logger.log("Feedback doesn't have approval");
+                    return '0';
+                }
+            } catch (Exception e) {
+                throw new Exception("Database error " + e.getMessage());
+            }
+        }
+        return '0';
+    }
 }

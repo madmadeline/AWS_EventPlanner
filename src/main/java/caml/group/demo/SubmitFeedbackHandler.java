@@ -28,36 +28,62 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 	Alternative alternative;
 	FeedbackDAO feedbackDAO;
 
-	public void submitFeedback(Feedback feedback) throws Exception {
+	public boolean submitFeedback(Feedback feedback) throws Exception {
+		char oldApproval;
+
 		logger.log("In submitFeedback in SubmitFeedback Handler");
+
 		feedbackDAO = new FeedbackDAO(logger);
 		AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
-
-		int oldNumApprovals;
-
-		boolean userChangedMind = feedbackDAO.feedbackExists(feedback.getAltID(), feedback.getUserID());
-
 		logger.log("Retrieved dao");
-		feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
-				feedback.getTimeStamp());
 
-		// update the alternative
+		// get old alternative
 		alternative = alternativeDAO.getAlternativeByID(feedback.getAltID());
-		if (feedback.getApproved() == 'A') { // approve alternative
+
+		// store old approval
+		oldApproval = feedbackDAO.getApproval(feedback.getAltID(), feedback.getUserID());
+//		feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+//				feedback.getTimeStamp());
+
+		System.out.println("old approval = " + oldApproval);
+
+		// update the alternative and feedback
+		alternative = alternativeDAO.getAlternativeByID(feedback.getAltID());
+		if (feedback.getApproved() == 'A' && oldApproval != 'A') {
+			logger.log("Adding approval");
 			alternative.setTotalApprovals(alternative.getTotalApprovals() + 1);
-			if (userChangedMind) {
+			feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+					feedback.getTimeStamp());
+			if (oldApproval != 'D') {
+				logger.log("Getting rid of old disapproval");
 				alternative.setTotalDisapprovals(alternative.getTotalDisapprovals() - 1);
 			}
 			alternativeDAO.updateAlternative(alternative, true, true);
-		} else if (feedback.getApproved() == 'D') { // disapprove alternative
+			return true;
+		}
+
+		// disapprove alternative
+		else if (feedback.getApproved() == 'D' && oldApproval != 'D') {
+			logger.log("Adding disapproval");
 			alternative.setTotalApprovals(alternative.getTotalDisapprovals() + 1);
-			if (userChangedMind) {
+			feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+					feedback.getTimeStamp());
+			if (oldApproval != 'A') {
+				logger.log("Getting rid of old approval");
 				alternative.setTotalApprovals(alternative.getTotalApprovals() - 1);
 			}
 			alternativeDAO.updateAlternative(alternative, true, false);
+			return true;
 		}
-		// TODO for iteration 3: update alternative when the feedback is just a message
-
+		else if (feedbackDAO.feedbackExists(feedback.getAltID(), feedback.getUserID())) {
+			logger.log("Duplicate approval/disapproval, doing nothing :)");
+			return false;
+		}
+		else {
+			feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+					feedback.getTimeStamp());
+			return true;
+		}
 	}
 
 	@Override
@@ -74,7 +100,10 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 				req.getRating(), req.getFeedback(), time);
 
 		try{
-			submitFeedback(feedback);
+			if (!submitFeedback(feedback)) {
+				fail = true;
+				failMessage = "Duplicate approval";
+			}
 		}catch (Exception e){
 			fail = true;
 			failMessage = "Failed to submit feedback";
