@@ -8,6 +8,7 @@ public class AddLogInResponse {
 	public boolean result;  // true: logged in
 	public String username;
 	public String password;
+	public String userID;
 	public Choice choice;
 	public int statusCode;  // HTTP status code.
 	public String error;
@@ -17,6 +18,7 @@ public class AddLogInResponse {
 //		System.out.println("this changed");
 		this.username = user.getName();
 		this.password = user.getPassword();
+		this.userID = user.getID();
 		this.choice = choice;
 		this.statusCode = statusCode;
 		this.error = "";
@@ -26,6 +28,7 @@ public class AddLogInResponse {
 		this.result = false; // doesn't matter since error
 		this.username = "";
 		this.password = "";
+		this.userID = "";
 		this.choice = null;
 		this.statusCode = statusCode;
 		this.error = errorMessage;
