@@ -31,4 +31,13 @@ public class AddFindChoiceResponse {
         this.statusCode = statusCode;
         this.error = errorMessage;
     }
+
+    public String toString() {
+        if (statusCode / 100 == 2) {  // too cute?
+//            return "ChoiceID " + choiceID + " Description " + description;
+            return "Response: Result (" + result + ")\n";
+        } else {
+            return "Response: ErrorResult(" + statusCode + ", err=" + error + ")\n";
+        }
+    }
 }

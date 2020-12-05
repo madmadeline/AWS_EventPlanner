@@ -42,7 +42,7 @@ public class FeedbackDAO {
      * @return the User object
      * @throws SQLException if the user could not be found or inserted in the table
      */
-    public Feedback loadOrInsertFeedback(String altID, char approved, String message, Timestamp timeStamp, String userID) throws SQLException {
+    public Feedback loadOrInsertFeedback(String altID, char approved, String message, Timestamp timeStamp, String userID, String username) throws Exception {
         Feedback feedback = null; // User object representing the database entry
         PreparedStatement ps;
         ResultSet resultSet;
@@ -65,7 +65,7 @@ public class FeedbackDAO {
             // user feedback isn't in the table --> insert new feedback
             if (!resultSet.isBeforeFirst()) {
 //                System.out.println("user's feedback isn't in the table");
-                feedback = new Feedback(altID, userID, approved, message, timeStamp);
+                feedback = new Feedback(altID, userID, username, approved, message, timeStamp);
 //                System.out.println("got new feedback");
                 try {
                     addFeedback(altID, userID, approved, message, timeStamp);
@@ -101,21 +101,24 @@ public class FeedbackDAO {
      * @return the Feedback object
      * @throws SQLException database error idk
      */
-    private Feedback generateFeedback(ResultSet resultSet) throws SQLException {
+    private Feedback generateFeedback(ResultSet resultSet) throws Exception {
         String altID;
         char approved;
         String message;
         Timestamp timestamp;
         String userID;
+        UserDAO userDAO;
 
         try {
+            userDAO = new UserDAO(logger);
             altID = resultSet.getString("altID");
             approved = resultSet.getString("approved").toCharArray()[0];
             message = resultSet.getString("message");
             timestamp = resultSet.getTimestamp("timeStamp");
             userID = resultSet.getString("userID");
 //            logger.log("Row username: " + username + "\n");
-            return new Feedback(altID, userID, approved, message, timestamp);
+            return new Feedback(altID, userID, userDAO.getUsernameFromID(userID),
+                    approved, message, timestamp);
         } catch (SQLException e) {
             // result set is null, user doesn't exist
             throw new SQLException("Feedback can't be found in the table: " + e.getMessage());
@@ -211,7 +214,7 @@ public class FeedbackDAO {
      * @throws Exception, couldn't get all the Feedback
      */
     public List<Feedback> getAllFeedback(String altID) throws Exception {
-        
+        UserDAO userDAO = new UserDAO(logger);
         List<Feedback> allFeedback = new ArrayList<>();
         PreparedStatement ps;
 
@@ -221,7 +224,9 @@ public class FeedbackDAO {
             ResultSet resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
-                Feedback feedback = new Feedback(altID, resultSet.getString("userID"),
+                String userID = resultSet.getString("userID");
+                Feedback feedback = new Feedback(altID, userID,
+                        userDAO.getUsernameFromID(userID),
                         resultSet.getString("approved").toCharArray()[0],
                         resultSet.getString("message"),
                         resultSet.getTimestamp("timeStamp"));

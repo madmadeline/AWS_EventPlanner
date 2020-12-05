@@ -3,6 +3,7 @@ package caml.group.demo.http;
 public class AddSubmitFeedbackRequest {
     String altID;
     String userID;
+    String username;
     String feedback;
     char rating;
 
@@ -22,6 +23,8 @@ public class AddSubmitFeedbackRequest {
         return rating;
     }
 
+    public String getUsername() { return username; }
+
     public void setAltID(String altID) {
         this.altID = altID;
     }
@@ -37,6 +40,8 @@ public class AddSubmitFeedbackRequest {
     public void setUserID(String userID) {
         this.userID = userID;
     }
+
+    public void setUsername(String username) { this.username = username; }
 
     public String toString() { return "Add(" + feedback + ")"; }
 }

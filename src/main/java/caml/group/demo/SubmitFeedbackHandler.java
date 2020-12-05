@@ -42,7 +42,8 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 		String failMessage = "";
 		Timestamp time = Timestamp.from(Instant.now());
 
-		Feedback feedback = new Feedback(req.getAltID(), req.getUserID(), req.getRating(), req.getFeedback(), time);
+		Feedback feedback = new Feedback(req.getAltID(), req.getUserID(), req.getUsername(),
+				req.getRating(), req.getFeedback(), time);
 
 		try{
 			submitFeedback(feedback);

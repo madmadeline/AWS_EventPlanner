@@ -1,5 +1,6 @@
 package caml.group.demo.http;
 
+import caml.group.demo.db.UserDAO;
 import caml.group.demo.model.Feedback;
 
 public class AddSubmitFeedbackResponse {
@@ -9,6 +10,7 @@ public class AddSubmitFeedbackResponse {
     public String altID;
     public String userID;
     public String feedback;
+    public String username;
     public char rating;
 
     public AddSubmitFeedbackResponse(int statusCode, Feedback feedback){
@@ -18,6 +20,7 @@ public class AddSubmitFeedbackResponse {
         assert feedback != null;
         this.altID = feedback.getAltID();
         this.userID = feedback.getUserID();
+        this.username = feedback.getUsername();
         this.feedback = feedback.getMessage();
         this.rating = feedback.getApproved();
     }
