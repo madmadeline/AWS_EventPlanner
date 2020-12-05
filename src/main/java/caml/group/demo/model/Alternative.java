@@ -51,6 +51,24 @@ public class Alternative {
 		return totalApprovals;
 	}
 
+	public ArrayList<String> getTotalDisapprovalUsers() { 
+		ArrayList<String> answer = new ArrayList<String>();
+		for(Feedback rate : feedback) {
+			if(rate.isDisapproved(rate.getApproved())) { answer.add(rate.getUsername()); }
+		}
+		
+		return answer;
+	}
+
+	public ArrayList<String> getTotalApprovalUsers() { 
+		ArrayList<String> answer = new ArrayList<String>();
+		for(Feedback rate : feedback) {
+			if(rate.isApproved(rate.getApproved())) { answer.add(rate.getUsername()); }
+		}
+		 
+		return answer;
+	}
+	
 	public void setTotalApprovals(int totalApprovs) { totalApprovals = totalApprovs; }
 	public void setTotalDisapprovals(int totalDisapprovs) { totalDisapprovals = totalDisapprovs; }
 
