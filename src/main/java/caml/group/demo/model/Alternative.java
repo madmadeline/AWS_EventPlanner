@@ -26,6 +26,12 @@ public class Alternative {
 	public String getDescription() { return description;}
 
 
+	public int getTotalRatings() {
+		int answer = 0;
+		answer = getTotalDisapprovals() + getTotalApprovals();
+		
+		return answer;
+	}
 
 	public int getTotalDisapprovals() { 
 		int answer = 0;
