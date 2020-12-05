@@ -160,6 +160,8 @@ public class AlternativeDAO {
 	 * @throws Exception, failed to delete alternative
 	 */
 	public boolean deleteAlternative(Alternative alt) throws Exception {
+		// TODO delete feedback
+
 		try {
 			PreparedStatement ps = conn.prepareStatement("DELETE FROM " + tblName + " WHERE altID=?;");
 			ps.setString(1, alt.getID());

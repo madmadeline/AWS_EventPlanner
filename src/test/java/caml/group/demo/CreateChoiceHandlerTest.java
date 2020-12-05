@@ -48,22 +48,22 @@ public class CreateChoiceHandlerTest {
         Assert.assertEquals(req.getMaxTeamSize(), response.maxTeamSize);
 
         // check that all the alternatives are correct
-        ArrayList<Alternative> alts = response.alts;
-        int altsLen = alts.size();
+        ArrayList<Alternative> alternatives = response.alternatives;
+        int altsLen = alternatives.size();
 
-//        System.out.println(req.getAlt1ID());
-//        System.out.println(req.getAlt1Description());
+//        System.out.println("id " + req.getAlt1ID());
+//        System.out.println("desc " + req.getAlt1Description());
 
         if (req.getAlt1ID() != null) {
-            Assert.assertEquals(req.getAlt1ID(), alts.get(index).getID().split("_")[0]);
-            Assert.assertEquals(req.getAlt1Description(), alts.get(index).getID().split("_")[0]);
+//            Assert.assertEquals(req.getAlt1ID(), alts.get(index).getID().split("_")[0]);
+            Assert.assertEquals(req.getAlt1Description(), alternatives.get(index).getDescription());
 //            System.out.println("first");
             index++;
         }
 
         if (req.getAlt2ID() != null) {
-            Assert.assertEquals(req.getAlt2ID(), alts.get(index).getID().split("_")[0]);
-            Assert.assertEquals(req.getAlt2Description(), alts.get(index).getID().split("_")[0]);
+//            Assert.assertEquals(req.getAlt2ID(), alts.get(index).getID().split("_")[0]);
+            Assert.assertEquals(req.getAlt2Description(), alternatives.get(index).getDescription());
 //            System.out.println("second");
             index++;
         }
@@ -71,23 +71,23 @@ public class CreateChoiceHandlerTest {
 
         if (altsLen > 2 || req.getAlt3ID() != null) {
 //            System.out.println("third");
-            Assert.assertEquals(req.getAlt3ID(), alts.get(index).getID().split("_")[0]);
+//            Assert.assertEquals(req.getAlt3ID(), alts.get(index).getID().split("_")[0]);
             Assert.assertEquals(req.getAlt3Description(),
-                    alts.get(index).getID().split("_")[0]);
+                    alternatives.get(index).getDescription());
             index++;
         }
         if (altsLen > 3 || req.getAlt4ID() != null) {
 //            System.out.println("fourth");
-            Assert.assertEquals(req.getAlt4ID(), alts.get(index).getID().split("_")[0]);
+//            Assert.assertEquals(req.getAlt4ID(), alts.get(index).getID().split("_")[0]);
             Assert.assertEquals(req.getAlt4Description(),
-                    alts.get(index).getID().split("_")[0]);
+                    alternatives.get(index).getDescription());
             index++;
         }
         if (altsLen > 4 || req.getAlt5ID() != null) {
 //            System.out.println("fifth");
-            Assert.assertEquals(req.getAlt5ID(), alts.get(index).getID().split("_")[0]);
+//            Assert.assertEquals(req.getAlt5ID(), alts.get(index).getID().split("_")[0]);
             Assert.assertEquals(req.getAlt5Description(),
-                    alts.get(index).getID().split("_")[0]);
+                    alternatives.get(index).getDescription());
         }
     }
 
@@ -100,101 +100,103 @@ public class CreateChoiceHandlerTest {
         Assert.assertEquals(outgoing, response.error);
     }
 
-    /*@Test
-    public void createChoice1Alt() throws Exception {
-        String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Whaddaya cook with tomatoes??\"," +
-                "\"maxTeamSize\":\"2\"," +
-                "\"alt3ID\":\"spicy tomato soup\",\"alt3Description\":\"spicy tomato soup\"" +
-                "}";
-        try {
-            testFailInput(SAMPLE_INPUT_STRING, "Failed. Not enough alternatives");
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }
-
-    @Test
-    public void createChoice4Alts() throws Exception {
-        String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Whaddaya cook with tomatoes??\"," +
-                "\"maxTeamSize\":\"2\"," +
-                "\"alt1ID\":\"spicy tomato soup\",\"alt1Description\":\"spicy tomato soup\"," +
-                "\"alt2ID\":\"pizza\",\"alt2Description\":\"pizza\"," +
-                "\"alt3ID\":\"chili mac\",\"alt3Description\":\"chili mac\"," +
-                "\"alt4ID\":\"tomato and egg\",\"alt4Description\":\"tomato and egg\"" +
-                "}";
-        try {
-            testInput(SAMPLE_INPUT_STRING);
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }
-
-    @Test
-    public void createChoiceTestDuplicateAlts() throws Exception {
-        String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Test\"," +
-                "\"maxTeamSize\":\"2\"," +
-                "\"alt1ID\":\"a\",\"alt1Description\":\"a\"," +
-                "\"alt2ID\":\"a\",\"alt2Description\":\"a\"" +
+//    @Test
+//    public void createChoice1Alt() throws Exception {
+//        String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Whaddaya cook with tomatoes??\"," +
+//                "\"maxTeamSize\":\"2\"," +
+//                "\"alt3ID\":\"spicy tomato soup\",\"alt3Description\":\"spicy tomato soup\"" +
+//                "}";
+//        try {
+//            testFailInput(SAMPLE_INPUT_STRING, "Failed. Not enough alternatives");
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void createChoice4Alts() throws Exception {
+//        String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Whaddaya cook with tomatoes??\"," +
+//                "\"maxTeamSize\":\"2\"," +
+//                "\"alt1ID\":\"spicy tomato soup\",\"alt1Description\":\"spicy tomato soup\"," +
+//                "\"alt2ID\":\"pizza\",\"alt2Description\":\"pizza\"," +
 //                "\"alt3ID\":\"chili mac\",\"alt3Description\":\"chili mac\"," +
 //                "\"alt4ID\":\"tomato and egg\",\"alt4Description\":\"tomato and egg\"" +
-                "}";
-        try {
-            testFailInput(SAMPLE_INPUT_STRING, "Either the choice description, an alternative description exceeds the 60 character limit, or you have a duplicate alternative");
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }
-
-    @Test
-    public void createChoiceAltsOutOfOrder() throws Exception {
-        String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Whaddaya cook with tomatoes??\"," +
-                "\"maxTeamSize\":\"2\"," +
+//                "}";
+//        try {
+//            testInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void createChoiceTestDuplicateAlts() throws Exception {
+//        String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Test\"," +
+//                "\"maxTeamSize\":\"2\"," +
+//                "\"alt1ID\":\"a\",\"alt1Description\":\"a\"," +
+//                "\"alt2ID\":\"a\",\"alt2Description\":\"a\"" +
+////                "\"alt3ID\":\"chili mac\",\"alt3Description\":\"chili mac\"," +
+////                "\"alt4ID\":\"tomato and egg\",\"alt4Description\":\"tomato and egg\"" +
+//                "}";
+//        try {
+//            testInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void createChoiceAltsOutOfOrder() throws Exception {
+//        String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Whaddaya cook with tomatoes??\"," +
+//                "\"maxTeamSize\":\"2\"," +
+////                "\"alt1ID\":\"spicy tomato soup\",\"alt1Description\":\"spicy tomato soup\"," +
+//                "\"alt2ID\":\"pizza\",\"alt2Description\":\"pizza\"," +
+////                "\"alt3ID\":\"chili mac\",\"alt3Description\":\"chili mac\"," +
+//                "\"alt4ID\":\"tomato and egg\",\"alt4Description\":\"tomato and egg\"" +
+//                "}";
+//        try {
+//            testInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
+//
+//
+//    @Test
+//    public void createChoiceAltTooLong() throws Exception {
+//        String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Whaddaya cook with tomatoes??\"," +
+//                "\"maxTeamSize\":\"2\"," +
 //                "\"alt1ID\":\"spicy tomato soup\",\"alt1Description\":\"spicy tomato soup\"," +
-                "\"alt2ID\":\"pizza\",\"alt2Description\":\"pizza\"," +
-//                "\"alt3ID\":\"chili mac\",\"alt3Description\":\"chili mac\"," +
-                "\"alt4ID\":\"tomato and egg\",\"alt4Description\":\"tomato and egg\"" +
-                "}";
-        try {
-            testInput(SAMPLE_INPUT_STRING);
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }
-
-
-    @Test
-    public void createChoiceAltTooLong() throws Exception {
-        String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Whaddaya cook with tomatoes??\"," +
-                "\"maxTeamSize\":\"2\"," +
-                "\"alt1ID\":\"spicy tomato soup\",\"alt1Description\":\"spicy tomato soup\"," +
-                "\"alt2ID\":\"pizza\",\"alt2Description\":\"pizza\"," +
-//                "\"alt3ID\":\"chili mac\",\"alt3Description\":\"chili mac\"," +
-                "\"alt4ID\":\"tomato and egg\",\"alt4Description\":\"tomato and egg\"," +
-                "\"alt5ID\":\"i don't care about tomatoes i just wanna sleep and rest a bit\"," +
-                "\"alt5Description\":\"i don't care about tomatoes i just wanna sleep and rest a bit\"" +
-                "}";
-        try {
-            testFailInput(SAMPLE_INPUT_STRING, "Either the choice description or an alternative " +
-                    "description exceeds the 60 character limit");
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }
-
-    @Test
-    public void createChoiceDescTooLong() throws Exception {
-        String SAMPLE_INPUT_STRING = "{\"choiceDescription\":" +
-                "\"i don't care about tomatoes i just wanna sleep and rest a bit\"," +
-                "\"maxTeamSize\":\"2\"," +
-                "\"alt1ID\":\"spicy tomato soup\",\"alt1Description\":\"spicy tomato soup\"," +
-                "\"alt2ID\":\"pizza\",\"alt2Description\":\"pizza\"," +
-                "\"alt3ID\":\"chili mac\",\"alt3Description\":\"chili mac\"" +
-                "}";
-        try {
-            testFailInput(SAMPLE_INPUT_STRING, "Either the choice description or an alternative " +
-                    "description exceeds the 60 character limit");
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }*/
+//                "\"alt2ID\":\"pizza\",\"alt2Description\":\"pizza\"," +
+////                "\"alt3ID\":\"chili mac\",\"alt3Description\":\"chili mac\"," +
+//                "\"alt4ID\":\"tomato and egg\",\"alt4Description\":\"tomato and egg\"," +
+//                "\"alt5ID\":\"i don't care about tomatoes i just wanna sleep and rest a bit\"," +
+//                "\"alt5Description\":\"i don't care about tomatoes i just wanna sleep and rest a bit\"" +
+//                "}";
+//        try {
+//            testFailInput(SAMPLE_INPUT_STRING, "Either the choice description, an " +
+//                    "alternative description exceeds the 60 character limit, or you have a duplicate " +
+//                    "alternative");
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void createChoiceDescTooLong() throws Exception {
+//        String SAMPLE_INPUT_STRING = "{\"choiceDescription\":" +
+//                "\"i don't care about tomatoes i just wanna sleep and rest a bit\"," +
+//                "\"maxTeamSize\":\"2\"," +
+//                "\"alt1ID\":\"spicy tomato soup\",\"alt1Description\":\"spicy tomato soup\"," +
+//                "\"alt2ID\":\"pizza\",\"alt2Description\":\"pizza\"," +
+//                "\"alt3ID\":\"chili mac\",\"alt3Description\":\"chili mac\"" +
+//                "}";
+//        try {
+//            testFailInput(SAMPLE_INPUT_STRING, "Either the choice description, an " +
+//                    "alternative description exceeds the 60 character limit, or you have a duplicate " +
+//                    "alternative");
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
 }

@@ -1,49 +1,85 @@
 package caml.group.demo;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.sql.SQLException;
-
-import caml.group.demo.SubmitFeedbackHandler;
+import caml.group.demo.db.ChoiceDAO;
+import caml.group.demo.db.DatabaseUtil;
+import caml.group.demo.db.UserDAO;
+import caml.group.demo.http.AddLogInRequest;
+import caml.group.demo.http.AddLogInResponse;
+import caml.group.demo.http.AddSubmitFeedbackRequest;
+import caml.group.demo.http.AddSubmitFeedbackResponse;
+import caml.group.demo.model.Choice;
+import caml.group.demo.model.TestContext;
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import com.google.gson.Gson;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.sql.SQLException;
 
-
-/**
- * A simple test harness for locally invoking your Lambda function handler.
- */
 public class SubmitFeedbackHandlerTest {
+    UserDAO udao;
+    ChoiceDAO choiceDAO;
+    LambdaLogger logger;
+    Choice choice;
 
-    private static final String SAMPLE_INPUT_STRING = "{\"foo\": \"bar\"}";
-    private static final String EXPECTED_OUTPUT_STRING = "{\"FOO\": \"BAR\"}";
-    SubmitFeedbackHandler handler;
-/*
-
-	@Before
-	public void init() throws ClassNotFoundException, SQLException {
-		model = new Model("admin", "admin:pass");
-		handler = new SubmitFeedbackHandler(model);
-	}
-
-    @Test
-    public void testSubmitFeedbackHandler() throws IOException, ClassNotFoundException, SQLException {
-        init();
-
-        InputStream input = new ByteArrayInputStream(SAMPLE_INPUT_STRING.getBytes());;
-        OutputStream output = new ByteArrayOutputStream();
-
-        handler.handleRequest(input, output, null);
-
-        // TODO: validate output here if needed.
-        String sampleOutputString = output.toString();
-        System.out.println(sampleOutputString);
-        Assert.assertEquals(EXPECTED_OUTPUT_STRING, sampleOutputString);
+    /**
+     * Helper method that creates a context that supports logging so you can test lambda functions
+     * in JUnit without worrying about the logger anymore.
+     *
+     * @param apiCall      An arbitrary string to identify which API is being called.
+     * @return
+     */
+    Context createContext(String apiCall) {
+        caml.group.demo.model.TestContext ctx = new TestContext();
+        ctx.setFunctionName(apiCall);
+        return ctx;
     }
 
- */
+
+    void testInput(String incoming) throws Exception {
+        java.sql.Connection conn;
+        conn = DatabaseUtil.connect();
+
+        SubmitFeedbackHandler handler = new SubmitFeedbackHandler();
+        AddSubmitFeedbackRequest req = new Gson().fromJson(incoming, AddSubmitFeedbackRequest.class);
+        AddSubmitFeedbackResponse response = handler.handleRequest(req, createContext("post"));
+
+        Assert.assertTrue(response.result);
+        Assert.assertEquals(200, response.statusCode);
+    }
+
+    void testFailInput(String incoming) throws IOException, ClassNotFoundException, SQLException {
+        SubmitFeedbackHandler handler = new SubmitFeedbackHandler();
+        AddSubmitFeedbackRequest req = new Gson().fromJson(incoming, AddSubmitFeedbackRequest.class);
+        AddSubmitFeedbackResponse response = handler.handleRequest(req, createContext("post"));
+
+        Assert.assertEquals(400, response.statusCode);
+    }
+
+    @Test
+    public void testSubmitApproval() throws Exception {
+        String SAMPLE_INPUT_STRING = "{\"userID\":\"9102\",\"altID\":" +
+                "\"385c4a3d-a9dd-4150-b32b-603e6773d0fb\",\"rating\":\"A\"," +
+                "\"username\":\"d\"}";
+        try {
+            testInput(SAMPLE_INPUT_STRING);
+        } catch (IOException ioe) {
+            Assert.fail("Invalid:" + ioe.getMessage());
+        }
+    }
+
+    @Test
+    public void testSubmitDuplicateApproval() throws Exception {
+        String SAMPLE_INPUT_STRING = "{\"userID\":\"9102\",\"altID\":" +
+                "\"385c4a3d-a9dd-4150-b32b-603e6773d0fb\",\"rating\":\"A\"," +
+                "\"username\":\"d\"}";
+        try {
+            testFailInput(SAMPLE_INPUT_STRING);
+        } catch (IOException ioe) {
+            Assert.fail("Invalid:" + ioe.getMessage());
+        }
+    }
+
 }

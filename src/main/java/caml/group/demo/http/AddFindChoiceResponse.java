@@ -14,21 +14,30 @@ public class AddFindChoiceResponse {
     public String description;
     public int maxTeamSize;
     public Timestamp time;
-    public ArrayList<Alternative> alts;
+    public ArrayList<Alternative> alternatives;
 
     public AddFindChoiceResponse(Choice choice, int statusCode){
         this.result = true;
         this.choiceID = choice.getID();
         this.description = choice.getDescription();
-        this.alts = choice.getAlternatives();
+        this.alternatives = choice.getAlternatives();
         this.time = choice.getTime();
         this.statusCode = 200;
-        this.maxTeamSize = choice.getMaxTimeSize();
+        this.maxTeamSize = choice.getMaxTeamSize();
     }
 
     public AddFindChoiceResponse(int statusCode, String errorMessage){
         this.result = false;
         this.statusCode = statusCode;
         this.error = errorMessage;
+    }
+
+    public String toString() {
+        if (statusCode / 100 == 2) {  // too cute?
+//            return "ChoiceID " + choiceID + " Description " + description;
+            return "Response: Result (" + result + ")\n";
+        } else {
+            return "Response: ErrorResult(" + statusCode + ", err=" + error + ")\n";
+        }
     }
 }

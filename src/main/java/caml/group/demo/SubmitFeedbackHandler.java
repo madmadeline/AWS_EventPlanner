@@ -6,88 +6,112 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
 
+import caml.group.demo.db.AlternativeDAO;
+import caml.group.demo.db.FeedbackDAO;
+import caml.group.demo.http.AddSubmitFeedbackRequest;
+import caml.group.demo.http.AddSubmitFeedbackResponse;
+import caml.group.demo.model.Alternative;
+import caml.group.demo.model.Feedback;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.amazonaws.util.json.Jackson;
 import com.fasterxml.jackson.databind.JsonNode;
 
-
-public class SubmitFeedbackHandler implements RequestStreamHandler {
+public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRequest,AddSubmitFeedbackResponse> {
 	LambdaLogger logger;
-	
-	public SubmitFeedbackHandler(LambdaLogger logger) {
-		this.logger = logger;
+	Alternative alternative;
+	FeedbackDAO feedbackDAO;
+
+	public boolean submitFeedback(Feedback feedback) throws Exception {
+		char oldApproval;
+
+		logger.log("In submitFeedback in SubmitFeedback Handler");
+
+		feedbackDAO = new FeedbackDAO(logger);
+		AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
+		logger.log("Retrieved dao");
+
+		// get old alternative
+		alternative = alternativeDAO.getAlternativeByID(feedback.getAltID());
+
+		// store old approval
+		oldApproval = feedbackDAO.getApproval(feedback.getAltID(), feedback.getUserID());
+//		feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+//				feedback.getTimeStamp());
+
+		System.out.println("old approval = " + oldApproval);
+
+		// update the alternative and feedback
+		alternative = alternativeDAO.getAlternativeByID(feedback.getAltID());
+		if (feedback.getApproved() == 'A' && oldApproval != 'A') {
+			logger.log("Adding approval");
+			alternative.setTotalApprovals(alternative.getTotalApprovals() + 1);
+			feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+					feedback.getTimeStamp());
+			if (oldApproval != 'D') {
+				logger.log("Getting rid of old disapproval");
+				alternative.setTotalDisapprovals(alternative.getTotalDisapprovals() - 1);
+			}
+			alternativeDAO.updateAlternative(alternative, true, true);
+			return true;
+		}
+
+		// disapprove alternative
+		else if (feedback.getApproved() == 'D' && oldApproval != 'D') {
+			logger.log("Adding disapproval");
+			alternative.setTotalApprovals(alternative.getTotalDisapprovals() + 1);
+			feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+					feedback.getTimeStamp());
+			if (oldApproval != 'A') {
+				logger.log("Getting rid of old approval");
+				alternative.setTotalApprovals(alternative.getTotalApprovals() - 1);
+			}
+			alternativeDAO.updateAlternative(alternative, true, false);
+			return true;
+		}
+		else if (feedbackDAO.feedbackExists(feedback.getAltID(), feedback.getUserID())) {
+			logger.log("Duplicate approval/disapproval, doing nothing :)");
+			return false;
+		}
+		else {
+			feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+					feedback.getTimeStamp());
+			return true;
+		}
 	}
 
 	@Override
-    public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
-    	// create a printer
-    	PrintWriter pw = new PrintWriter(output);
-    	
-    	// create a logger
+    public AddSubmitFeedbackResponse handleRequest(AddSubmitFeedbackRequest req, Context context) {
     	logger = context.getLogger();
-    	if (context != null) { context.getLogger(); }
-    	
-    	// load entire input into a String (since it contains JSON)
-    	StringBuilder incoming = new StringBuilder();
-    	try (BufferedReader br = new BufferedReader(new InputStreamReader(input))) {
-    		String line = null;
-    		while ((line = br.readLine()) != null) {
-    			incoming.append(line);
-    		}
-    	}
-    	
-    	/* When coming in from Lambda function is pure JSON. When coming from API Gateway or the
-    	 * real thing, then is wrapped inside more complicated JSON and you only want the BODY
-    	 * in most cases. 
-    	 */
-        JsonNode node = Jackson.fromJsonString(incoming.toString(), JsonNode.class);
-        if (node.has("body")) {
-        	node = Jackson.fromJsonString(node.get("body").asText(), JsonNode.class);
-        }
-        
-        
-        // parse the inputed strings
-        String feedback = "";
-    	
-        // TODO ensure "feedback" is correct field name
-    	String param = node.get("feedback").asText();
-    	boolean error = false;
-		try {
-			feedback = param;
-    	} catch (Exception e) {
-    		logger.log("Unable to parse:" + param + " as feedback"); 
-			error = true;
-    	}
-		
-		
-		
-		// submit feedback
-        int statusCode;
-        
-		if (error) {
-			statusCode = 400;
-		} else {
-//			model.getCurrentUser().submitFeedback(feedback);
-	    	statusCode = 200;
-		}
-    	
-		// Needed for CORS integration...
-		String response = "{ \n" + 
-				         "  \"isBase64Encoded\" : false, \n" +
-				         "  \"statusCode\"      : " + statusCode + ", \n" +
-				         "  \"headers\" : { \n " +
-		                 "     \"Access-Control-Allow-Origin\" : \"*\", \n" + 
-				         "     \"Access-Control-Allow-Method\"  : \"GET,POST,OPTIONS\" \n" + 
-		                 "  }, \n" +
-//				         "  \"body\" : \"" + "{ \\\"result\\\" : \\\"" + loggedIn + "\\\" }" + "\" \n" +
-				         "}";
-		
-        // write out output
-        pw.print(response);
-        pw.close();
-    }
+		logger.log("Loading Java Lambda handler of RequestHandler");
+		logger.log(req.toString());
 
+		boolean fail = false;
+		String failMessage = "";
+		Timestamp time = Timestamp.from(Instant.now());
+
+		Feedback feedback = new Feedback(req.getAltID(), req.getUserID(), req.getUsername(),
+				req.getRating(), req.getFeedback(), time);
+
+		try{
+			if (!submitFeedback(feedback)) {
+				fail = true;
+				failMessage = "Duplicate approval";
+			}
+		}catch (Exception e){
+			fail = true;
+			failMessage = "Failed to submit feedback";
+		}
+
+		AddSubmitFeedbackResponse response;
+		if(fail) response = new AddSubmitFeedbackResponse(400, failMessage);
+		else response = new AddSubmitFeedbackResponse(200, feedback);
+		return response;
+    }
 }

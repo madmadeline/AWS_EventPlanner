@@ -44,6 +44,11 @@ public class FindChoiceHandler implements RequestHandler<AddFindChoiceRequest,Ad
             fail = true;
             failMessage = "Failed to retrieve choice";
         }
+        //Todo: Update this so that it fires only when a choice does not exist, not always
+        if(choice == null){
+            fail = true;
+            failMessage = "Choice does not exist";
+        }
 
         AddFindChoiceResponse response;
         if(fail) response = new AddFindChoiceResponse(400, failMessage);

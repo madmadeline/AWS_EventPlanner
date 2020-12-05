@@ -15,7 +15,7 @@ import caml.group.demo.model.User;
 /**
  * For handling JSON requests for registering and logging in a user to a choice.
  * List of functions:
- * 		logInOrRegister(String name, String pass, int choiceID) --> User
+ * 		logInOrRegister(String name, String pass, String choiceID) --> User
  * 		handleRequest(AddLogInRequest req, Context context) --> AddLogInResponse
  * @author Group Caml
  */
@@ -46,7 +46,7 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 		User user = null;
 		String name;
 		String pass;
-		int choiceID;
+		String choiceID;
 		AddLogInResponse response;
 		Choice choice = null;
 
@@ -61,7 +61,7 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 			}
 			try {
 				// make sure that the choice ID is valid
-				choiceID = req.getChoiceID();
+				choiceID = String.valueOf(req.getChoiceID());
 				ChoiceDAO cdao = new ChoiceDAO(logger);
 				choice = cdao.getChoice(""+choiceID);
 				if (choice == null ) {

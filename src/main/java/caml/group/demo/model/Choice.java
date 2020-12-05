@@ -13,7 +13,7 @@ public class Choice {
 	Alternative winner;
 	final ArrayList<Alternative> alternatives;// = new ArrayList<Alternative>();
 	ArrayList<User> users;
-	final int maxTimeSize;
+	final int maxTeamSize;
 
 
 	public Choice(String id, String description, ArrayList<Alternative> alternatives, Timestamp time, int teamSize) {
@@ -22,7 +22,7 @@ public class Choice {
 		this.alternatives = alternatives;
 		this.time = time;
 		this.winner = null;
-		this.maxTimeSize = teamSize;
+		this.maxTeamSize = teamSize;
 	}
 
 	public Choice(String id, String description, Timestamp time, int teamSize) {
@@ -31,11 +31,11 @@ public class Choice {
 		this.alternatives = null;
 		this.time = time;
 		this.winner = null;
-		this.maxTimeSize = teamSize;
+		this.maxTeamSize = teamSize;
 	}
 	
 	public String getID() { return this.id; }
-	public int getMaxTimeSize() { return this.maxTimeSize; };
+	public int getMaxTeamSize() { return this.maxTeamSize; };
 	public ArrayList<Alternative> getAlternatives() {
 		return alternatives;
 	}
