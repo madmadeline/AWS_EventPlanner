@@ -15,6 +15,7 @@ public class AddFindChoiceResponse {
     public int maxTeamSize;
     public Timestamp time;
     public ArrayList<Alternative> alternatives;
+    //public Choice choice;
 
     public AddFindChoiceResponse(Choice choice, int statusCode){
         this.result = true;
@@ -22,7 +23,7 @@ public class AddFindChoiceResponse {
         this.description = choice.getDescription();
         this.alternatives = choice.getAlternatives();
         this.time = choice.getTime();
-        this.statusCode = 200;
+        this.statusCode = statusCode;
         this.maxTeamSize = choice.getMaxTeamSize();
     }
 

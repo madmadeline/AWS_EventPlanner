@@ -36,10 +36,34 @@ public class ChoiceDAO {
         logger.log("Getting choice\n");
 //        logger.log(id);
         Choice choice;
+        String description = "";
+        Timestamp time = null;
+        int teamSize = 0;
+        ArrayList<Alternative> alts = new ArrayList<>();
         PreparedStatement ps;
         ResultSet rs;
+        int numLikes;
 
-        System.out.println(id);
+        ps = conn.prepareStatement("SELECT c.choiceID, c.description as CDescription, a.description as ADescription," +
+                " dateOfCreation, maxTeamSize, altID, numLikes, numDislikes" +
+                " From Choice c join Alternative a on c.choiceID=a.choiceID " +
+                "where c.choiceID=?");
+        ps.setString(1,id);
+        rs = ps.executeQuery();
+
+        while(rs.next()){
+            description = rs.getString("CDescription");
+            time = rs.getTimestamp("dateOfCreation");
+            teamSize = rs.getInt("maxTeamSize");
+            numLikes = rs.getInt("numLikes");
+            logger.log(String.valueOf(numLikes));
+            Alternative alt = new Alternative(rs.getString("altID"), rs.getString("ADescription"),
+                    numLikes, rs.getInt("numDislikes"));
+            //logger.log(String.valueOf(alt.getTotalApprovals()));
+            alts.add(alt);
+        }
+        choice = new Choice(id, description, alts, time, teamSize);
+        /*System.out.println(id);
 
         try {
             ps = conn.prepareStatement(
@@ -49,12 +73,12 @@ public class ChoiceDAO {
 
             if (rs.next()) { // choice doesn't exist
                 logger.log("Invalid choice ID");
-                return null;
+                //return null;
             }
         } catch(SQLException e){
             throw new SQLException("Database error" + e.getMessage());
         }
-        choice = generateChoice(rs);
+        choice = generateChoice(rs);*/
 
         rs.close();
         ps.close();
@@ -231,19 +255,6 @@ public class ChoiceDAO {
 
         logger.log("about to get alts");
         alts = alternativeDAO.getAllAlternativesByChoiceID(id);
-
-
-//        while(rs.next()){
-//            aID = rs.getString("altID");
-////            logger.log("got aID");
-//            aDesc = rs.getString("aDesc");
-//            logger.log("got aDesc");
-//            Alternative alt = new Alternative(aID, aDesc);
-//            alt.setTotalApprovals();
-////            logger.log("made alt");
-//            alts.add(alt);
-////            logger.log("added alt to alts");
-//        }
 
         rs.close();
         return new Choice(id, description, alts, time, teamSize);

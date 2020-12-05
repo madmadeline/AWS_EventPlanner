@@ -265,7 +265,7 @@ public class AlternativeDAO {
 		alternative = new Alternative (id, desc);
 
 		alternative.setTotalApprovals(resultSet.getInt("numLikes"));
-		alternative.setTotalApprovals(resultSet.getInt("numDislikes"));
+		alternative.setTotalDisapprovals(resultSet.getInt("numDislikes"));
 
 		return alternative;
 	}
