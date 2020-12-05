@@ -11,7 +11,6 @@ public class Alternative {
 	String description;
 	int totalApprovals;
 	int totalDisapprovals; 
-	ArrayList<Rating> ratings; // ArrayList of Rating. Rating holds 2 values User object and RatingType object - approve/disapprove
 	ArrayList<Feedback> feedback;
 
 
@@ -20,7 +19,6 @@ public class Alternative {
 		this.description = description;
 		this.totalApprovals = 0;
 		this.totalDisapprovals = 0;
-		this.ratings = new ArrayList<Rating>();
 		this.feedback  = new ArrayList<Feedback>();
 	}
 
@@ -50,20 +48,6 @@ public class Alternative {
 	public void setTotalApprovals(int totalApprovs) { totalApprovals = totalApprovs; }
 	public void setTotalDisapprovals(int totalDisapprovs) { totalDisapprovals = totalDisapprovs; }
 
-	public ArrayList<Rating> getRatings() { return ratings;}
-
-	public void addRating(Rating rator) { ratings.add(rator); } // fyi rator is noun and rater is verb
-	public void removeRating(Rating rator) { ratings.remove(rator); }
-
-	//	public void changeRating(Rating rator) {
-	//		int currentID = rator.getUserID();
-	//		for(Rating rater : ratings) {
-	//			if(helpEquals(rater.getUserID(), currentID)) {
-	//				removeRating(rater);
-	//			}
-	//		}
-	//		ratings.add(rator);
-	//	}
 
 	public boolean sameChar(char a, char b) {
 		int compare = Character.compare(a, b);
