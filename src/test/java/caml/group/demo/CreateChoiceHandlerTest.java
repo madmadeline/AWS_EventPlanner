@@ -48,22 +48,22 @@ public class CreateChoiceHandlerTest {
         Assert.assertEquals(req.getMaxTeamSize(), response.maxTeamSize);
 
         // check that all the alternatives are correct
-        ArrayList<Alternative> alts = response.alts;
-        int altsLen = alts.size();
+        ArrayList<Alternative> alternatives = response.alternatives;
+        int altsLen = alternatives.size();
 
 //        System.out.println("id " + req.getAlt1ID());
 //        System.out.println("desc " + req.getAlt1Description());
 
         if (req.getAlt1ID() != null) {
 //            Assert.assertEquals(req.getAlt1ID(), alts.get(index).getID().split("_")[0]);
-            Assert.assertEquals(req.getAlt1Description(), alts.get(index).getDescription());
+            Assert.assertEquals(req.getAlt1Description(), alternatives.get(index).getDescription());
 //            System.out.println("first");
             index++;
         }
 
         if (req.getAlt2ID() != null) {
 //            Assert.assertEquals(req.getAlt2ID(), alts.get(index).getID().split("_")[0]);
-            Assert.assertEquals(req.getAlt2Description(), alts.get(index).getDescription());
+            Assert.assertEquals(req.getAlt2Description(), alternatives.get(index).getDescription());
 //            System.out.println("second");
             index++;
         }
@@ -73,21 +73,21 @@ public class CreateChoiceHandlerTest {
 //            System.out.println("third");
 //            Assert.assertEquals(req.getAlt3ID(), alts.get(index).getID().split("_")[0]);
             Assert.assertEquals(req.getAlt3Description(),
-                    alts.get(index).getDescription());
+                    alternatives.get(index).getDescription());
             index++;
         }
         if (altsLen > 3 || req.getAlt4ID() != null) {
 //            System.out.println("fourth");
 //            Assert.assertEquals(req.getAlt4ID(), alts.get(index).getID().split("_")[0]);
             Assert.assertEquals(req.getAlt4Description(),
-                    alts.get(index).getDescription());
+                    alternatives.get(index).getDescription());
             index++;
         }
         if (altsLen > 4 || req.getAlt5ID() != null) {
 //            System.out.println("fifth");
 //            Assert.assertEquals(req.getAlt5ID(), alts.get(index).getID().split("_")[0]);
             Assert.assertEquals(req.getAlt5Description(),
-                    alts.get(index).getDescription());
+                    alternatives.get(index).getDescription());
         }
     }
 

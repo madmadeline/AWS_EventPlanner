@@ -14,13 +14,13 @@ public class AddFindChoiceResponse {
     public String description;
     public int maxTeamSize;
     public Timestamp time;
-    public ArrayList<Alternative> alts;
+    public ArrayList<Alternative> alternatives;
 
     public AddFindChoiceResponse(Choice choice, int statusCode){
         this.result = true;
         this.choiceID = choice.getID();
         this.description = choice.getDescription();
-        this.alts = choice.getAlternatives();
+        this.alternatives = choice.getAlternatives();
         this.time = choice.getTime();
         this.statusCode = 200;
         this.maxTeamSize = choice.getMaxTeamSize();

@@ -10,9 +10,11 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 
+import caml.group.demo.db.AlternativeDAO;
 import caml.group.demo.db.FeedbackDAO;
 import caml.group.demo.http.AddSubmitFeedbackRequest;
 import caml.group.demo.http.AddSubmitFeedbackResponse;
+import caml.group.demo.model.Alternative;
 import caml.group.demo.model.Feedback;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -23,13 +25,39 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRequest,AddSubmitFeedbackResponse> {
 	LambdaLogger logger;
+	Alternative alternative;
+	FeedbackDAO feedbackDAO;
 
-	public void submitFeedback(Feedback feedback) throws SQLException {
+	public void submitFeedback(Feedback feedback) throws Exception {
 		logger.log("In submitFeedback in SubmitFeedback Handler");
-		FeedbackDAO dao = new FeedbackDAO(logger);
+		feedbackDAO = new FeedbackDAO(logger);
+		AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
+
+		int oldNumApprovals;
+
+		boolean userChangedMind = feedbackDAO.feedbackExists(feedback.getAltID(), feedback.getUserID());
+
 		logger.log("Retrieved dao");
-		dao.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+		feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
 				feedback.getTimeStamp());
+
+		// update the alternative
+		alternative = alternativeDAO.getAlternativeByID(feedback.getAltID());
+		if (feedback.getApproved() == 'A') { // approve alternative
+			alternative.setTotalApprovals(alternative.getTotalApprovals() + 1);
+			if (userChangedMind) {
+				alternative.setTotalDisapprovals(alternative.getTotalDisapprovals() - 1);
+			}
+			alternativeDAO.updateAlternative(alternative, true, true);
+		} else if (feedback.getApproved() == 'D') { // disapprove alternative
+			alternative.setTotalApprovals(alternative.getTotalDisapprovals() + 1);
+			if (userChangedMind) {
+				alternative.setTotalApprovals(alternative.getTotalApprovals() - 1);
+			}
+			alternativeDAO.updateAlternative(alternative, true, false);
+		}
+		// TODO for iteration 3: update alternative when the feedback is just a message
+
 	}
 
 	@Override

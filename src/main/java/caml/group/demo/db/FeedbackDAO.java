@@ -158,14 +158,15 @@ public class FeedbackDAO {
     /**
      * Adds the given User object to the User database.
      * @return true if the User was added, false otherwise
-     * @throws SQLException, failed to insert user
+     * @throws Exception, failed to insert user
      */
-    public boolean addFeedback(String altID, String userID, char approved, String message, Timestamp timeStamp) throws SQLException {
+    public boolean addFeedback(String altID, String userID, char approved, String message, Timestamp timeStamp) throws Exception {
         PreparedStatement ps;
         int result;
 
         try {
             // already present?
+            // TODO use the feedbackExists() instead
             ps = conn.prepareStatement("SELECT * FROM " + feedbackTbl + " WHERE " + feedbackTbl
                     + ".altID=? AND " + feedbackTbl + ".userID=?;");
             ps.setString(1, altID);
@@ -176,15 +177,23 @@ public class FeedbackDAO {
             if (resultSet.isBeforeFirst()) {
                // update the feedback row
                 ps = conn.prepareStatement("UPDATE " + feedbackTbl + " SET " +
-                        " message=?, timeStamp=?, approved=? WHERE altID=? AND userID=?;");
+                        " message=?, timeStamp=?, approved=? WHERE altID=? AND userID=? AND" +
+                        "approved!=?;");
                 ps.setString(1, message);
                 ps.setTimestamp(2, timeStamp);
                 ps.setString(3, "" + approved);
                 ps.setString(4, altID);
                 ps.setString(5, userID);
+                ps.setString(6, "" + approved);
+                try {
+                    result = ps.executeUpdate();
+                } catch (Exception e) {
+                    throw new Exception("User is trying to approve/disapprove the same " +
+                            "alternative twice " + e.getMessage());
+                }
 
-                result = ps.executeUpdate();
                 ps.close();
+
                 return result == 1;
             }
 
@@ -237,6 +246,30 @@ public class FeedbackDAO {
 
         } catch (Exception e) {
             throw new Exception("Failed in getting all feedback: " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Returns whether or not the feedback already exists.
+     * @param altID
+     * @param userID
+     * @return
+     */
+    public boolean feedbackExists(String altID, String userID) throws Exception {
+        PreparedStatement ps;
+
+        ps = conn.prepareStatement("SELECT * FROM " + feedbackTbl + " WHERE " + feedbackTbl
+                + ".altID=? AND " + feedbackTbl + ".userID=?;");
+        ps.setString(1, altID);
+        ps.setString(2, userID);
+        try {
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            } else { return false; }
+        } catch (Exception e) {
+            throw new Exception("database error in feedback exists??? idk" + e.getMessage());
         }
     }
 
