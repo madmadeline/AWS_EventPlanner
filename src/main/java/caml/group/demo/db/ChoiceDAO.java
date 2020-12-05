@@ -43,6 +43,7 @@ public class ChoiceDAO {
         PreparedStatement ps;
         ResultSet rs;
         int numLikes;
+        String altID;
 
         ps = conn.prepareStatement("SELECT c.choiceID, c.description as CDescription, a.description as ADescription," +
                 " dateOfCreation, maxTeamSize, altID, numLikes, numDislikes" +
@@ -56,9 +57,30 @@ public class ChoiceDAO {
             time = rs.getTimestamp("dateOfCreation");
             teamSize = rs.getInt("maxTeamSize");
             numLikes = rs.getInt("numLikes");
+            altID = rs.getString("altID");
             logger.log(String.valueOf(numLikes));
-            Alternative alt = new Alternative(rs.getString("altID"), rs.getString("ADescription"),
-                    numLikes, rs.getInt("numDislikes"));
+
+            PreparedStatement preparedStatement = conn.prepareStatement("SELECT altID, f.userID as FuserID, approved, " +
+                    "username FROM Feedback f join User u on f.userID = u.userID where altID=?;");
+            preparedStatement.setString(1,altID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<String> aUsers = new ArrayList<>();
+            ArrayList<String> dUsers = new ArrayList<>();
+            String approved;
+
+            while(resultSet.next()){
+                approved = resultSet.getString("approved");
+                if(approved.equals("A")){
+                    aUsers.add(resultSet.getString("username"));
+                }
+                else if(approved.equals("D")){
+                    dUsers.add(resultSet.getString("username"));
+                }
+                else logger.log("Failed to get approval");
+            }
+
+            Alternative alt = new Alternative(altID, rs.getString("ADescription"),
+                    numLikes, rs.getInt("numDislikes"), aUsers, dUsers);
             //logger.log(String.valueOf(alt.getTotalApprovals()));
             alts.add(alt);
         }

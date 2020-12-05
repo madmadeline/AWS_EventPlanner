@@ -33,6 +33,18 @@ public class Alternative {
 		this.totalRatings = totalApprovals + totalDisapprovals;
 	}
 
+	public Alternative(String id, String description, int totalApprovals, int totalDisapprovals,
+					   ArrayList<String> totalApprovalUsers, ArrayList<String> totalDisapprovalUsers) {
+		this.id = id;
+		this.description = description;
+		this.totalApprovals = totalApprovals;
+		this.totalDisapprovals = totalDisapprovals;
+		this.feedback  = new ArrayList<Feedback>();
+		this.totalRatings = totalApprovals + totalDisapprovals;
+		this.totalApprovalUsers = totalApprovalUsers;
+		this.totalDisapprovalUsers = totalDisapprovalUsers;
+	}
+
 	public String getID() { return id; }
 	public String getDescription() { return description;}
 
@@ -53,21 +65,11 @@ public class Alternative {
 	}
 
 	public ArrayList<String> getTotalDisapprovalUsers() { 
-		ArrayList<String> answer = new ArrayList<String>();
-		for(Feedback rate : feedback) {
-			if(rate.isDisapproved(rate.getApproved())) { answer.add(rate.getUsername()); }
-		}
-		
-		return answer;
+		return totalDisapprovalUsers;
 	}
 
 	public ArrayList<String> getTotalApprovalUsers() { 
-		ArrayList<String> answer = new ArrayList<String>();
-		for(Feedback rate : feedback) {
-			if(rate.isApproved(rate.getApproved())) { answer.add(rate.getUsername()); }
-		}
-		 
-		return answer;
+		return totalApprovalUsers;
 	}
 	
 	public void setTotalApprovals(int totalApprovs) {
