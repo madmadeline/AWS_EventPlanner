@@ -3,10 +3,7 @@ package caml.group.demo;
 import caml.group.demo.db.ChoiceDAO;
 import caml.group.demo.db.DatabaseUtil;
 import caml.group.demo.db.UserDAO;
-import caml.group.demo.http.AddLogInRequest;
-import caml.group.demo.http.AddLogInResponse;
-import caml.group.demo.http.AddSubmitFeedbackRequest;
-import caml.group.demo.http.AddSubmitFeedbackResponse;
+import caml.group.demo.http.*;
 import caml.group.demo.model.Choice;
 import caml.group.demo.model.TestContext;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -18,7 +15,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class SubmitFeedbackHandlerTest {
+public class FindChoiceHandlerTest {
     UserDAO udao;
     ChoiceDAO choiceDAO;
     LambdaLogger logger;
@@ -42,32 +39,30 @@ public class SubmitFeedbackHandlerTest {
         java.sql.Connection conn;
         conn = DatabaseUtil.connect();
 
-        SubmitFeedbackHandler handler = new SubmitFeedbackHandler();
-        AddSubmitFeedbackRequest req = new Gson().fromJson(incoming, AddSubmitFeedbackRequest.class);
-        AddSubmitFeedbackResponse response = handler.handleRequest(req, createContext("post"));
+        FindChoiceHandler handler = new FindChoiceHandler();
+        AddFindChoiceRequest req = new Gson().fromJson(incoming, AddFindChoiceRequest.class);
+        AddFindChoiceResponse response = handler.handleRequest(req, createContext("post"));
 
         Assert.assertTrue(response.result);
+        System.out.println(response.toString());
         Assert.assertEquals(200, response.statusCode);
     }
 
     void testFailInput(String incoming, String outgoing) throws IOException, ClassNotFoundException, SQLException {
-        SubmitFeedbackHandler handler = new SubmitFeedbackHandler();
-        AddSubmitFeedbackRequest req = new Gson().fromJson(incoming, AddSubmitFeedbackRequest.class);
-        AddSubmitFeedbackResponse response = handler.handleRequest(req, createContext("post"));
+        LogInHandler handler = new LogInHandler();
+        AddLogInRequest req = new Gson().fromJson(incoming, AddLogInRequest.class);
+        AddLogInResponse response = handler.handleRequest(req, createContext("post"));
 
         Assert.assertEquals(400, response.statusCode);
     }
 
 //    @Test
-//    public void testSubmitApproval() throws Exception {
-//        String SAMPLE_INPUT_STRING = "{\"userID\":\"9102\",\"altID\":" +
-//                "\"385c4a3d-a9dd-4150-b32b-603e6773d0fb\",\"rating\":\"A\"," +
-//                "\"username\":\"d\"}";
+//    public void testFindChoice() throws Exception {
+//        String SAMPLE_INPUT_STRING = "{\"choiceID\":\"68429476-ebc7-4870-a5cf-916dc13679a4\"}";
 //        try {
 //            testInput(SAMPLE_INPUT_STRING);
 //        } catch (IOException ioe) {
 //            Assert.fail("Invalid:" + ioe.getMessage());
 //        }
 //    }
-
 }

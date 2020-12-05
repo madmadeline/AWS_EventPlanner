@@ -69,6 +69,7 @@ public class UserDAO {
 
         // check if user is already in the table
         try {
+            // TODO call getUserFromID() instead
             ps = conn.prepareStatement("SELECT * FROM " + usrTbl + " WHERE " + usrTbl
                     + ".username=? AND " + usrTbl + ".choiceID=?;");
             ps.setString(1,  name);
@@ -213,6 +214,30 @@ public class UserDAO {
 
         } catch (Exception e) {
             throw new Exception("Failed to delete user: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Get the username given a user ID.
+     * @param userID The given user ID
+     * @return the username
+     * @throws Exception database connection idk
+     */
+    public String getUsernameFromID(String userID) throws Exception {
+        ResultSet resultSet;
+
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + usrTbl
+                + " WHERE userID=?;");
+        ps.setString(1, userID);
+
+        try {
+            resultSet = ps.executeQuery(); // cursor that points to database row
+            if (resultSet.isBeforeFirst()) {
+                return resultSet.getString("username");
+            }
+            return null;
+        } catch (Exception e) {
+            throw new SQLException("Couldn't get the username from the table" + e.getMessage());
         }
     }
 
