@@ -103,39 +103,39 @@ public class LogInHandlerTest {
 	}
 
 	// passed dec 3 2:39pm
-	@Test
-	public void testAddUserAndPass() throws Exception {
-		createChoice();
-		System.out.println(choice.getID());
-		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"Hello\"," +
-				"\"choiceID\": \""+choice.getID()+"\"}";
-
-		try {
-			testInput(SAMPLE_INPUT_STRING);
-		} catch (IOException ioe) {
-			Assert.fail("Invalid:" + ioe.getMessage());
-		}
-		deleteChoice();
-	}
-
-	@Test
-	public void testAddUserNoPass() throws Exception {
-		createChoice();
-
-		System.out.println(choice.getID());
-
-		String SAMPLE_INPUT_STRING = "{\"username\": \"jane doe\", \"password\": \"\"," +
-				"\"choiceID\": \""+ choice.getID() + "\"}";
-
-
-		try {
-			testInput(SAMPLE_INPUT_STRING);
-		} catch (IOException ioe) {
-			Assert.fail("Invalid:" + ioe.getMessage());
-		}
-
-		deleteChoice();
-	}
+//	@Test
+//	public void testAddUserAndPass() throws Exception {
+//		createChoice();
+//		System.out.println(choice.getID());
+//		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"Hello\"," +
+//				"\"choiceID\": \""+choice.getID()+"\"}";
+//
+//		try {
+//			testInput(SAMPLE_INPUT_STRING);
+//		} catch (IOException ioe) {
+//			Assert.fail("Invalid:" + ioe.getMessage());
+//		}
+//		deleteChoice();
+//	}
+//
+//	@Test
+//	public void testAddUserNoPass() throws Exception {
+//		createChoice();
+//
+//		System.out.println(choice.getID());
+//
+//		String SAMPLE_INPUT_STRING = "{\"username\": \"jane doe\", \"password\": \"\"," +
+//				"\"choiceID\": \""+ choice.getID() + "\"}";
+//
+//
+//		try {
+//			testInput(SAMPLE_INPUT_STRING);
+//		} catch (IOException ioe) {
+//			Assert.fail("Invalid:" + ioe.getMessage());
+//		}
+//
+//		deleteChoice();
+//	}
 
 //	@Test
 //	public void testAddUserInvalidChoiceID() throws Exception {

@@ -56,13 +56,13 @@ public class FindChoiceHandlerTest {
         Assert.assertEquals(400, response.statusCode);
     }
 
-    @Test
-    public void testFindChoice() throws Exception {
-        String SAMPLE_INPUT_STRING = "{\"choiceID\":\"68429476-ebc7-4870-a5cf-916dc13679a4\"}";
-        try {
-            testInput(SAMPLE_INPUT_STRING);
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }
+//    @Test
+//    public void testFindChoice() throws Exception {
+//        String SAMPLE_INPUT_STRING = "{\"choiceID\":\"68429476-ebc7-4870-a5cf-916dc13679a4\"}";
+//        try {
+//            testInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
 }
