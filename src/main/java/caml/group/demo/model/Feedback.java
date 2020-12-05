@@ -20,6 +20,24 @@ public class Feedback {
 		this.timestamp = timestamp;
 		this.userID = userID;
 	}
+
+	// constructor for approving and disapproving
+	public Feedback(String altID, String userID, char approved) {
+		this.altID = altID;
+		this.approved = approved;
+		this.message = null;
+		this.timestamp = null;
+		this.userID = userID;
+	}
+
+	// constructor for leaving message on alternative
+	public Feedback(String altID, String userID, String message, Timestamp timestamp) {
+		this.altID = altID;
+		this.approved = 0;
+		this.message = message;
+		this.timestamp = timestamp;
+		this.userID = userID;
+	}
 	
 	public String getAltID() { return altID; }
 	public char getApproved() { return approved;}
@@ -30,7 +48,6 @@ public class Feedback {
 	public void setApproved(char approved) { approved = approved; }
 	public void setMessage(String message) { message = message; }
 	public void setTimeStamp(Timestamp timestamp) { timestamp = timestamp; }
-	
 	
 	public boolean isApproved(char approved) {
 		char a = 'A';
