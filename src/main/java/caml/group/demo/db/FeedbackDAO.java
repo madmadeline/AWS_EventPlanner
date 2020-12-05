@@ -158,14 +158,15 @@ public class FeedbackDAO {
     /**
      * Adds the given User object to the User database.
      * @return true if the User was added, false otherwise
-     * @throws SQLException, failed to insert user
+     * @throws Exception, failed to insert user
      */
-    public boolean addFeedback(String altID, String userID, char approved, String message, Timestamp timeStamp) throws SQLException {
+    public boolean addFeedback(String altID, String userID, char approved, String message, Timestamp timeStamp) throws Exception {
         PreparedStatement ps;
         int result;
+
         try {
             // already present?
-            logger.log("Checking if already present");
+            // TODO use the feedbackExists() instead
             ps = conn.prepareStatement("SELECT * FROM " + feedbackTbl + " WHERE " + feedbackTbl
                     + ".altID=? AND " + feedbackTbl + ".userID=?;");
             ps.setString(1, altID);
@@ -174,24 +175,31 @@ public class FeedbackDAO {
 
             // the feedback is already present in the table
             if (resultSet.isBeforeFirst()) {
-                logger.log("Already present");
+                logger.log("Updating feedback row");
                // update the feedback row
                 ps = conn.prepareStatement("UPDATE " + feedbackTbl + " SET " +
-                        " message=?, timeStamp=?, approved=? WHERE altID=? AND userID=?;");
+                        " message=?, timeStamp=?, approved=? WHERE altID=? AND userID=? AND" +
+                        "approved!=?;");
                 ps.setString(1, message);
                 ps.setTimestamp(2, timeStamp);
                 ps.setString(3, "" + approved);
                 ps.setString(4, altID);
                 ps.setString(5, userID);
+                ps.setString(6, "" + approved);
+                try {
+                    result = ps.executeUpdate();
+                } catch (Exception e) {
+                    throw new Exception("User is trying to approve/disapprove the same " +
+                            "alternative twice " + e.getMessage());
+                }
 
-                result = ps.executeUpdate();
                 ps.close();
-                logger.log("Updated table");
+
                 return result == 1;
             }
 
             // add to the Feedback table
-            logger.log("Adding new stuff");
+            logger.log("Adding to the Feedback table");
             ps = conn.prepareStatement("INSERT INTO " + feedbackTbl +
                     " (altID,userID,message,timeStamp,approved) values(?,?,?,?,?);"); // ps is closed ignore error
             ps.setString(1, altID);
@@ -243,5 +251,65 @@ public class FeedbackDAO {
         }
     }
 
-	
+
+    /**
+     * Returns whether or not the feedback already exists.
+     * @param altID
+     * @param userID
+     * @return
+     */
+    public boolean feedbackExists(String altID, String userID) throws Exception {
+        PreparedStatement ps;
+
+        ps = conn.prepareStatement("SELECT * FROM " + feedbackTbl + " WHERE " + feedbackTbl
+                + ".altID=? AND " + feedbackTbl + ".userID=?;");
+        ps.setString(1, altID);
+        ps.setString(2, userID);
+        try {
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            } else { return false; }
+        } catch (Exception e) {
+            throw new Exception("database error in feedback exists??? idk" + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Checks to see if the feedback with the given alt ID and user ID already
+     * has an approval in it.
+     * @param altID The given alt ID
+     * @param userID The given user ID
+     * @return The approval
+     *      'A' if approval,
+     *      'D' if disapproval,
+     *      '0' if null or feedback doesn't exist)
+     * @throws Exception
+     */
+    public char getApproval(String altID, String userID) throws Exception {
+        logger.log("Getting approval");
+        PreparedStatement ps;
+
+        ps = conn.prepareStatement("SELECT * FROM " + feedbackTbl + " WHERE " +
+                "altID=? AND userID=? AND approved IS NOT NULL;");
+        ps.setString(1, altID);
+        ps.setString(2, userID);
+
+        if (feedbackExists(altID, userID)) {
+            try {
+                ResultSet resultSet = ps.executeQuery();
+                if (resultSet.next()) {
+                    logger.log("Feedback does have approval");
+                    return resultSet.getString("approved").toCharArray()[0];
+                } else {
+                    logger.log("Feedback doesn't have approval");
+                    return '0';
+                }
+            } catch (Exception e) {
+                throw new Exception("Database error " + e.getMessage());
+            }
+        }
+        return '0';
+    }
 }
