@@ -100,7 +100,7 @@ public class CreateChoiceHandlerTest {
         Assert.assertEquals(outgoing, response.error);
     }
 
-    @Test
+    /*@Test
     public void createChoice1Alt() throws Exception {
         String SAMPLE_INPUT_STRING = "{\"choiceDescription\":\"Whaddaya cook with tomatoes??\"," +
                 "\"maxTeamSize\":\"2\"," +
@@ -198,5 +198,5 @@ public class CreateChoiceHandlerTest {
         } catch (IOException ioe) {
             Assert.fail("Invalid:" + ioe.getMessage());
         }
-    }
+    }*/
 }

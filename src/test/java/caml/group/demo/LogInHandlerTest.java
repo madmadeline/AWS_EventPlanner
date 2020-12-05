@@ -103,7 +103,7 @@ public class LogInHandlerTest {
 	}
 
 	// passed dec 3 2:39pm
-	@Test
+	/*@Test
 	public void testAddUserAndPass() throws Exception {
 		createChoice();
 		System.out.println(choice.getID());
@@ -135,7 +135,7 @@ public class LogInHandlerTest {
 		}
 
 		deleteChoice();
-	}
+	}*/
 
 //	@Test
 //	public void testAddUserInvalidChoiceID() throws Exception {
