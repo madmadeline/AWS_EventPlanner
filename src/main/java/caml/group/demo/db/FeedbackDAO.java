@@ -164,7 +164,7 @@ public class FeedbackDAO {
 
             // add to the Feedback table
             ps = conn.prepareStatement("INSERT INTO " + feedbackTbl +
-                    " (altID,userID,message,timeStamp,approved) values(?,?,?,?,?);");
+                    " (altID,userID,message,timeStamp,approved) values(?,?,?,?,?);"); // ps is closed ignore error
             ps.setString(1, altID);
             ps.setString(2, userID);
             ps.setString(3, message);
