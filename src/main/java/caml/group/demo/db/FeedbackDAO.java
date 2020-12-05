@@ -35,6 +35,13 @@ public class FeedbackDAO {
     }
 
 
+    /**
+     * Returns a User object representing the entry in the User table with the given
+     * username and password. If the User isn't in the table, add a new User with the
+     * given username and password, and return it.
+     * @return the User object
+     * @throws SQLException if the user could not be found or inserted in the table
+     */
     public Feedback loadOrInsertFeedback(String altID, char approved, String message, Timestamp timeStamp, String userID) throws SQLException {
         Feedback feedback = null; // User object representing the database entry
         PreparedStatement ps;
@@ -88,6 +95,12 @@ public class FeedbackDAO {
     }
 
 
+    /**
+     * Returns a Feedback object representing the given row in the Feedback table.
+     * @param resultSet the row in the table
+     * @return the Feedback object
+     * @throws SQLException database error idk
+     */
     private Feedback generateFeedback(ResultSet resultSet) throws SQLException {
         String altID;
         char approved;
@@ -110,6 +123,11 @@ public class FeedbackDAO {
     }
 
 
+    /**
+     * Deletes the specified user from the User table.
+     * @return true if the User was deleted, false otherwise
+     * @throws Exception the User can't be found in the table
+     */
     public boolean deleteFeedback(Feedback fb) throws Exception {
         PreparedStatement ps = conn.prepareStatement("DELETE FROM " + feedbackTbl
                 + " WHERE altID=? AND userID=?;");
@@ -134,6 +152,11 @@ public class FeedbackDAO {
 
 
 
+    /**
+     * Adds the given User object to the User database.
+     * @return true if the User was added, false otherwise
+     * @throws SQLException, failed to insert user
+     */
     public boolean addFeedback(String altID, String userID, char approved, String message, Timestamp timeStamp) throws SQLException {
         PreparedStatement ps;
         int result;
@@ -185,6 +208,11 @@ public class FeedbackDAO {
     }
 
 
+    /**
+     * Returns all feedback in the Feedback table with the given alternative ID.
+     * @return the list of Feedback objects
+     * @throws Exception, couldn't get all the Feedback
+     */
     public List<Feedback> getAllFeedback(String altID) throws Exception {
         
         List<Feedback> allFeedback = new ArrayList<>();
