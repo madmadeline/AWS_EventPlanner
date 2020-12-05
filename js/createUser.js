@@ -32,8 +32,10 @@ function processCreateUserResponse(result) {
 		document.createChoiceForm.alt5.value = alts[4].description;
 	}
 	
-	//display the username/user id as a welcome banner thing
-	//cheat to grab the user id to send with approval
+		
+	//send the json to the invisible div for sneaky js access
+	var payload = document.getElementById("payload");
+	payload.innerHTML = result;
 	
 	
 	//display the alternative approval UI and list the alternatives (with buttons!)
@@ -55,6 +57,7 @@ function processCreateUserResponse(result) {
 	
 	uname.innerHTML = obj.username;
 	display.innerHTML = altList;
+	document.getElementById("userList").innerHTML = "Successfully registered with choice: " + description;
   }else{
 	//error
 	console.log("User could not be created.");

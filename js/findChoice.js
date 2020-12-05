@@ -15,7 +15,7 @@ function processFindResponse(result) {
 	var choiceID = obj.choiceID;
 	var maxTeamSize = obj.maxTeamSize;
 	var description = obj.description;
-	var alts = obj.alts;
+	var alts = obj.alternatives;
 	
 	//update the register form
 	document.createUserForm.newChoiceID.value = choiceID;
@@ -27,17 +27,23 @@ function processFindResponse(result) {
 	//update the UI
 	document.createChoiceForm.choiceDesc.value = description;
 	document.createChoiceForm.numParticipants.value = maxTeamSize;
-	document.createChoiceForm.alt1.value = alts[0];
-	document.createChoiceForm.alt2.value = alts[1];
+	document.createChoiceForm.alt1.value = alts[0].description;
+	document.createChoiceForm.alt2.value = alts[1].description;
 	//all other alts are optional, so check length
 	if (alts.length > 2){
-		document.createChoiceForm.alt3.value = alts[2];
+		document.createChoiceForm.alt3.value = alts[2].description;
+	}else{
+		document.createChoiceForm.alt3.value = "";
 	}
 	if (alts.length > 3){
-		document.createChoiceForm.alt4.value = alts[3];
+		document.createChoiceForm.alt4.value = alts[3].description;
+	}else{
+		document.createChoiceForm.alt4.value = "";
 	}
 	if (alts.length > 4){
-		document.createChoiceForm.alt5.value = alts[4];
+		document.createChoiceForm.alt5.value = alts[4].description;
+	}else{
+		document.createChoiceForm.alt5.value = "";
 	}
 	
 	refreshChoice(result);
@@ -54,12 +60,13 @@ function handleFindClick() {
   var form = document.findChoiceForm;
  
   var data = {};
+  console.log(form.findChoice.value);
   data["choiceID"] = form.findChoice.value;
 
   var js = JSON.stringify(data);
   console.log("JS:" + js);
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", find_choice_url, true);
+  xhr.open("POST", find_choice_url, true);
 
   // send the collected data as JSON
   xhr.send(js);

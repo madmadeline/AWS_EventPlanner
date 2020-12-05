@@ -11,7 +11,7 @@ function processCreateResponse(result) {
 		//get the choice info from the parsed json
 		var choiceID = obj.choiceID;
 		var description = obj.description;
-		var alts = obj.alts;
+		var alts = obj.alternatives;
 		
 		//update the register form
 		document.createUserForm.newChoiceID.value = choiceID;

@@ -6,6 +6,7 @@ function processApprovalResponse(result){
 		console.log("approval successfully responded");
 		//update interface to show new approval/disapproval
 		handleFindClick();
+		
 	}else{
 		console.log("approval failed to respond.");
 	}
@@ -17,25 +18,32 @@ function handleApprovalClick(b, index){
 	//if false, a disapproval was chosen
 	
 	var data = {};
-	data["username"] = document.getElementById("uname").innerHTML;
 	
 	//TODO: figure out how to send the alternative id
 	//currently: getting the index and searching through the choice
 	payload = document.getElementById("payload").innerHTML;
+	console.log("Payload: " + payload);
 	var p = JSON.parse(payload);
-	var alts = p.alts;
+	console.log("Parsed: " + p["choice"]);
+	var alts = p.choice.alternatives;
 	
+	console.log(alts);
+	
+	console.log(alts[index].ID);
+	data["username"] = p.username;
+	data["userID"] = p.userID;
 	data["altID"] = alts[index].ID;
+	data["feedback"] = "Hello, world!";
 	
 	var confirm = document.getElementById("approvalConfirm");
 	if (b){
 		//send approval
 		confirm.innerHTML = "An approval was sent."
-		data["approval"] = "A";
+		data["rating"] = 'A';
 	}else{
 		//send disapproval
 		confirm.innerHTML = "A disapproval was sent."
-		data["approval"] = "D";
+		data["rating"] = 'D';
 	}
 	
 	

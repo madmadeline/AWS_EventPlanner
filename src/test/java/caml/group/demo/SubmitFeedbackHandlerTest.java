@@ -58,28 +58,28 @@ public class SubmitFeedbackHandlerTest {
         Assert.assertEquals(400, response.statusCode);
     }
 
-    /*@Test
-    public void testSubmitApproval() throws Exception {
-        String SAMPLE_INPUT_STRING = "{\"userID\":\"9102\",\"altID\":" +
-                "\"385c4a3d-a9dd-4150-b32b-603e6773d0fb\",\"rating\":\"A\"," +
-                "\"username\":\"d\"}";
-        try {
-            testInput(SAMPLE_INPUT_STRING);
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }
-
-    @Test
-    public void testSubmitDuplicateApproval() throws Exception {
-        String SAMPLE_INPUT_STRING = "{\"userID\":\"9102\",\"altID\":" +
-                "\"385c4a3d-a9dd-4150-b32b-603e6773d0fb\",\"rating\":\"A\"," +
-                "\"username\":\"d\"}";
-        try {
-            testFailInput(SAMPLE_INPUT_STRING);
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }*/
+//    @Test
+//    public void testSubmitApproval() throws Exception {
+//        String SAMPLE_INPUT_STRING = "{\"userID\":\"9102\",\"altID\":" +
+//                "\"385c4a3d-a9dd-4150-b32b-603e6773d0fb\",\"rating\":\"A\"," +
+//                "\"username\":\"d\"}";
+//        try {
+//            testInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void testSubmitDuplicateApproval() throws Exception {
+//        String SAMPLE_INPUT_STRING = "{\"userID\":\"9102\",\"altID\":" +
+//                "\"385c4a3d-a9dd-4150-b32b-603e6773d0fb\",\"rating\":\"A\"," +
+//                "\"username\":\"d\"}";
+//        try {
+//            testFailInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
 
 }

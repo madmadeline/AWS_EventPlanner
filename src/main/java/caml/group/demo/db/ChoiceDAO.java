@@ -32,22 +32,22 @@ public class ChoiceDAO {
      * @return the Choice object
      * @throws SQLException, exception thrown on fail
      */
-    public Choice getChoice(String id) throws SQLException {
+    public Choice getChoice(String id) throws Exception {
         logger.log("Getting choice\n");
 //        logger.log(id);
         Choice choice;
         PreparedStatement ps;
         ResultSet rs;
 
+        System.out.println(id);
+
         try {
             ps = conn.prepareStatement(
-                    "Select c.choiceID, c.description as cDesc, altID, a.description as aDesc, dateOfCreation, " +
-                            "maxTeamSize From " + tblName + " c " +
-                            "join Alternative a on a.choiceID = c.choiceID WHERE c.choiceID=?");
+                    "Select * From " + tblName + " WHERE choiceID=?");
             ps.setString(1, id);
             rs = ps.executeQuery();
 
-            if (!rs.isBeforeFirst()) { // choice doesn't exist
+            if (rs.next()) { // choice doesn't exist
                 logger.log("Invalid choice ID");
                 return null;
             }
@@ -212,34 +212,38 @@ public class ChoiceDAO {
      * @return a Choice object
      * @throws SQLException failed to get Choice
      */
-    private Choice generateChoice(ResultSet rs) throws SQLException {
-        ArrayList<Alternative> alts = new ArrayList<>();
-//        logger.log("Generating choice from result set");
-        String id = "";
-        String description = "";
-        Timestamp time = null;
-        String aID;
-        String aDesc;
-        int teamSize = 0;
+    private Choice generateChoice(ResultSet rs) throws Exception {
+        ArrayList<Alternative> alts;
+        logger.log("Generating choice from result set");
+        String id;
+        String description;
+        Timestamp time;
+        int teamSize;
+        AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
 
-        while(rs.next()){
-            id = rs.getString("choiceID");
-//            logger.log("Got cID");
-            description = rs.getString("cDesc");
-//            logger.log("Got cDesc");
-            time = rs.getTimestamp("dateOfCreation");
-//            logger.log("got time");
-            aID = rs.getString("altID");
-//            logger.log("got aID");
-            aDesc = rs.getString("aDesc");
-            logger.log("got aDesc");
-            teamSize = rs.getInt("maxTeamSize");
-            logger.log("got maxTeamSize");
-            Alternative alt = new Alternative(aID, aDesc);
-//            logger.log("made alt");
-            alts.add(alt);
-//            logger.log("added alt to alts");
-        }
+        id = rs.getString("choiceID");
+            logger.log("Got cID");
+        description = rs.getString("description");
+            logger.log("Got cDesc");
+        time = rs.getTimestamp("dateOfCreation");
+        teamSize = rs.getInt("maxTeamSize");
+        logger.log("got maxTeamSize");
+
+        logger.log("about to get alts");
+        alts = alternativeDAO.getAllAlternativesByChoiceID(id);
+
+
+//        while(rs.next()){
+//            aID = rs.getString("altID");
+////            logger.log("got aID");
+//            aDesc = rs.getString("aDesc");
+//            logger.log("got aDesc");
+//            Alternative alt = new Alternative(aID, aDesc);
+//            alt.setTotalApprovals();
+////            logger.log("made alt");
+//            alts.add(alt);
+////            logger.log("added alt to alts");
+//        }
 
         rs.close();
         return new Choice(id, description, alts, time, teamSize);
