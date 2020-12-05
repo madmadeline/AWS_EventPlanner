@@ -58,7 +58,7 @@ public class FindChoiceHandlerTest {
 
 //    @Test
 //    public void testFindChoice() throws Exception {
-//        String SAMPLE_INPUT_STRING = "{\"choiceID\":\"68429476-ebc7-4870-a5cf-916dc13679a4\"}";
+//        String SAMPLE_INPUT_STRING = "{\"choiceID\":\"899cdca0-61dc-4e78-9f15-6608d2af2348\"}";
 //        try {
 //            testInput(SAMPLE_INPUT_STRING);
 //        } catch (IOException ioe) {

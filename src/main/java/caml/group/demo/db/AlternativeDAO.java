@@ -67,6 +67,7 @@ public class AlternativeDAO {
 
 	public ArrayList<Alternative> getAllAlternativesByChoiceID(String choiceID) throws Exception {
 		ArrayList<Alternative> alts = new ArrayList<Alternative>();
+		logger.log("getting the alts");
 
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName +
@@ -257,10 +258,16 @@ public class AlternativeDAO {
 	 * @throws Exception, failed to get user
 	 */
 	private Alternative generateAlternative(ResultSet resultSet) throws Exception {
+		Alternative alternative;
 		String id  = resultSet.getString("altID");
 		String desc = resultSet.getString("description");
 
-		return new Alternative (id, desc);
+		alternative = new Alternative (id, desc);
+
+		alternative.setTotalApprovals(resultSet.getInt("numLikes"));
+		alternative.setTotalApprovals(resultSet.getInt("numDislikes"));
+
+		return alternative;
 	}
 
 }
