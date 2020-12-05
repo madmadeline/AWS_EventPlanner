@@ -137,9 +137,9 @@ public class FeedbackDAO {
     public boolean addFeedback(String altID, String userID, char approved, String message, Timestamp timeStamp) throws SQLException {
         PreparedStatement ps;
         int result;
-
         try {
             // already present?
+            logger.log("Checking if already present");
             ps = conn.prepareStatement("SELECT * FROM " + feedbackTbl + " WHERE " + feedbackTbl
                     + ".altID=? AND " + feedbackTbl + ".userID=?;");
             ps.setString(1, altID);
@@ -148,6 +148,7 @@ public class FeedbackDAO {
 
             // the feedback is already present in the table
             if (resultSet.isBeforeFirst()) {
+                logger.log("Already present");
                // update the feedback row
                 ps = conn.prepareStatement("UPDATE " + feedbackTbl + " SET " +
                         " message=?, timeStamp=?, approved=? WHERE altID=? AND userID=?;");
@@ -159,10 +160,12 @@ public class FeedbackDAO {
 
                 result = ps.executeUpdate();
                 ps.close();
+                logger.log("Updated table");
                 return result == 1;
             }
 
             // add to the Feedback table
+            logger.log("Adding new stuff");
             ps = conn.prepareStatement("INSERT INTO " + feedbackTbl +
                     " (altID,userID,message,timeStamp,approved) values(?,?,?,?,?);");
             ps.setString(1, altID);
