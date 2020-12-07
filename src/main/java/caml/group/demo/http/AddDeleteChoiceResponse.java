@@ -17,7 +17,7 @@ public class AddDeleteChoiceResponse {
         this.result = true;
         this.statusCode = statusCode;
         this.error = "";
-        //this.choices = choices;
+        this.choices = choices;
     }
 
     public AddDeleteChoiceResponse(int statusCode, String errorMessage){

@@ -1,13 +1,13 @@
 package caml.group.demo.http;
 
 public class AddDeleteChoiceRequest {
-    int days;
+    double days;
 
-    public int getDays() {
+    public double getDays() {
         return days;
     }
 
-    public void setDays(int days) {
+    public void setDays(double days) {
         this.days = days;
     }
 

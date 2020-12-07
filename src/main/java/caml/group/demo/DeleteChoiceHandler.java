@@ -32,13 +32,15 @@ public class DeleteChoiceHandler implements RequestHandler<AddDeleteChoiceReques
         boolean fail = false;
         String failMessage = "";
         ArrayList<Choice> choices = null;
-        Calendar cal = new GregorianCalendar();
-        cal.add(Calendar.DAY_OF_MONTH, -req.getDays());
-        Date sevenDaysAgo = cal.getTime();
-        Timestamp timestamp = new Timestamp(sevenDaysAgo.getTime());
+
+        Timestamp currentTime = Timestamp.from(Instant.now());
+        Long currentTimeMilli = currentTime.getTime();
+        Double removalTimeMilli = req.getDays() * (8.64*(Math.pow(10, 7)));
+        Long deletionTimeMilli = Double.valueOf(currentTimeMilli - removalTimeMilli).longValue();
+        Timestamp deletionTime = new Timestamp(deletionTimeMilli);
 
         try{
-            choices = deleteChoice(timestamp);
+            choices = deleteChoice(deletionTime);
         }
         catch (Exception e){
             fail = true;
@@ -47,5 +49,7 @@ public class DeleteChoiceHandler implements RequestHandler<AddDeleteChoiceReques
 
         if (fail) return new AddDeleteChoiceResponse(400, failMessage);
         else return new AddDeleteChoiceResponse(200, choices);
+
+
     }
 }
