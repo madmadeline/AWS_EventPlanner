@@ -244,9 +244,53 @@ public class ChoiceDAO {
         PreparedStatement ps = conn.prepareStatement("SELECT * from Choice Where dateOfCreation<=?");
         ps.setTimestamp(1,timestamp);
         ResultSet rs = ps.executeQuery();
-        ArrayList<Choice> choices = generateReport(rs);
+        ArrayList<Choice> choices = generateReport(rs); // Just the return, and gives choice ids
         ps.close();
 
+        logger.log("Getting all alt ids");
+        ArrayList<String> altIDs = new ArrayList<>();
+        for(Choice choice : choices){
+            PreparedStatement aps = conn.prepareStatement("SELECT * from Alternative where choiceID=?");
+            aps.setString(1, choice.getID());
+            ResultSet ars = aps.executeQuery();
+            while(ars.next()) altIDs.add(ars.getString("altID"));
+            ars.close();
+            aps.close();
+        }
+
+        logger.log("Deleting from Message");
+        for(String altID : altIDs){
+            PreparedStatement mps = conn.prepareStatement("DELETE FROM Message where altID=?");
+            mps.setString(1,altID);
+            mps.execute();
+            mps.close();
+        }
+
+        logger.log("Deleting from Feedback");
+        for(String altID : altIDs){
+            PreparedStatement fps = conn.prepareStatement("DELETE FROM Feedback where altID=?");
+            fps.setString(1,altID);
+            fps.execute();
+            fps.close();
+        }
+
+        logger.log("Deleting from User");
+        for(Choice choice : choices){
+            PreparedStatement ups = conn.prepareStatement("DELETE FROM User where choiceID=?");
+            ups.setString(1,choice.getID());
+            ups.execute();
+            ups.close();
+        }
+
+        logger.log("Deleting from Alternative");
+        for(Choice choice : choices){
+            PreparedStatement aps2 = conn.prepareStatement("DELETE FROM Alternative where choiceID=?");
+            aps2.setString(1,choice.getID());
+            aps2.execute();
+            aps2.close();
+        }
+
+        logger.log("Deleting Choice");
         PreparedStatement ps2 = conn.prepareStatement("DELETE From Choice where dateOfCreation<=?");
         ps2.setTimestamp(1, timestamp);
         ps2.execute();
@@ -344,6 +388,22 @@ public class ChoiceDAO {
             logger.log("Getting choice data for choice " + rs.getString("choiceID"));
             Choice choice = new Choice(rs.getString("choiceID"), rs.getString("description"),
                     rs.getTimestamp("dateOfCreation"), rs.getInt("maxTeamSize"));
+            choices.add(choice);
+        }
+
+        return choices;
+    }
+
+    private ArrayList<Choice> generateChoices(ResultSet rs) throws Exception {
+        ArrayList<Choice> choices = new ArrayList<>();
+        ArrayList<Alternative> alts;
+        AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
+
+        while(rs.next()){
+            alts = alternativeDAO.getAllAlternativesByChoiceID(rs.getString("choiceID"));
+            logger.log("Getting choice data for choice " + rs.getString("choiceID"));
+            Choice choice = new Choice(rs.getString("choiceID"), rs.getString("description"),
+                    alts, rs.getTimestamp("dateOfCreation"), rs.getInt("maxTeamSize"));
             choices.add(choice);
         }
 
