@@ -15,6 +15,7 @@ import caml.group.demo.db.FeedbackDAO;
 import caml.group.demo.http.AddSubmitFeedbackRequest;
 import caml.group.demo.http.AddSubmitFeedbackResponse;
 import caml.group.demo.model.Alternative;
+import caml.group.demo.model.Choice;
 import caml.group.demo.model.Feedback;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -30,7 +31,8 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 
 	public boolean submitFeedback(Feedback feedback) throws Exception {
 		char oldApproval;
-
+		Choice choice = null;
+		
 		logger.log("In submitFeedback in SubmitFeedback Handler");
 
 		feedbackDAO = new FeedbackDAO(logger);
@@ -107,7 +109,7 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 		}catch (Exception e){
 			fail = true;
 			failMessage = "Failed to submit feedback";
-		}
+		} 
 
 		AddSubmitFeedbackResponse response;
 		if(fail) response = new AddSubmitFeedbackResponse(400, failMessage);

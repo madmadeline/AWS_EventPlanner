@@ -3,6 +3,8 @@ package caml.group.demo.db;
 import java.sql.*;
 import java.util.ArrayList;
 
+//import caml.group.demo.db.AlternativeDAO;
+
 import caml.group.demo.model.*;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
@@ -33,6 +35,7 @@ public class ChoiceDAO {
      * @throws SQLException, exception thrown on fail
      */
     public Choice getChoice(String id) throws Exception {
+    	
         logger.log("Getting choice\n");
 //        logger.log(id);
         Choice choice;
@@ -281,7 +284,59 @@ public class ChoiceDAO {
         rs.close();
         return new Choice(id, description, alts, time, teamSize);
     }
-
+    /**
+     * Generates a Choice object that represents several rows of ChoiceAltMatch
+     * @param rs, the cursor to the specified row in Choice
+     * @return a Choice object
+     * @throws SQLException failed to get Choice
+     */
+    public Choice generateChoiceByAltID(String altID) throws Exception {
+        Choice choice = null;
+        
+        PreparedStatement ps = conn.prepareStatement("SELECT * from Choice");
+        ResultSet rs = ps.executeQuery();
+        ArrayList<Choice> choices = generateReport(rs);
+        ps.close();
+        
+        for(Choice achoice: choices) {
+        	if(achoice.getChoiceIDbyAltID(altID)) {
+        		choice = achoice;
+        	}
+//        	ArrayList<Alternative> alternatives = achoice.getAlternatives();
+//        	for(Alternative alt: alternatives) {
+//        		if(alt.getID().equals(altID))
+//        			choice = achoice;
+//        	}
+        }   
+        return choice;
+    }
+    
+//    public ArrayList<Alternative> getAllAlternativesByChoiceID(String choiceID) throws Exception {
+//		ArrayList<Alternative> alts = new ArrayList<Alternative>();
+//		logger.log("getting the alts");
+//
+//		try {
+//			PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName +
+//					" WHERE choiceID=?;");
+//			ps.setString(1,  choiceID);
+//			ResultSet resultSet = ps.executeQuery(); // cursor that points to database row
+//
+//			while (resultSet.next()) {
+//				alts.add(generateAlternative(resultSet));
+//			}
+//			resultSet.close();
+//			ps.close();
+//
+//			logger.log("Retrieved all alternatives");
+//			return alts;
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			throw new Exception("Failed in getting alternatives: " + e.getMessage());
+//		}
+//	}  
+    
+    
     private ArrayList<Choice> generateReport(ResultSet rs) throws Exception {
         ArrayList<Choice> choices = new ArrayList<>();
 

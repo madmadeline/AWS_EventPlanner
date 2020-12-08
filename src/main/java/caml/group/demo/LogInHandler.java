@@ -76,33 +76,48 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 						failMessage = "The password is longer than 30 characters.";
 						fail = true;
 					}
-					if (!fail) {
-						UserDAO dao = new UserDAO(logger);
-						user = dao.loadOrInsertUser(name, pass, choiceID);
+					if(choice.getWinner() != null) {
+						failMessage = "The choice is finalized.";
+						fail = true;
+					}
+					if(choice.getMaxTeamSize() <= choice.getUsers().size() ) {						
+						failMessage = "The choice is full.";
+						fail = true;
+						
+						for(User aUser: choice.getUsers()) {
+							if(name.equals(aUser.getName()) && pass.equals(aUser.getPassword())) {
+								fail = false;
+							}
+						}
+					}
+						if (!fail) {
+							UserDAO dao = new UserDAO(logger);
+							user = dao.loadOrInsertUser(name, pass, choiceID);
+						}
+					} catch (Exception e) {
+						failMessage = "Invalid password: " + req.getPassword() + ".";
+						fail = true;
 					}
 				} catch (Exception e) {
-					failMessage = "Invalid password: " + req.getPassword() + ".";
-					fail = true;
+					failMessage = "Invalid choice ID: " + req.getChoiceID() + ".";
 				}
 			} catch (Exception e) {
-				failMessage = "Invalid choice ID: " + req.getChoiceID() + ".";
+				failMessage = "Invalid username: " + req.getUsername() + ".";
+				fail = true;
 			}
+		
+
+	response = new AddLogInResponse(400, failMessage);
+
+	if (!fail) {
+		try {
+			response = new AddLogInResponse(user, choice,200);  // success
 		} catch (Exception e) {
-			failMessage = "Invalid username: " + req.getUsername() + ".";
-			fail = true;
+			e.printStackTrace();
 		}
-
-		response = new AddLogInResponse(400, failMessage);
-
-		if (!fail) {
-			try {
-				response = new AddLogInResponse(user, choice,200);  // success
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		logger.log(response.toString());
-		return response; 
 	}
+
+	logger.log(response.toString());
+	return response; 
+}
 }

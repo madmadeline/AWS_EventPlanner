@@ -24,6 +24,7 @@ public class Choice {
 		this.winner = null;
 		this.maxTeamSize = teamSize;
 	}
+	
 
 	public Choice(String id, String description, Timestamp time, int teamSize) {
 		this.id = id;
@@ -40,7 +41,18 @@ public class Choice {
 		return alternatives;
 	}
 
-//	public int getMaxTeamSize() { return maxTimeSize; }
+	public boolean getChoiceIDbyAltID(String altID) {
+		//String ans = null;
+		boolean ans = false;
+		for(Alternative alt: alternatives) {
+			if(altID.equals(alt.getID())) {
+				//ans = this.id;
+				ans = true;
+			}
+		}
+		return ans;
+	}
+	
 //	public void setMaxTeamSize(int teamSize){ this.maxTeamSize = teamSize; }
 
 	public String getDescription(){
@@ -52,6 +64,7 @@ public class Choice {
 	public Alternative getWinner() { return this.winner; }
 	public void setWinner(Alternative winner) { this.winner = winner; }
 	public ArrayList<User> getUsers() { return this.users; }
+
 	
 	public void addUser(User user) { users.add(user); }
 	
