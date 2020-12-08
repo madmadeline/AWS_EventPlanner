@@ -109,7 +109,7 @@ public class FeedbackDAO {
 
             // try to get the message
             try {
-                getMessage_ps = conn.prepareStatement("SELECT * FROM " + feedbackTbl + " WHERE altID=? " +
+                getMessage_ps = conn.prepareStatement("SELECT * FROM " + messageTbl + " WHERE altID=? " +
                         "AND userID=?;");
                 getMessage_ps.setString(1, altID);
                 getMessage_ps.setString(2, userID);
@@ -156,13 +156,15 @@ public class FeedbackDAO {
             userDAO = new UserDAO(logger);
             altID = msg_resultSet.getString("altID");
             userID = msg_resultSet.getString("userID");
+            logger.log("user id is " + userID);
+            logger.log("username is " + userDAO.getUserFromID(userID).getName());
             username = userDAO.getUserFromID(userID).getName();
             message = msg_resultSet.getString("message");
             timestamp = msg_resultSet.getTimestamp("timeStamp");
 
             // try to get the rating
             try {
-                getFeedback_ps = conn.prepareStatement("SELECT * FROM " + messageTbl + " WHERE altID=? " +
+                getFeedback_ps = conn.prepareStatement("SELECT * FROM " + feedbackTbl + " WHERE altID=? " +
                         "AND userID=?;");
                 getFeedback_ps.setString(1, altID);
                 getFeedback_ps.setString(2, userID);

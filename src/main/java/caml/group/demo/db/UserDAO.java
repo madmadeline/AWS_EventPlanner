@@ -215,15 +215,19 @@ public class UserDAO {
      * @throws Exception database connection idk
      */
     public User getUserFromID(String userID) throws Exception {
+        logger.log("getting the user object from id " + userID);
+
         ResultSet resultSet;
 
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + usrTbl
                 + " WHERE userID=?;");
         ps.setString(1, userID);
 
+        logger.log("got user from user table");
+
         try {
             resultSet = ps.executeQuery(); // cursor that points to database row
-            if (resultSet.isBeforeFirst()) {
+            if (resultSet.next()) {
                 return new User(
                         resultSet.getString("userID"),
                         resultSet.getString("username"),
