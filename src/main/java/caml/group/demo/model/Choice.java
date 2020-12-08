@@ -22,6 +22,7 @@ public class Choice {
 		this.alternatives = alternatives;
 		this.time = time;
 		this.winner = null;
+		this.users = new ArrayList<>();
 		this.maxTeamSize = teamSize;
 	}
 	
@@ -32,6 +33,7 @@ public class Choice {
 		this.alternatives = null;
 		this.time = time;
 		this.winner = null;
+		this.users = new ArrayList<>();
 		this.maxTeamSize = teamSize;
 	}
 	

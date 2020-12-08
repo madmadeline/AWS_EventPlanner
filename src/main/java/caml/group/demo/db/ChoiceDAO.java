@@ -35,59 +35,83 @@ public class ChoiceDAO {
      * @throws SQLException, exception thrown on fail
      */
     public Choice getChoice(String id) throws Exception {
-    	
-        logger.log("Getting choice\n");
-//        logger.log(id);
-        Choice choice;
+        logger.log("Getting choice " + id);
+//        Choice choice;
         String description = "";
         Timestamp time = null;
         int teamSize = 0;
-        ArrayList<Alternative> alts = new ArrayList<>();
-        PreparedStatement ps;
-        ResultSet rs;
-        int numLikes;
-        String altID;
+        ArrayList<Alternative> alts;
 
-        ps = conn.prepareStatement("SELECT c.choiceID, c.description as CDescription, a.description as ADescription," +
-                " dateOfCreation, maxTeamSize, altID, numLikes, numDislikes" +
-                " From Choice c join Alternative a on c.choiceID=a.choiceID " +
-                "where c.choiceID=?");
+        AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
+
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName +
+                " WHERE choiceID=?");
         ps.setString(1,id);
-        rs = ps.executeQuery();
+        ResultSet rs = ps.executeQuery();
 
-        while(rs.next()){
-            description = rs.getString("CDescription");
+        // get choice info
+        if (rs.next()) {
+            description = rs.getString("description");
             time = rs.getTimestamp("dateOfCreation");
             teamSize = rs.getInt("maxTeamSize");
-            numLikes = rs.getInt("numLikes");
-            altID = rs.getString("altID");
-            logger.log(String.valueOf(numLikes));
-
-            PreparedStatement preparedStatement = conn.prepareStatement("SELECT altID, f.userID as FuserID, approved, " +
-                    "username FROM Feedback f join User u on f.userID = u.userID where altID=?;");
-            preparedStatement.setString(1,altID);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            ArrayList<String> aUsers = new ArrayList<>();
-            ArrayList<String> dUsers = new ArrayList<>();
-            String approved;
-
-            while(resultSet.next()){
-                approved = resultSet.getString("approved");
-                if(approved.equals("A")){
-                    aUsers.add(resultSet.getString("username"));
-                }
-                else if(approved.equals("D")){
-                    dUsers.add(resultSet.getString("username"));
-                }
-                else logger.log("Failed to get approval");
-            }
-
-            Alternative alt = new Alternative(altID, rs.getString("ADescription"),
-                    numLikes, rs.getInt("numDislikes"), aUsers, dUsers);
-            //logger.log(String.valueOf(alt.getTotalApprovals()));
-            alts.add(alt);
         }
-        choice = new Choice(id, description, alts, time, teamSize);
+
+
+        // get the alternatives (including ratings and messages)
+        alts = alternativeDAO.getAllAlternativesByChoiceID(id);
+
+
+//        // get all alternatives associated with the choice
+//        while(rs.next()){
+//            description = rs.getString("CDescription");
+//            time = rs.getTimestamp("dateOfCreation");
+//            teamSize = rs.getInt("maxTeamSize");
+//            numLikes = rs.getInt("numLikes");
+//            altID = rs.getString("altID");
+//            logger.log(String.valueOf(numLikes));
+//
+//            // prepared statement for ratings
+//            PreparedStatement preparedStatement = conn.prepareStatement("SELECT altID, f.userID as userID, " +
+//                    "approved, username FROM Feedback f join User u on f.userID = u.userID where altID=?;");
+//            preparedStatement.setString(1,altID);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            ArrayList<Feedback> feedback = new ArrayList<>();
+//            ArrayList<String> aUsers = new ArrayList<>();
+//            ArrayList<String> dUsers = new ArrayList<>();
+//            String approved;
+//
+//            // get all ratings associated with the alternative
+//            while(resultSet.next()){
+//                approved = resultSet.getString("approved");
+//                if(approved.equals("A")){
+//                    aUsers.add(resultSet.getString("username"));
+//                    feedback.add(new Feedback())
+//                }
+//                else if(approved.equals("D")){
+//                    dUsers.add(resultSet.getString("username"));
+//                }
+//                else logger.log("Failed to get approval");
+//            }
+//
+//            // prepared statement for messages
+//            preparedStatement = conn.prepareStatement("SELECT * FROM Message where altID=?;");
+//            preparedStatement.setString(1,altID);
+//
+//            // get all messages associated with the alternative
+//            while (resultSet.next()) {
+//                feedback.add(new Feedback())
+//            }
+//
+//
+//            // get the alternative
+//            Alternative alt = new Alternative(altID, rs.getString("ADescription"),
+//                    numLikes, rs.getInt("numDislikes"), aUsers, dUsers);
+//            //logger.log(String.valueOf(alt.getTotalApprovals()));
+//            alts.add(alt);
+//        }
+
+        // generate the choice
+//        choice =
         /*System.out.println(id);
 
         try {
@@ -108,7 +132,7 @@ public class ChoiceDAO {
         rs.close();
         ps.close();
 //        logger.log("Returning choice");
-        return choice;
+        return new Choice(id, description, alts, time, teamSize);
     }
 
 
@@ -228,12 +252,12 @@ public class ChoiceDAO {
         return true;
     }
 
-    // TESTED
+
     /**
-     * Deletes the given choice from the Choice table. Also deletes
-     * any alternatives associated with the choice from the
+     * Deletes choices older than the timestamp from the Choice table.
+     * Also deletes any alternatives associated with the choice from the
      * Alternative table.
-     * @param choice The given choice
+     * @param timestamp The given timestamp
      * @return True if the choice/alternatives were deleted,
      * false otherwise
      * @throws Exception The choice couldn't be deleted
@@ -298,6 +322,37 @@ public class ChoiceDAO {
 
         return  choices;
     }
+
+    /**
+     * Deletes a specific choice given a choice ID. Also deletes any alternatives
+     * associated with the choice from the Alternative table.
+     * @param choiceID The given choice ID
+     * @return True if the choice/alternatives were deleted,
+     * false otherwise
+     * @throws Exception The choice couldn't be deleted
+     */
+    public boolean deleteSpecificChoice(String choiceID) throws Exception {
+        UserDAO userDAO = new UserDAO(logger);
+        AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
+        int result;
+
+        logger.log("Deleting choice " + choiceID);
+
+        // delete alternatives, ratings, reviews
+        alternativeDAO.deleteAlternatives(choiceID);
+
+        // delete users
+        userDAO.deleteUsers(choiceID);
+
+        // delete choice
+        PreparedStatement ps = conn.prepareStatement("DELETE from " + tblName + " WHERE choiceID=?");
+        ps.setString(1, choiceID);
+        result = ps.executeUpdate();
+        ps.close();
+
+        return result == 1;
+    }
+
 
     /**
      * Generates a Choice object that represents several rows of ChoiceAltMatch

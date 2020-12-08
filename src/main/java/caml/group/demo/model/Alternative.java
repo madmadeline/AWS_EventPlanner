@@ -24,22 +24,23 @@ public class Alternative {
 		this.feedback  = new ArrayList<Feedback>();
 	}
 
-	public Alternative(String id, String description, int totalApprovals, int totalDisapprovals) {
-		this.id = id;
-		this.description = description;
-		this.totalApprovals = totalApprovals;
-		this.totalDisapprovals = totalDisapprovals;
-		this.feedback  = new ArrayList<Feedback>();
-		this.totalRatings = totalApprovals + totalDisapprovals;
-	}
+//	public Alternative(String id, String description, int totalApprovals, int totalDisapprovals) {
+//		this.id = id;
+//		this.description = description;
+//		this.totalApprovals = totalApprovals;
+//		this.totalDisapprovals = totalDisapprovals;
+//		this.feedback  = new ArrayList<Feedback>();
+//		this.totalRatings = totalApprovals + totalDisapprovals;
+//	}
 
 	public Alternative(String id, String description, int totalApprovals, int totalDisapprovals,
-					   ArrayList<String> totalApprovalUsers, ArrayList<String> totalDisapprovalUsers) {
+					   ArrayList<Feedback> feedback, ArrayList<String> totalApprovalUsers,
+					   ArrayList<String> totalDisapprovalUsers) {
 		this.id = id;
 		this.description = description;
 		this.totalApprovals = totalApprovals;
 		this.totalDisapprovals = totalDisapprovals;
-		this.feedback  = new ArrayList<Feedback>();
+		this.feedback  = feedback;
 		this.totalRatings = totalApprovals + totalDisapprovals;
 		this.totalApprovalUsers = totalApprovalUsers;
 		this.totalDisapprovalUsers = totalDisapprovalUsers;
@@ -112,6 +113,7 @@ public class Alternative {
 		this.totalDisapprovalUsers = totalDisapprovalUsers;
 	}
 
+	public void addFeedback(Feedback feedback) { this.feedback.add(feedback); }
 	public ArrayList<Feedback> getFeedback() { return feedback;}
 
 	// iterators
