@@ -113,7 +113,6 @@ public class SubmitFeedbackMessageHandlerTest {
 //        try {
 //            System.out.println("testing now!!");
 //            testInput(SAMPLE_INPUT_STRING);
-////            clean();
 //        } catch (IOException ioe) {
 //            Assert.fail("Invalid:" + ioe.getMessage());
 //        }
