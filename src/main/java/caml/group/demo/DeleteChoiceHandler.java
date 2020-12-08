@@ -36,7 +36,7 @@ public class DeleteChoiceHandler implements RequestHandler<AddDeleteChoiceReques
         Timestamp currentTime = Timestamp.from(Instant.now());
         Long currentTimeMilli = currentTime.getTime();
         Double removalTimeMilli = req.getDays() * (8.64*(Math.pow(10, 7)));
-        Long deletionTimeMilli = Double.valueOf(currentTimeMilli - removalTimeMilli).longValue();
+        long deletionTimeMilli = Double.valueOf(currentTimeMilli - removalTimeMilli).longValue();
         Timestamp deletionTime = new Timestamp(deletionTimeMilli);
 
         try{
