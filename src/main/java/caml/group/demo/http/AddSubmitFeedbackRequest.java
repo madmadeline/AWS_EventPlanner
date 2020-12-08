@@ -4,7 +4,7 @@ public class AddSubmitFeedbackRequest {
     String altID;
     String userID;
     String username;
-    String feedback;
+    String message;
     char rating;
 
     public String getAltID() {
@@ -12,7 +12,7 @@ public class AddSubmitFeedbackRequest {
     }
 
     public String getFeedback() {
-        return feedback;
+        return message;
     }
 
     public String getUserID() {
@@ -30,7 +30,7 @@ public class AddSubmitFeedbackRequest {
     }
 
     public void setFeedback(String feedback) {
-        this.feedback = feedback;
+        this.message = feedback;
     }
 
     public void setRating(char rating) {
@@ -43,5 +43,5 @@ public class AddSubmitFeedbackRequest {
 
     public void setUsername(String username) { this.username = username; }
 
-    public String toString() { return "Add(" + feedback + ")"; }
+    public String toString() { return "Add(" + message + ")"; }
 }
