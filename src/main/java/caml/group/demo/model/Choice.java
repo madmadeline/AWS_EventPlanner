@@ -66,7 +66,11 @@ public class Choice {
 	}
 	public Alternative getWinner() { return this.winner; }
 	public void setWinner(Alternative winner) { this.winner = winner; }
-	public ArrayList<User> getUsers() { return this.users; }
+	public ArrayList<User> getUsers() { return users; }
+
+	public void setUsers(ArrayList<User> users) {
+		this.users = users;
+	}
 
 	public void setWinnerName(String winnerName) {
 		this.winnerName = winnerName;

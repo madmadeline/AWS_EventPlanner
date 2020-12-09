@@ -41,6 +41,7 @@ public class ChoiceDAO {
         int teamSize = 0;
         ArrayList<Alternative> alts;
         Alternative winningAlt = null;
+        ArrayList<User> users = new ArrayList<>();
 
         AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
 
@@ -63,8 +64,17 @@ public class ChoiceDAO {
         rs.close();
         ps.close();
 
+        PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM User where choiceID=?");
+        ps2.setString(1,id);
+        ResultSet rs2 = ps2.executeQuery();
+        while(rs2.next()){
+            User user = new User(rs2.getString("username"), rs2.getString("password"), id);
+            users.add(user);
+        }
+
         choice = new Choice(id, description, alts, time, teamSize);
         choice.setWinner(winningAlt);
+        choice.setUsers(users);
         return choice;
     }
 

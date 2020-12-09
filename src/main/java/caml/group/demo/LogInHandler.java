@@ -80,6 +80,8 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 //						failMessage = "The choice is finalized.";
 //						fail = true;
 //					}
+					logger.log(String.valueOf(choice.getMaxTeamSize()));
+					logger.log(String.valueOf(choice.getUsers().size()));
 					if(choice.getMaxTeamSize() <= choice.getUsers().size() ) {						
 						failMessage = "The choice is full.";
 						fail = true;
