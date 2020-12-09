@@ -67,7 +67,7 @@ public class SubmitFeedbackHandlerTest {
         Assert.assertEquals(400, response.statusCode);
     }
 
-    @Before
+    /*@Before
     public void init() throws Exception {
         logger = createContext("post").getLogger();
         choiceDAO = new ChoiceDAO(logger);
@@ -127,6 +127,6 @@ public class SubmitFeedbackHandlerTest {
         } catch (IOException ioe) {
             Assert.fail("Invalid:" + ioe.getMessage());
         }
-    }
+    }*/
 
 }

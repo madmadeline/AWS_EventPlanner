@@ -409,6 +409,14 @@ public class ChoiceDAO {
         }   
         return choice;
     }
+
+    public void addWinner(String altID, String choiceID) throws Exception {
+        PreparedStatement ps = conn.prepareStatement("UPDATE Choice set winningAlt=? where choiceID=?");
+        ps.setString(1, altID);
+        ps.setString(2, choiceID);
+        ps.execute();
+        ps.close();
+    }
     
 //    public ArrayList<Alternative> getAllAlternativesByChoiceID(String choiceID) throws Exception {
 //		ArrayList<Alternative> alts = new ArrayList<Alternative>();
