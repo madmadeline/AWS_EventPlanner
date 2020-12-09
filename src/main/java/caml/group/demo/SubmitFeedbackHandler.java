@@ -21,8 +21,7 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 
 	public boolean submitFeedback(Feedback feedback) throws Exception {
 		char oldApproval;
-		Choice choice = null;
-		
+
 		logger.log("In submitFeedback in SubmitFeedback Handler");
 
 		feedbackDAO = new FeedbackDAO(logger);
@@ -38,7 +37,7 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 		oldApproval = feedbackDAO.getRating(feedback.getAltID(), feedback.getUserID());
 		System.out.println("Old approval = " + oldApproval);
 
-		// update the alternative and feedback
+		// approve alternative
 		if (feedback.getApproved() == 'A' && oldApproval != 'A') {
 			logger.log("Adding approval");
 			alternative.setTotalApprovals(alternative.getTotalApprovals() + 1);
@@ -65,8 +64,22 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 			alternativeDAO.updateAlternative(alternative);
 			return true;
 		}
+
+		// clear rating
 		else if (feedbackDAO.ratingExists(feedback.getAltID(), feedback.getUserID())) {
-			logger.log("Duplicate approval/disapproval, doing nothing :)");
+			logger.log("Clearing alternative");
+
+			// delete disapproval
+			if (feedback.getApproved() == 'D') {
+				alternative.setTotalDisapprovals(alternative.getTotalDisapprovals() - 1);
+				feedbackDAO.clearRating(feedback.getAltID(), feedback.getUserID());
+			}
+
+			// delete approval
+			else {
+				alternative.setTotalApprovals(alternative.getTotalApprovals() - 1);
+				feedbackDAO.clearRating(feedback.getAltID(), feedback.getUserID());
+			}
 			return false;
 		}
 		else {

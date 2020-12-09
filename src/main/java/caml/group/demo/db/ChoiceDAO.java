@@ -65,6 +65,7 @@ public class ChoiceDAO {
 
         choice = new Choice(id, description, alts, time, teamSize);
         choice.setWinner(winningAlt);
+
         return choice;
     }
 

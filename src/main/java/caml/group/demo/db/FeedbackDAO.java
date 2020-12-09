@@ -303,6 +303,31 @@ public class FeedbackDAO {
 
 
     /**
+     * Clears the given rating.
+     * @param altID
+     * @param userID
+     * @return
+     * @throws Exception
+     */
+    public boolean clearRating(String altID, String userID) throws Exception {
+        PreparedStatement ps;
+        int result;
+
+        ps = conn.prepareStatement("DELETE FROM " + feedbackTbl + " WHERE altID=? AND userID=?;");
+        ps.setString(1, altID);
+        ps.setString(2, userID);
+
+        try {
+            result = ps.executeUpdate();
+            logger.log("Cleared the rating");
+            return result == 1;
+        } catch (Exception e) {
+            throw new Exception("Couldn't delete the row from the Feedback table " + e.getMessage());
+        }
+    }
+
+
+    /**
      * Adds the given feedback message to the database for the given alternative
      * ID and user ID.
      * @return True if the message was added, false otherwise
