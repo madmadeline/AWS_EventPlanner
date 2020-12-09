@@ -387,11 +387,9 @@ public class AlternativeDAO {
 				fb = feedbackDAO.generateFeedbackFromFeedbackTable(ratings_rs);
 				feedback.add(fb);
 				if (ratings_rs.getString("approval").equals("A")) {
-//					totalApprovals++;
 					userID = ratings_rs.getString("userID");
 					totalApprovalUsers.add(userDAO.getUserFromID(userID).getName());
 				} else if (ratings_rs.getString("approval").equals("D")) {
-//					totalDisapprovals++;
 					userID = ratings_rs.getString("userID");
 					totalDisapprovalUsers.add(userDAO.getUserFromID(userID).getName());
 				}
