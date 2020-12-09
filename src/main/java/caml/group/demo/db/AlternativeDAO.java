@@ -361,6 +361,7 @@ public class AlternativeDAO {
 	private Alternative generateAlternative(ResultSet alt_rs, ResultSet ratings_rs, ResultSet messages_rs)
 			throws Exception {
 		FeedbackDAO feedbackDAO = new FeedbackDAO(logger);
+		UserDAO userDAO = new UserDAO(logger);
 
 		logger.log("Generating alternative");
 
@@ -368,6 +369,7 @@ public class AlternativeDAO {
 		String description;
 		int totalApprovals = 0;
 		int totalDisapprovals = 0;
+		String userID;
 
 		ArrayList<Feedback> feedback = new ArrayList<>();
 		ArrayList<String> totalDisapprovalUsers = new ArrayList<>();
@@ -386,10 +388,12 @@ public class AlternativeDAO {
 				feedback.add(fb);
 				if (ratings_rs.getString("approval").equals("A")) {
 					totalApprovals++;
-					totalApprovalUsers.add(ratings_rs.getString("username"));
+					userID = ratings_rs.getString("userID");
+					totalApprovalUsers.add(userDAO.getUserFromID(userID).getName());
 				} else if (ratings_rs.getString("approval").equals("D")) {
 					totalDisapprovals++;
-					totalDisapprovalUsers.add(ratings_rs.getString("username"));
+					userID = ratings_rs.getString("userID");
+					totalDisapprovalUsers.add(userDAO.getUserFromID(userID).getName());
 				}
 			}
 		}
