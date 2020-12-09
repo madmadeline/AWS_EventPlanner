@@ -27,7 +27,6 @@ public class ChoiceDAO {
     }
 
 
-    // TESTED
     /**
      * Returns a Choice object that is the requested entry from the Choice table
      * @param id, the given id of the desired choice
@@ -36,11 +35,12 @@ public class ChoiceDAO {
      */
     public Choice getChoice(String id) throws Exception {
         logger.log("Getting choice " + id);
-//        Choice choice;
+        Choice choice;
         String description = "";
         Timestamp time = null;
         int teamSize = 0;
         ArrayList<Alternative> alts;
+        Alternative winningAlt = null;
 
         AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
 
@@ -54,85 +54,18 @@ public class ChoiceDAO {
             description = rs.getString("description");
             time = rs.getTimestamp("dateOfCreation");
             teamSize = rs.getInt("maxTeamSize");
+            winningAlt = alternativeDAO.getAlternativeByID(rs.getString("winningAlt"));
         }
-
 
         // get the alternatives (including ratings and messages)
         alts = alternativeDAO.getAllAlternativesByChoiceID(id);
 
-
-//        // get all alternatives associated with the choice
-//        while(rs.next()){
-//            description = rs.getString("CDescription");
-//            time = rs.getTimestamp("dateOfCreation");
-//            teamSize = rs.getInt("maxTeamSize");
-//            numLikes = rs.getInt("numLikes");
-//            altID = rs.getString("altID");
-//            logger.log(String.valueOf(numLikes));
-//
-//            // prepared statement for ratings
-//            PreparedStatement preparedStatement = conn.prepareStatement("SELECT altID, f.userID as userID, " +
-//                    "approved, username FROM Feedback f join User u on f.userID = u.userID where altID=?;");
-//            preparedStatement.setString(1,altID);
-//            ResultSet resultSet = preparedStatement.executeQuery();
-//            ArrayList<Feedback> feedback = new ArrayList<>();
-//            ArrayList<String> aUsers = new ArrayList<>();
-//            ArrayList<String> dUsers = new ArrayList<>();
-//            String approved;
-//
-//            // get all ratings associated with the alternative
-//            while(resultSet.next()){
-//                approved = resultSet.getString("approved");
-//                if(approved.equals("A")){
-//                    aUsers.add(resultSet.getString("username"));
-//                    feedback.add(new Feedback())
-//                }
-//                else if(approved.equals("D")){
-//                    dUsers.add(resultSet.getString("username"));
-//                }
-//                else logger.log("Failed to get approval");
-//            }
-//
-//            // prepared statement for messages
-//            preparedStatement = conn.prepareStatement("SELECT * FROM Message where altID=?;");
-//            preparedStatement.setString(1,altID);
-//
-//            // get all messages associated with the alternative
-//            while (resultSet.next()) {
-//                feedback.add(new Feedback())
-//            }
-//
-//
-//            // get the alternative
-//            Alternative alt = new Alternative(altID, rs.getString("ADescription"),
-//                    numLikes, rs.getInt("numDislikes"), aUsers, dUsers);
-//            //logger.log(String.valueOf(alt.getTotalApprovals()));
-//            alts.add(alt);
-//        }
-
-        // generate the choice
-//        choice =
-        /*System.out.println(id);
-
-        try {
-            ps = conn.prepareStatement(
-                    "Select * From " + tblName + " WHERE choiceID=?");
-            ps.setString(1, id);
-            rs = ps.executeQuery();
-
-            if (rs.next()) { // choice doesn't exist
-                logger.log("Invalid choice ID");
-                //return null;
-            }
-        } catch(SQLException e){
-            throw new SQLException("Database error" + e.getMessage());
-        }
-        choice = generateChoice(rs);*/
-
         rs.close();
         ps.close();
-//        logger.log("Returning choice");
-        return new Choice(id, description, alts, time, teamSize);
+
+        choice = new Choice(id, description, alts, time, teamSize);
+        choice.setWinner(winningAlt);
+        return choice;
     }
 
 
@@ -385,7 +318,7 @@ public class ChoiceDAO {
     }
     /**
      * Generates a Choice object that represents several rows of ChoiceAltMatch
-     * @param rs, the cursor to the specified row in Choice
+     * @param altID The given alternative ID
      * @return a Choice object
      * @throws SQLException failed to get Choice
      */
