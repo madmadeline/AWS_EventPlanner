@@ -67,7 +67,7 @@ public class SubmitFeedbackHandlerTest {
         Assert.assertEquals(400, response.statusCode);
     }
 
-    /*@Before
+    @Before
     public void init() throws Exception {
         logger = createContext("post").getLogger();
         choiceDAO = new ChoiceDAO(logger);
@@ -101,32 +101,57 @@ public class SubmitFeedbackHandlerTest {
         choiceDAO.deleteSpecificChoice(choice.getID());
     }
 
-    @Test
-    public void testSubmitApprovalGiantGippslandEarthworm() throws Exception {
-        String altID = choice.getAlternatives().get(3).getID();
-        String userID = user.getID();
-        String username = user.getName();
-
-        String SAMPLE_INPUT_STRING = "{\"userID\":\"" + userID + "\",\"altID\":" +
-                "\"" + altID + "\",\"rating\":\"A\"," +
-                "\"username\":\"" + username + "\"}";
-        try {
-            testInput(SAMPLE_INPUT_STRING);
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }
-
-    @Test
-    public void testSubmitDuplicateApproval() throws Exception {
-        String SAMPLE_INPUT_STRING = "{\"userID\":\"9102\",\"altID\":" +
-                "\"385c4a3d-a9dd-4150-b32b-603e6773d0fb\",\"rating\":\"A\"," +
-                "\"username\":\"d\"}";
-        try {
-            testFailInput(SAMPLE_INPUT_STRING);
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }*/
+//    @Test
+//    public void testSubmitApproveWormhole() throws Exception {
+//        String altID = choice.getAlternatives().get(4).getID();
+//        String userID = user.getID();
+//        String username = user.getName();
+//
+//        String SAMPLE_INPUT_STRING = "{\"userID\":\"" + userID + "\",\"altID\":" +
+//                "\"" + altID + "\",\"rating\":\"A\"," +
+//                "\"username\":\"" + username + "\"}";
+//        try {
+//            testInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void cleanThis() throws Exception {
+//        clean();
+//    }
+//
+//    @Test
+//    public void testSubmitDisapproveGiantGippslandEarthworm() throws Exception {
+//        String altID = choice.getAlternatives().get(3).getID();
+//        String userID = user.getID();
+//        String username = user.getName();
+//
+//        String SAMPLE_INPUT_STRING = "{\"userID\":\"" + userID + "\",\"altID\":" +
+//                "\"" + altID + "\",\"rating\":\"D\"," +
+//                "\"username\":\"" + username + "\"}";
+//        try {
+//            testInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void testSubmitDuplicateDisapproval() throws Exception {
+//        String altID = choice.getAlternatives().get(3).getID();
+//        String userID = user.getID();
+//        String username = user.getName();
+//
+//        String SAMPLE_INPUT_STRING = "{\"userID\":\"" + userID + "\",\"altID\":" +
+//                "\"" + altID + "\",\"rating\":\"A\"," +
+//                "\"username\":\"" + username + "\"}";
+//        try {
+//            testInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
 
 }

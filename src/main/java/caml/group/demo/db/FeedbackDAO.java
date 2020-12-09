@@ -100,14 +100,14 @@ public class FeedbackDAO {
         logger.log("getting feedback from feedback table");
 
         try {
-            // get the rating
+            // get all the ratings
             userDAO = new UserDAO(logger);
             altID = fb_resultSet.getString("altID");
             userID = fb_resultSet.getString("userID");
             username = userDAO.getUserFromID(userID).getName();
             approved = fb_resultSet.getString("approved").toCharArray()[0];
 
-            // try to get the message
+            // try to get all the messages
             try {
                 getMessage_ps = conn.prepareStatement("SELECT * FROM " + messageTbl + " WHERE altID=? " +
                         "AND userID=?;");

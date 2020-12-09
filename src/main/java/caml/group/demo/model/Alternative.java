@@ -49,7 +49,6 @@ public class Alternative {
 	public String getID() { return id; }
 	public String getDescription() { return description;}
 
-
 	public int getTotalRatings() {
 		int answer = 0;
 		answer = getTotalDisapprovals() + getTotalApprovals();

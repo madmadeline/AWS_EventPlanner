@@ -68,7 +68,7 @@ public class SubmitFeedbackMessageHandlerTest {
         Assert.assertEquals(400, response.statusCode);
     }
 
-   /* @Before
+    @Before
     public void init() throws Exception {
         logger = createContext("post").getLogger();
         choiceDAO = new ChoiceDAO(logger);
@@ -100,67 +100,67 @@ public class SubmitFeedbackMessageHandlerTest {
         choiceDAO.deleteSpecificChoice(choice.getID());
     }
 
-    @Test
-    public void testAddMessageToYes() throws Exception {
-        String altID = choice.getAlternatives().get(0).getID(); // Alt: Yes
-        String userID = choice.getUsers().get(0).getID(); // Corona Virus
-        String username = choice.getUser(userID).getName();
-        String message = "Heck yea i kno da wae";
-
-        String SAMPLE_INPUT_STRING = "{\"altID\":\""+altID+"\",\"userID\":" +
-                "\""+userID+"\",\"username\":\""+username+"\"," +
-                "\"message\":\""+message+"\"}";
-        try {
-            System.out.println("testing now!!");
-            testInput(SAMPLE_INPUT_STRING);
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }
-
-    @Test
-    public void testAddMessageToBothAlts() throws Exception {
-        String altID = choice.getAlternatives().get(0).getID(); // Alt: Yes
-        String userID = choice.getUsers().get(0).getID(); // Corona Virus
-        String username = choice.getUser(userID).getName();
-        String message = "Heck yea i kno da wae";
-
-        String SAMPLE_INPUT_STRING = "{\"altID\":\""+altID+"\",\"userID\":" +
-                "\""+userID+"\",\"username\":\""+username+"\"," +
-                "\"message\":\""+message+"\"}";
-        try {
-            testInput(SAMPLE_INPUT_STRING);
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-
-        message = "No???????????????????????????";
-        SAMPLE_INPUT_STRING = "{\"altID\":\""+altID+"\",\"userID\":" +
-                "\""+userID+"\",\"username\":\""+username+"\"," +
-                "\"message\":\""+message+"\"}";
-        try {
-            testInput(SAMPLE_INPUT_STRING);
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }
-
-    @Test
-    public void testEmptyMessage() throws Exception {
-        String altID = choice.getAlternatives().get(0).getID(); // Alt: Yes
-        String userID = choice.getUsers().get(0).getID(); // Corona Virus
-        String username = choice.getUser(userID).getName();
-        String message = "";
-
-        String SAMPLE_INPUT_STRING = "{\"altID\":\""+altID+"\",\"userID\":" +
-                "\""+userID+"\",\"username\":\""+username+"\"," +
-                "\"message\":\""+message+"\"}";
-        try {
-            System.out.println("testing now!!");
-            testInput(SAMPLE_INPUT_STRING);
-        } catch (IOException ioe) {
-            Assert.fail("Invalid:" + ioe.getMessage());
-        }
-    }*/
+//    @Test
+//    public void testAddMessageToYes() throws Exception {
+//        String altID = choice.getAlternatives().get(0).getID(); // Alt: Yes
+//        String userID = choice.getUsers().get(0).getID(); // Corona Virus
+//        String username = choice.getUser(userID).getName();
+//        String message = "Heck yea i kno da wae";
+//
+//        String SAMPLE_INPUT_STRING = "{\"altID\":\""+altID+"\",\"userID\":" +
+//                "\""+userID+"\",\"username\":\""+username+"\"," +
+//                "\"message\":\""+message+"\"}";
+//        try {
+//            System.out.println("testing now!!");
+//            testInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void testAddMessageToBothAlts() throws Exception {
+//        String altID = choice.getAlternatives().get(0).getID(); // Alt: Yes
+//        String userID = choice.getUsers().get(0).getID(); // Corona Virus
+//        String username = choice.getUser(userID).getName();
+//        String message = "Heck yea i kno da wae";
+//
+//        String SAMPLE_INPUT_STRING = "{\"altID\":\""+altID+"\",\"userID\":" +
+//                "\""+userID+"\",\"username\":\""+username+"\"," +
+//                "\"message\":\""+message+"\"}";
+//        try {
+//            testInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//
+//        message = "No???????????????????????????";
+//        SAMPLE_INPUT_STRING = "{\"altID\":\""+altID+"\",\"userID\":" +
+//                "\""+userID+"\",\"username\":\""+username+"\"," +
+//                "\"message\":\""+message+"\"}";
+//        try {
+//            testInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void testEmptyMessage() throws Exception {
+//        String altID = choice.getAlternatives().get(0).getID(); // Alt: Yes
+//        String userID = choice.getUsers().get(0).getID(); // Corona Virus
+//        String username = choice.getUser(userID).getName();
+//        String message = "";
+//
+//        String SAMPLE_INPUT_STRING = "{\"altID\":\""+altID+"\",\"userID\":" +
+//                "\""+userID+"\",\"username\":\""+username+"\"," +
+//                "\"message\":\""+message+"\"}";
+//        try {
+//            System.out.println("testing now!!");
+//            testInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
 
 }

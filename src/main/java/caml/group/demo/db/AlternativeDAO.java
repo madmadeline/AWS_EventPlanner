@@ -381,8 +381,9 @@ public class AlternativeDAO {
 		if (ratings_rs.isBeforeFirst()) {
 			while (ratings_rs.next()) {
 				// this method adds both the rating and the message to the feedback object
-				logger.log("Adding feedback: " + ratings_rs.getString("approval"));
-				feedback.add(feedbackDAO.generateFeedbackFromFeedbackTable(ratings_rs));
+				Feedback fb;
+				fb = feedbackDAO.generateFeedbackFromFeedbackTable(ratings_rs);
+				feedback.add(fb);
 				if (ratings_rs.getString("approval").equals("A")) {
 					totalApprovals++;
 					totalApprovalUsers.add(ratings_rs.getString("userID"));
@@ -392,11 +393,17 @@ public class AlternativeDAO {
 				}
 			}
 		}
-		else {
+		if (messages_rs.isBeforeFirst()) {
 			while (messages_rs.next()) {
-					// this method adds both the rating and the message to the feedback object
+				// this method adds both the rating and the message to the feedback object
+				Feedback newFb = feedbackDAO.generateFeedbackFromMessageTable(messages_rs);
+				logger.log(newFb.getMessage());
+				if (!feedback.contains(newFb)) {
 					logger.log("Adding feedback: " + messages_rs.getString("message"));
-					feedback.add(feedbackDAO.generateFeedbackFromMessageTable(messages_rs));
+					feedback.add(newFb);
+				}
+//					logger.log("Adding feedback: " + messages_rs.getString("message"));
+//					feedback.add(feedbackDAO.generateFeedbackFromMessageTable(messages_rs));
 			}
 		}
 
