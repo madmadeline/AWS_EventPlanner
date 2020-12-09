@@ -76,10 +76,10 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 						failMessage = "The password is longer than 30 characters.";
 						fail = true;
 					}
-					if(choice.getWinner() != null) {
-						failMessage = "The choice is finalized.";
-						fail = true;
-					}
+//					if(choice.getWinner() != null) {
+//						failMessage = "The choice is finalized.";
+//						fail = true;
+//					}
 					if(choice.getMaxTeamSize() <= choice.getUsers().size() ) {						
 						failMessage = "The choice is full.";
 						fail = true;

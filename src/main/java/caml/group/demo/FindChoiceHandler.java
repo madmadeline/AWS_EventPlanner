@@ -51,10 +51,10 @@ public class FindChoiceHandler implements RequestHandler<AddFindChoiceRequest,Ad
 				fail = true;
 				failMessage = "Choice does not exist";
 			}
-			if(choice.getWinner() != null ) {
-				failMessage = "The choice is finalized.";
-				fail = true;
-			}
+//			if(choice.getWinner() != null ) {
+//				failMessage = "The choice is finalized.";
+//				fail = true;
+//			}
 		}
 
 		AddFindChoiceResponse response;
