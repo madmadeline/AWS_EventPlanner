@@ -97,7 +97,10 @@ public class UserDAO {
 //                System.out.println("user is in the table");
                 user = rowToUserObject(resultSet, pass); // should only loop 1x
                 if (user != null) { logger.log("Retrieved user from the " + usrTbl + " table\n"); }
-                else { logger.log("Incorrect password\n"); }
+                else {
+                    logger.log("Incorrect password\n");
+                    return null;
+                }
             }
 
             resultSet.close();

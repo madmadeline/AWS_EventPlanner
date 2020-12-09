@@ -90,10 +90,14 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 							}
 						}
 					}
-						if (!fail) {
-							UserDAO dao = new UserDAO(logger);
-							user = dao.loadOrInsertUser(name, pass, choiceID);
+					if (!fail) {
+						UserDAO dao = new UserDAO(logger);
+						user = dao.loadOrInsertUser(name, pass, choiceID);
+						if (user == null) {
+							failMessage = "Incorrect password: " + req.getPassword() + ".";
+							fail = true;
 						}
+					}
 					} catch (Exception e) {
 						failMessage = "Invalid password: " + req.getPassword() + ".";
 						fail = true;
