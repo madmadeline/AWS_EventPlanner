@@ -386,10 +386,10 @@ public class AlternativeDAO {
 				feedback.add(fb);
 				if (ratings_rs.getString("approval").equals("A")) {
 					totalApprovals++;
-					totalApprovalUsers.add(ratings_rs.getString("userID"));
+					totalApprovalUsers.add(ratings_rs.getString("username"));
 				} else if (ratings_rs.getString("approval").equals("D")) {
 					totalDisapprovals++;
-					totalDisapprovalUsers.add(ratings_rs.getString("userID"));
+					totalDisapprovalUsers.add(ratings_rs.getString("username"));
 				}
 			}
 		}
