@@ -11,6 +11,7 @@ public class Choice {
 	final String description;
 	Timestamp time;
 	Alternative winner;
+	String winnerName;
 	final ArrayList<Alternative> alternatives;// = new ArrayList<Alternative>();
 	ArrayList<User> users;
 	final int maxTeamSize;
@@ -67,7 +68,14 @@ public class Choice {
 	public void setWinner(Alternative winner) { this.winner = winner; }
 	public ArrayList<User> getUsers() { return this.users; }
 
-	
+	public void setWinnerName(String winnerName) {
+		this.winnerName = winnerName;
+	}
+
+	public String getWinnerName() {
+		return winnerName;
+	}
+
 	public void addUser(User user) { users.add(user); }
 	
 	

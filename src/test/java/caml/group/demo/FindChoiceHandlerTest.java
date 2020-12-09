@@ -77,7 +77,7 @@ public class FindChoiceHandlerTest {
         Assert.assertEquals(400, response.statusCode);
     }
 
-    @Before
+    /*@Before
     public void init() throws Exception {
         logger = createContext("post").getLogger();
         choiceDAO = new ChoiceDAO(logger);
@@ -127,5 +127,5 @@ public class FindChoiceHandlerTest {
         } catch (IOException ioe) {
             Assert.fail("Invalid:" + ioe.getMessage());
         }
-    }
+    }*/
 }

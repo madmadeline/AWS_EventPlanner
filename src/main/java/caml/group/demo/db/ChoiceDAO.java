@@ -384,6 +384,21 @@ public class ChoiceDAO {
             logger.log("Getting choice data for choice " + rs.getString("choiceID"));
             Choice choice = new Choice(rs.getString("choiceID"), rs.getString("description"),
                     rs.getTimestamp("dateOfCreation"), rs.getInt("maxTeamSize"));
+            if(rs.getString("winningAlt") != null){
+                logger.log("Getting alt desc");
+                logger.log("Preparing statement");
+                PreparedStatement ps = conn.prepareStatement("SELECT description FROM Alternative where altID=?");
+                logger.log("Setting string");
+                ps.setString(1, rs.getString("winningAlt"));
+                logger.log("Executing query");
+                ResultSet rs2 = ps.executeQuery();
+                logger.log("Getting desc");
+                while(rs2.next()) choice.setWinnerName(rs2.getString("description"));
+                logger.log("closing ps");
+                ps.close();
+                logger.log("closing rs2");
+                rs2.close();
+            }
             choices.add(choice);
         }
 

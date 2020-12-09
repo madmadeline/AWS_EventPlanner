@@ -16,17 +16,20 @@ public class AddFindChoiceResponse {
     public int maxTeamSize;
     public Timestamp time;
     public ArrayList<Alternative> alternatives;
-    public ArrayList<Feedback> feedback;
-//    public Choice choice;
+    //public ArrayList<Feedback> feedback;
+    public String winner;
+    //public Choice choice;
 
     public AddFindChoiceResponse(Choice choice, int statusCode){
         this.result = true;
         this.choiceID = choice.getID();
         this.description = choice.getDescription();
-        this.alternatives = choice.getAlternatives();
+        //this.alternatives = choice.getAlternatives();
         this.time = choice.getTime();
         this.statusCode = statusCode;
         this.maxTeamSize = choice.getMaxTeamSize();
+        //this.winner = choice.getWinner().getDescription();
+        this.winner = choice.getWinnerName();
 //        this.feedback = alternatives
     }
 
