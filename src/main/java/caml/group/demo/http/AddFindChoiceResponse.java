@@ -2,6 +2,7 @@ package caml.group.demo.http;
 
 import caml.group.demo.model.Alternative;
 import caml.group.demo.model.Choice;
+import caml.group.demo.model.Feedback;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -15,7 +16,8 @@ public class AddFindChoiceResponse {
     public int maxTeamSize;
     public Timestamp time;
     public ArrayList<Alternative> alternatives;
-    //public Choice choice;
+    public ArrayList<Feedback> feedback;
+//    public Choice choice;
 
     public AddFindChoiceResponse(Choice choice, int statusCode){
         this.result = true;
@@ -25,6 +27,7 @@ public class AddFindChoiceResponse {
         this.time = choice.getTime();
         this.statusCode = statusCode;
         this.maxTeamSize = choice.getMaxTeamSize();
+//        this.feedback = alternatives
     }
 
     public AddFindChoiceResponse(int statusCode, String errorMessage){
