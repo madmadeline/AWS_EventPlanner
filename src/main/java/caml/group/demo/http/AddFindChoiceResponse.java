@@ -24,7 +24,7 @@ public class AddFindChoiceResponse {
         this.result = true;
         this.choiceID = choice.getID();
         this.description = choice.getDescription();
-        //this.alternatives = choice.getAlternatives();
+        this.alternatives = choice.getAlternatives();
         this.time = choice.getTime();
         this.statusCode = statusCode;
         this.maxTeamSize = choice.getMaxTeamSize();
