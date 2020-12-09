@@ -25,6 +25,7 @@ public class Choice {
 		this.winner = null;
 		this.users = new ArrayList<>();
 		this.maxTeamSize = teamSize;
+		this.winnerName = "";
 	}
 	
 
@@ -36,6 +37,7 @@ public class Choice {
 		this.winner = null;
 		this.users = new ArrayList<>();
 		this.maxTeamSize = teamSize;
+		this.winnerName = "";
 	}
 	
 	public String getID() { return this.id; }
