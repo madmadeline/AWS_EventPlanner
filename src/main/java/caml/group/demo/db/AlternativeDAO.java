@@ -142,27 +142,31 @@ public class AlternativeDAO {
 		ResultSet ratings_rs;
 		ResultSet messages_rs;
 
+		logger.log("getting alternative by id");
+
 		alt_ps = conn.prepareStatement("SELECT * FROM " + tblName +
 				" WHERE altID=?;");
 		alt_ps.setString(1,  id);
-		alt_rs = alt_ps.executeQuery(); // cursor that points to database row
+		alt_rs = alt_ps.executeQuery();
+		logger.log("got alternative result set");
 
 		// ratings result set
 		ratings_ps = conn.prepareStatement("SELECT * FROM " + fbTbl + " WHERE altID=?;");
 		ratings_ps.setString(1,  id);
-		ratings_rs = ratings_ps.executeQuery(); // cursor that points to database row
+		ratings_rs = ratings_ps.executeQuery();
+		logger.log("got ratings result set");
 
 		// messages result set
-		messages_ps = conn.prepareStatement("SELECT * FROM " + msgTbl + "" +
-				" WHERE altID=?;");
-		messages_ps.setString(1, alt_rs.getString("altID"));
+		messages_ps = conn.prepareStatement("SELECT * FROM " + msgTbl + " WHERE altID=?;");
+		messages_ps.setString(1, id);
 		messages_rs = messages_ps.executeQuery();
+		logger.log("got messages result set");
 
 
 		logger.log("Generating alternative");
 		while (alt_rs.next()) {
 			// this method adds both the ratings and the messages to the alternative
-			alt = generateAlternative(alt_rs, ratings_rs, messages_rs); // should only loop 1x
+			alt = generateAlternative(alt_rs, ratings_rs, messages_rs);
 		}
 		alt_rs.close();
 		ratings_rs.close();

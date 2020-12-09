@@ -27,14 +27,16 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 
 		feedbackDAO = new FeedbackDAO(logger);
 		AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
-		logger.log("Retrieved dao");
+		logger.log("Retrieved daos");
 
 		// get old alternative
+//		System.out.println("alt id " + feedback.getAltID());
 		alternative = alternativeDAO.getAlternativeByID(feedback.getAltID());
+		logger.log("Alternative: " + alternative.getDescription());
 
 		// store old approval
 		oldApproval = feedbackDAO.getRating(feedback.getAltID(), feedback.getUserID());
-		System.out.println("old approval = " + oldApproval);
+		System.out.println("Old approval = " + oldApproval);
 
 		// update the alternative and feedback
 		if (feedback.getApproved() == 'A' && oldApproval != 'A') {
@@ -92,6 +94,7 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 				fail = true;
 				failMessage = "Duplicate approval";
 			}
+			logger.log("Submitted feedback");
 		}catch (Exception e){
 			fail = true;
 			failMessage = "Failed to submit feedback";

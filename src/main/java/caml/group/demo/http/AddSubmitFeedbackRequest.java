@@ -33,9 +33,7 @@ public class AddSubmitFeedbackRequest {
         this.message = feedback;
     }
 
-    public void setRating(char rating) {
-        this.rating = rating;
-    }
+    public void setRating(char rating) { this.rating = rating; }
 
     public void setUserID(String userID) {
         this.userID = userID;
@@ -43,5 +41,5 @@ public class AddSubmitFeedbackRequest {
 
     public void setUsername(String username) { this.username = username; }
 
-    public String toString() { return "Add(" + message + ")"; }
+    public String toString() { return "Add(" + rating + ")"; }
 }
