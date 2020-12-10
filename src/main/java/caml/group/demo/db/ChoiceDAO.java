@@ -64,6 +64,7 @@ public class ChoiceDAO {
         rs.close();
         ps.close();
 
+        logger.log("Getting users");
         PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM User where choiceID=?");
         ps2.setString(1,id);
         ResultSet rs2 = ps2.executeQuery();
@@ -71,12 +72,14 @@ public class ChoiceDAO {
             User user = new User(rs2.getString("username"), rs2.getString("password"), id);
             users.add(user);
         }
+        logger.log("Got all users");
 
         choice = new Choice(id, description, alts, time, teamSize);
         if (winningAlt != null) {
             choice.setWinnerName(winningAlt.getDescription());
         }
         choice.setUsers(users);
+        logger.log("Found the choice");
         return choice;
     }
 

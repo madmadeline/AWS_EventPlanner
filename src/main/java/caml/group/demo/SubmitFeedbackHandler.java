@@ -66,19 +66,21 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 		}
 
 		// clear rating
-		else if (feedbackDAO.ratingExists(feedback.getAltID(), feedback.getUserID())) {
+		else if (feedback.getApproved() == 'O'/*feedbackDAO.ratingExists(feedback.getAltID(), feedback.getUserID())*/) {
 			logger.log("Clearing alternative");
 
 			// delete disapproval
-			if (feedback.getApproved() == 'D') {
+			if (oldApproval == 'D') {
 				alternative.setTotalDisapprovals(alternative.getTotalDisapprovals() - 1);
 				feedbackDAO.clearRating(feedback.getAltID(), feedback.getUserID());
+				alternativeDAO.updateAlternative(alternative);
 			}
 
 			// delete approval
-			else {
+			else if (oldApproval == 'A'){
 				alternative.setTotalApprovals(alternative.getTotalApprovals() - 1);
 				feedbackDAO.clearRating(feedback.getAltID(), feedback.getUserID());
+				alternativeDAO.updateAlternative(alternative);
 			}
 			return true;
 		}
