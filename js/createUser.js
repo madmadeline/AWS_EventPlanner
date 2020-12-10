@@ -46,21 +46,25 @@ function processCreateUserResponse(result) {
 	var display = document.getElementById("altList");
 	var altList = "";
 	
-	for (var i = 0; i < alts.length; i++){
-		altList += `<div> <br>` + alts[i].description + `<br>` + alts[i].totalApprovals + ` users approved` + `<br>` + alts[i].totalDisapprovals + ` users disapproved` + `<br><button id = "approveBtn" onclick = "Javascript:handleApprovalClick(true,` + i + `)">
+	/*for (var i = 0; i < alts.length; i++){
+		altList += `<div> <br>` + alts[i].description + `<br>` + alts[i].totalApprovals + ` users approved:` + `<br>` + alts[i].totalApprovalUsers + `<br>` + alts[i].totalDisapprovals + ` users disapproved: ` + alts[i].totalApprovalUsers + `<br>` + `<br><button id = "approveBtn" onclick = "Javascript:handleApprovalClick(true,` + i + `)">
                     <i class="fa fa-thumbs-up"></i>
                 </button>
                 <button id = "disapproveBtn" onclick = "Javascript:handleApprovalClick(false,` + i + `)">
                     <i class="fa fa-thumbs-down"></i>
                 </button> </div>`;
-	}
+	}*/
 	
 	uname.innerHTML = obj.username;
+	uid.innerHTML = obj.userID;
 	display.innerHTML = altList;
 	document.getElementById("userList").innerHTML = "Successfully registered with choice: " + description;
+	
+	handleFindClick();
   }else{
 	//error
 	console.log("User could not be created.");
+	document.getElementById("userList").innerHTML = obj.error;
   }
 
 }
@@ -72,6 +76,8 @@ function handleUserClick(e) {
   data["username"] = form.newUsername.value;
   data["password"] = form.newPassword.value;
   data["choiceID"] = form.newChoiceID.value;
+
+  document.getElementById("alternativeApproval").style.visibility = "hidden";
 
   var js = JSON.stringify(data);
   console.log("JS:" + js);

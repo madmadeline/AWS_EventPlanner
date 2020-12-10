@@ -19,7 +19,7 @@ function handleDeleteClick(){
 	
 	var data = {};
 	
-	days = document.form.deleteForm.deleteDays.value;
+	days = document.deleteForm.deleteDays.value;
 	
 	data["days"] = days;
 	

@@ -1,21 +1,19 @@
-function processApprovalResponse(result){
+function processCompleteResponse(result){
 	console.log("result:" + result);
 	var obj = JSON.parse(result);
 	var status = obj["statusCode"];
 	if (status == 200){
-		console.log("approval successfully responded");
-		//update interface to show new approval/disapproval
+		console.log("complete successfully responded");
+		//update interface to show completion?
+		document.getElementById("approvalConfirm").innerHTML = "This choice has been COMPLETED."
 		handleFindClick();
 		
 	}else{
-		console.log("approval failed to respond.");
+		console.log("complete failed to respond.");
 	}
 }
 
-function handleApprovalClick(b, index){
-	//b is a boolean
-	//if true, an approval was chosen
-	//if false, a disapproval was chosen
+function handleCompleteClick(index){
 	
 	var data = {};
 	
@@ -36,31 +34,13 @@ function handleApprovalClick(b, index){
 	console.log(alts);
 	
 	console.log(alts[index].ID);
-	data["username"] = document.getElementById("usernameDisplay").innerHTML;
-	data["userID"] = document.getElementById("userIDdisplay").innerHTML;
+	data["choiceID"] = p.choiceID;
 	data["altID"] = alts[index].ID;
-	data["feedback"] = "";
-	
-	var confirm = document.getElementById("approvalConfirm");
-	if (b == 0){
-		//send approval
-		confirm.innerHTML = "An approval was sent."
-		data["rating"] = 'A';
-	}else if (b == 1){
-		//send disapproval
-		confirm.innerHTML = "A disapproval was sent."
-		data["rating"] = 'D';
-	}else{
-		//send delete
-		confirm.innerHTML = "(dis)Approval removed."
-		data["rating"] = 'O';
-	}
-	
 	
 	var js = JSON.stringify(data);
   	console.log("JS:" + js);
   	var xhr = new XMLHttpRequest();
-  	xhr.open("POST", send_approval_url, true);
+  	xhr.open("POST", complete_choice_url, true);
 
   	// send the collected data as JSON
   	xhr.send(js);
@@ -72,7 +52,7 @@ function handleApprovalClick(b, index){
 	    if (xhr.readyState == XMLHttpRequest.DONE) {
 	    	 if (xhr.status == 200) {
 		      console.log ("XHR:" + xhr.responseText);
-		      processApprovalResponse(xhr.responseText);
+		      processCompleteResponse(xhr.responseText);
 	    	 } else {
 	    		 console.log("actual:" + xhr.responseText)
 				  var js = JSON.parse(xhr.responseText);
@@ -80,7 +60,7 @@ function handleApprovalClick(b, index){
 				  alert (err);
 	    	 }
 	    } else {
-	      processApprovalResponse("N/A");
+	      processCompleteResponse("N/A");
 	    }
 	  };
 }

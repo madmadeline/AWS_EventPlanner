@@ -31,21 +31,33 @@ function processReportResponse(result){
 		//must display the choice description, choice ID, choice date of creation, and completion status.
 		console.log("Report success.");
 		var isComplete = false;
-		/*if (choices[i].winner == NULL){
-			isComplete = false;
-		}else{
-			isComplete = true;
-		}*/
-		var output = "";
+		var output = `<table id = "choicesTbl">
+                <thead>
+                    <tr>
+                        <th colspan = "4">REPORT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    	<td>Choice Description</td>
+                        <td>Timestamp</td>
+                        <td>Choice ID</td>
+                        <td>Completed</td>
+                    </tr>`;
 		//for loop goes through the list of choices
 		for (var i = 0; i < choices.length; i++){
+			if (choices[i].winnerName == ""){
+				isComplete = false;
+			}else{
+				isComplete = true;
+			}
 			var date = new Date(choices[i].time);
-			//print the choice descriptions
-			output += "Choice: " + choices[i].description + "<br />" +
-					  "ID: " + choices[i].ID + "<br />" +
-					  "Creation Date: " + date.toString() + "<br />"+
-					  "Completed?: " + isComplete + "<br />" + "<br />";
+			output += `<tr><td>` + choices[i].description + `</td>
+							<td>` + date.toString() + `</td>
+							<td>` + choices[i].ID + `</td>
+							<td>` + isComplete + `</td></tr>`;
 		}
+		output +=  `</tbody></table>`
 		reportList.innerHTML = output;
 	}else{
 		//choices not found, or error
