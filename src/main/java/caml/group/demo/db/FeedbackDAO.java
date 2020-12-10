@@ -170,7 +170,7 @@ public class FeedbackDAO {
                 getFeedback_ps.setString(2, userID);
                 ResultSet fb_resultSet = getFeedback_ps.executeQuery();
                 if (fb_resultSet.next()) {
-                    approved = msg_resultSet.getString("approved").toCharArray()[0];
+                    approved = fb_resultSet.getString("approved").toCharArray()[0];
                 } else {
                     approved = 0;
                 }
@@ -336,12 +336,32 @@ public class FeedbackDAO {
     public boolean addMessage(String altID, String userID, String message, Timestamp timeStamp) throws Exception {
         PreparedStatement ps;
         int result;
+        String choiceID = null;
+        String winningAlt = null;
+
+        logger.log("Getting choiceID");
+        PreparedStatement ps2 = conn.prepareStatement("SELECT choiceID from Alternative where altID=?");
+        ps2.setString(1,altID);
+        ResultSet resultSet = ps2.executeQuery();
+        while(resultSet.next()) choiceID = resultSet.getString("choiceID");
+        resultSet.close();
+        ps2.close();
+
+        logger.log("Getting winning alt");
+        PreparedStatement ps3 = conn.prepareStatement("SELECT winningAlt from Choice where choiceID=?");
+        ps3.setString(1,choiceID);
+        ResultSet resultSet2 = ps3.executeQuery();
+        while(resultSet2.next()) winningAlt = resultSet2.getString("winningAlt");
+
+        logger.log("Checking if choice is done");
+        if(winningAlt != null) return false;
 
         logger.log("Adding message");
 
+
         try {
             // feedback message already exists --> update Message table
-            if (ratingExists(altID, userID)) {
+            if (messageExists(altID, userID)) {
                 logger.log("Updating Message row");
                 ps = conn.prepareStatement("UPDATE " + messageTbl + " SET " +
                         " message=?, timeStamp=? WHERE altID=? AND userID=?;");
