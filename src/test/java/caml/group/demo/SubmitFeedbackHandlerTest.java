@@ -111,6 +111,7 @@ public class SubmitFeedbackHandlerTest {
 //                "\"" + altID + "\",\"rating\":\"A\"," +
 //                "\"username\":\"" + username + "\"}";
 //        try {
+//            System.out.println("Adding approval for " + choice.getAlternatives().get(4).getDescription());
 //            testInput(SAMPLE_INPUT_STRING);
 //        } catch (IOException ioe) {
 //            Assert.fail("Invalid:" + ioe.getMessage());
@@ -132,6 +133,7 @@ public class SubmitFeedbackHandlerTest {
 //                "\"" + altID + "\",\"rating\":\"D\"," +
 //                "\"username\":\"" + username + "\"}";
 //        try {
+//            System.out.println("Adding disapproval for " + choice.getAlternatives().get(3).getDescription());
 //            testInput(SAMPLE_INPUT_STRING);
 //        } catch (IOException ioe) {
 //            Assert.fail("Invalid:" + ioe.getMessage());
@@ -140,15 +142,82 @@ public class SubmitFeedbackHandlerTest {
 //
 //    @Test
 //    public void testSubmitDuplicateDisapproval() throws Exception {
-//        String altID = choice.getAlternatives().get(3).getID();
+//        String altID = choice.getAlternatives().get(3).getID(); // Giant Gippsland earthworm
 //        String userID = user.getID();
 //        String username = user.getName();
 //
 //        String SAMPLE_INPUT_STRING = "{\"userID\":\"" + userID + "\",\"altID\":" +
-//                "\"" + altID + "\",\"rating\":\"A\"," +
+//                "\"" + altID + "\",\"rating\":\"D\"," +
 //                "\"username\":\"" + username + "\"}";
 //        try {
+//            System.out.println("Adding disapproval for " + choice.getAlternatives().get(3).getDescription());
 //            testInput(SAMPLE_INPUT_STRING);
+//            System.out.println("Adding disapproval for " + choice.getAlternatives().get(3).getDescription());
+//            testFailInput(SAMPLE_INPUT_STRING);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void testChangeRating() throws Exception {
+//        String altID = choice.getAlternatives().get(0).getID(); // Earthworm
+//        String altDesc = choice.getAlternatives().get(0).getDescription();
+//        String userID = user.getID();
+//        String username = user.getName();
+//
+//        String SAMPLE_INPUT_STRING_A = "{\"userID\":\"" + userID + "\",\"altID\":" +
+//                "\"" + altID + "\",\"rating\":\"A\"," +
+//                "\"username\":\"" + username + "\"}";
+//        String SAMPLE_INPUT_STRING_D = "{\"userID\":\"" + userID + "\",\"altID\":" +
+//                "\"" + altID + "\",\"rating\":\"D\"," +
+//                "\"username\":\"" + username + "\"}";
+//        try {
+//            System.out.println("Adding approval for " + altDesc);
+//            testInput(SAMPLE_INPUT_STRING_A);
+//            System.out.println("Changing approval to disapproval for " + altDesc);
+//            testInput(SAMPLE_INPUT_STRING_D);
+//            System.out.println("Changing disapproval to approval for " + altDesc);
+//            testInput(SAMPLE_INPUT_STRING_A);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void testClearApproval() throws Exception {
+//        String altID = choice.getAlternatives().get(3).getID(); // Giant Gippsland earthworm
+//        String userID = user.getID();
+//        String username = user.getName();
+//
+//        String SAMPLE_INPUT_STRING_A = "{\"userID\":\"" + userID + "\",\"altID\":" +
+//                "\"" + altID + "\",\"rating\":\"A\"," +
+//                "\"username\":\"" + username + "\"}";
+//        String SAMPLE_INPUT_STRING_O = "{\"userID\":\"" + userID + "\",\"altID\":" +
+//                "\"" + altID + "\",\"rating\":\"O\"," +
+//                "\"username\":\"" + username + "\"}";
+//        try {
+//            System.out.println("Adding approval for " + choice.getAlternatives().get(3).getDescription());
+//            testInput(SAMPLE_INPUT_STRING_A);
+//            System.out.println("Clearing approval for " + choice.getAlternatives().get(3).getDescription());
+//            testInput(SAMPLE_INPUT_STRING_O);
+//        } catch (IOException ioe) {
+//            Assert.fail("Invalid:" + ioe.getMessage());
+//        }
+//    }
+//
+//    @Test
+//    public void testClearNoApproval() throws Exception {
+//        String altID = choice.getAlternatives().get(3).getID(); // Giant Gippsland earthworm
+//        String userID = user.getID();
+//        String username = user.getName();
+//
+//        String SAMPLE_INPUT_STRING_O = "{\"userID\":\"" + userID + "\",\"altID\":" +
+//                "\"" + altID + "\",\"rating\":\"O\"," +
+//                "\"username\":\"" + username + "\"}";
+//        try {
+//            System.out.println("Clearing approval for " + choice.getAlternatives().get(3).getDescription());
+//            testFailInput(SAMPLE_INPUT_STRING_O);
 //        } catch (IOException ioe) {
 //            Assert.fail("Invalid:" + ioe.getMessage());
 //        }

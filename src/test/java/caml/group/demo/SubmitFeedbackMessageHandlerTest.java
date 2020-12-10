@@ -24,7 +24,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.UUID;
 
-// ALL TESTS WORK 12/8 6:40PM
+// ALL TESTS WORK 12/10 5:03PM
 public class SubmitFeedbackMessageHandlerTest {
     UserDAO userDAO;
     ChoiceDAO choiceDAO;
@@ -156,8 +156,8 @@ public class SubmitFeedbackMessageHandlerTest {
 //                "\""+userID+"\",\"username\":\""+username+"\"," +
 //                "\"message\":\""+message+"\"}";
 //        try {
-//            System.out.println("testing now!!");
-//            testInput(SAMPLE_INPUT_STRING);
+////            System.out.println("testing now!!");
+//            testFailInput(SAMPLE_INPUT_STRING);
 //        } catch (IOException ioe) {
 //            Assert.fail("Invalid:" + ioe.getMessage());
 //        }

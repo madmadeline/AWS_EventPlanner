@@ -57,18 +57,32 @@ public class SubmitFeedbackMessageHandler implements RequestHandler<AddSubmitFee
         boolean fail = false;
         String failMessage = "";
         Timestamp time = Timestamp.from(Instant.now());
+        AddSubmitFeedbackMessageResponse response;
+
+        // check if empty string
+        if (req.getMessage().equals("")) {
+            failMessage = "Message is an empty string";
+            response = new AddSubmitFeedbackMessageResponse(400, failMessage);
+            return response;
+        }
+
+        // check if message is too long
+        if (req.getMessage().length() > 500) {
+            failMessage = "The message is too long";
+            response = new AddSubmitFeedbackMessageResponse(400, failMessage);
+            return response;
+        }
 
         Feedback feedback = new Feedback(req.getAltID(), req.getUserID(), req.getUsername(), (char)0,
                 req.getMessage(), time);
 
-        try{
+        try {
             submitFeedbackMessage(feedback);
-        }catch (Exception e){
+        } catch (Exception e) {
             fail = true;
             failMessage = "Failed to submit feedback message";
         }
 
-        AddSubmitFeedbackMessageResponse response;
         if(fail) response = new AddSubmitFeedbackMessageResponse(400, failMessage);
         else response = new AddSubmitFeedbackMessageResponse(200, feedback);
         return response;
