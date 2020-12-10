@@ -80,7 +80,7 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 				alternative.setTotalApprovals(alternative.getTotalApprovals() - 1);
 				feedbackDAO.clearRating(feedback.getAltID(), feedback.getUserID());
 			}
-			return false;
+			return true;
 		}
 		else {
 			feedbackDAO.addRating(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),

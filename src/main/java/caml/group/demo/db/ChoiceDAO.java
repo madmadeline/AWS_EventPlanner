@@ -73,7 +73,9 @@ public class ChoiceDAO {
         }
 
         choice = new Choice(id, description, alts, time, teamSize);
-        choice.setWinner(winningAlt);
+        if (winningAlt != null) {
+            choice.setWinnerName(winningAlt.getDescription());
+        }
         choice.setUsers(users);
         return choice;
     }
