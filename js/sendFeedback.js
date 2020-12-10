@@ -1,18 +1,18 @@
-function processApprovalResponse(result){
+function processFeedbackResponse(result){
 	console.log("result:" + result);
 	var obj = JSON.parse(result);
 	var status = obj["statusCode"];
 	if (status == 200){
-		console.log("approval successfully responded");
-		//update interface to show new approval/disapproval
+		console.log("feedback successfully responded");
+		//update interface to show new feedback
 		handleFindClick();
 		
 	}else{
-		console.log("approval failed to respond.");
+		console.log("feedback failed to respond.");
 	}
 }
 
-function handleApprovalClick(b, index){
+function handleFeedbackClick(index){
 	//b is a boolean
 	//if true, an approval was chosen
 	//if false, a disapproval was chosen
@@ -22,9 +22,9 @@ function handleApprovalClick(b, index){
 	//TODO: figure out how to send the alternative id
 	//currently: getting the index and searching through the choice
 	payload = document.getElementById("payload").innerHTML;
-	console.log("Payload: " + payload);
+	//console.log("Payload: " + payload);
 	var p = JSON.parse(payload);
-	console.log("Parsed: " + p["choice"]);
+	//console.log("Parsed: " + p["choice"]);
 	
 	if (typeof p.choice !== 'undefined'){
 		var alts = p.choice.alternatives;	
@@ -33,34 +33,49 @@ function handleApprovalClick(b, index){
 	}
 	
 	
-	console.log(alts);
+	//console.log(alts);
 	
 	console.log(alts[index].ID);
 	data["username"] = document.getElementById("usernameDisplay").innerHTML;
 	data["userID"] = document.getElementById("userIDdisplay").innerHTML;
 	data["altID"] = alts[index].ID;
-	data["feedback"] = "";
 	
-	var confirm = document.getElementById("approvalConfirm");
-	if (b == 0){
-		//send approval
-		confirm.innerHTML = "An approval was sent."
-		data["rating"] = 'A';
-	}else if (b == 1){
-		//send disapproval
-		confirm.innerHTML = "A disapproval was sent."
-		data["rating"] = 'D';
-	}else{
-		//send delete
-		confirm.innerHTML = "(dis)Approval removed."
-		data["rating"] = 'O';
+	var feed;
+	//get the correct feedback form
+	switch (index){
+		case 0:
+		//first alternative
+		feed = document.feedbackForm0.feedbackInput0.value;
+		console.log("Feedback received: " + feed);
+		break;
+		case 1:
+		//second alternative
+		feed = document.feedbackForm1.feedbackInput1.value;
+		console.log("Feedback received: " + feed);
+		break;
+		case 2:
+		//third alternative
+		feed = document.feedbackForm2.feedbackInput2.value;
+		console.log("Feedback received: " + feed);
+		break;
+		case 3:
+		//fourth alternative
+		feed = document.feedbackForm3.feedbackInput3.value;
+		console.log("Feedback received: " + feed);
+		break;
+		case 4:
+		//fifth alternative
+		feed = document.feedbackForm4.feedbackInput4.value;
+		console.log("Feedback received: " + feed);
+		break;
 	}
 	
+	data["message"] = feed;
 	
 	var js = JSON.stringify(data);
   	console.log("JS:" + js);
   	var xhr = new XMLHttpRequest();
-  	xhr.open("POST", send_approval_url, true);
+  	xhr.open("POST", send_feedback_url, true);
 
   	// send the collected data as JSON
   	xhr.send(js);
@@ -72,7 +87,7 @@ function handleApprovalClick(b, index){
 	    if (xhr.readyState == XMLHttpRequest.DONE) {
 	    	 if (xhr.status == 200) {
 		      console.log ("XHR:" + xhr.responseText);
-		      processApprovalResponse(xhr.responseText);
+		      processFeedbackResponse(xhr.responseText);
 	    	 } else {
 	    		 console.log("actual:" + xhr.responseText)
 				  var js = JSON.parse(xhr.responseText);
@@ -80,7 +95,7 @@ function handleApprovalClick(b, index){
 				  alert (err);
 	    	 }
 	    } else {
-	      processApprovalResponse("N/A");
+	      processFeedbackResponse("N/A");
 	    }
 	  };
 }
