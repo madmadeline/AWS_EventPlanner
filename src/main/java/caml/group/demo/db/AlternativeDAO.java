@@ -1,14 +1,14 @@
 package caml.group.demo.db;
 
 import java.sql.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import caml.group.demo.model.Feedback;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
 import caml.group.demo.model.Alternative;
-import caml.group.demo.model.User;
-
 
 
 /**
@@ -20,6 +20,8 @@ public class AlternativeDAO {
 	LambdaLogger logger;
 	java.sql.Connection conn;
 	final String tblName = "Alternative";   // Exact capitalization
+	final String fbTbl = "Feedback";
+	final String msgTbl = "Message";
 
 	public AlternativeDAO(LambdaLogger logger) {
 		this.logger = logger;
@@ -40,6 +42,10 @@ public class AlternativeDAO {
 	 * @throws Exception
 	 */
 	public Alternative getAlternative(String desc) throws Exception {
+		PreparedStatement ratings_ps;
+		PreparedStatement messages_ps;
+		ResultSet ratings_rs;
+		ResultSet messages_rs;
 
 		try {
 			Alternative alt = null; // User object representing the database entry
@@ -51,7 +57,18 @@ public class AlternativeDAO {
 			ResultSet resultSet = ps.executeQuery(); // cursor that points to database row
 
 			while (resultSet.next()) {
-				alt = generateAlternative(resultSet); // should only loop 1x
+				ratings_ps = conn.prepareStatement("SELECT * FROM " + fbTbl + "" +
+						" WHERE altID=?;");
+				ratings_ps.setString(1, resultSet.getString("altID"));
+				ratings_rs = ratings_ps.executeQuery();
+
+				// messages result set
+				messages_ps = conn.prepareStatement("SELECT * FROM " + msgTbl + "" +
+						" WHERE altID=?;");
+				messages_ps.setString(1, resultSet.getString("altID"));
+				messages_rs = messages_ps.executeQuery();
+
+				alt = generateAlternative(resultSet, ratings_rs, messages_rs); // should only loop 1x
 			}
 			resultSet.close();
 			ps.close();
@@ -67,6 +84,12 @@ public class AlternativeDAO {
 
 	public ArrayList<Alternative> getAllAlternativesByChoiceID(String choiceID) throws Exception {
 		ArrayList<Alternative> alts = new ArrayList<Alternative>();
+		PreparedStatement ratings_ps;
+		PreparedStatement messages_ps;
+		ResultSet ratings_rs;
+		ResultSet messages_rs;
+
+		logger.log("getting the alts");
 
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName +
@@ -74,8 +97,23 @@ public class AlternativeDAO {
 			ps.setString(1,  choiceID);
 			ResultSet resultSet = ps.executeQuery(); // cursor that points to database row
 
+
+			// for each alternative
 			while (resultSet.next()) {
-				alts.add(generateAlternative(resultSet));
+				logger.log("Got alt: " + resultSet.getString("description"));
+
+				// ratings result set
+				ratings_ps = conn.prepareStatement("SELECT * FROM " + fbTbl +
+						" WHERE altID=?;");
+				ratings_ps.setString(1, resultSet.getString("altID"));
+				ratings_rs = ratings_ps.executeQuery();
+
+				// messages result set
+				messages_ps = conn.prepareStatement("SELECT * FROM " + msgTbl +
+						" WHERE altID=?;");
+				messages_ps.setString(1, resultSet.getString("altID"));
+				messages_rs = messages_ps.executeQuery();
+				alts.add(generateAlternative(resultSet, ratings_rs, messages_rs));
 			}
 			resultSet.close();
 			ps.close();
@@ -97,20 +135,46 @@ public class AlternativeDAO {
 	 */
 	public Alternative getAlternativeByID(String id) throws Exception {
 		Alternative alt = null; // User object representing the database entry
-		//            boolean passwordCorrect = true;
+		PreparedStatement alt_ps;
+		PreparedStatement ratings_ps;
+		PreparedStatement messages_ps;
+		ResultSet alt_rs;
+		ResultSet ratings_rs;
+		ResultSet messages_rs;
 
-		PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName +
+		logger.log("getting alternative by id");
+
+		alt_ps = conn.prepareStatement("SELECT * FROM " + tblName +
 				" WHERE altID=?;");
-		ps.setString(1,  id);
-		ResultSet resultSet = ps.executeQuery(); // cursor that points to database row
-		logger.log("Generating alts");
-		while (resultSet.next()) {
-			alt = generateAlternative(resultSet); // should only loop 1x
-		}
-		resultSet.close();
-		ps.close();
+		alt_ps.setString(1,  id);
+		alt_rs = alt_ps.executeQuery();
+		logger.log("got alternative result set");
 
-		if (logger != null) { logger.log("retrieved alternative " + id); }
+		// ratings result set
+		ratings_ps = conn.prepareStatement("SELECT * FROM " + fbTbl + " WHERE altID=?;");
+		ratings_ps.setString(1,  id);
+		ratings_rs = ratings_ps.executeQuery();
+		logger.log("got ratings result set");
+
+		// messages result set
+		messages_ps = conn.prepareStatement("SELECT * FROM " + msgTbl + " WHERE altID=?;");
+		messages_ps.setString(1, id);
+		messages_rs = messages_ps.executeQuery();
+		logger.log("got messages result set");
+
+
+		logger.log("Generating alternative");
+		while (alt_rs.next()) {
+			// this method adds both the ratings and the messages to the alternative
+			alt = generateAlternative(alt_rs, ratings_rs, messages_rs);
+		}
+		alt_rs.close();
+		ratings_rs.close();
+		alt_ps.close();
+		ratings_ps.close();
+
+		logger.log("Retrieved alternative " + id);
+
 		return alt;
 	}
 
@@ -118,30 +182,17 @@ public class AlternativeDAO {
 	/**
 	 * Adds or removes an approval or disapproval to the row corresponding to 
 	 * the given Alternative.
-	 * @param alt, the given Alternative
-	 * @param isApproval, the type of rating
-	 * @param isAdd, the type of update (addition or removal)
-	 * @return true if the update was successful, false otherwise
+	 * @param alt The given Alternative
+	 * @return True if the update was successful, false otherwise
 	 * @throws Exception
 	 */
-	public boolean updateAlternative(Alternative alt, boolean isApproval, boolean isAdd) throws Exception {
-		String column = "numLikes";
-		int newNum = alt.getTotalApprovals();
-		
-		if (!isApproval) {
-			column = "numDislikes";
-			newNum = alt.getTotalDisapprovals();
-		}
-		
-		if (isAdd) { newNum++; }
-		else { newNum--; }
-		
-		
+	public boolean updateAlternative(Alternative alt) throws Exception {
 		try {
-			String query = "UPDATE " + tblName + " SET "+ column + "=? WHERE altID=?;";
+			String query = "UPDATE " + tblName + " SET numLikes=?, numDislikes=? where altID=?;";
 			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setInt(1, newNum);
-			ps.setString(2, alt.getID());
+			ps.setInt(1, alt.getTotalApprovals());
+			ps.setInt(2, alt.getTotalDisapprovals());
+			ps.setString(3, alt.getID());
 			int numAffected = ps.executeUpdate();
 			ps.close();
 
@@ -152,27 +203,43 @@ public class AlternativeDAO {
 	}
 
 
-	// TESTED
 	/**
-	 * Deletes the specified alternative from the Alternative table.
-	 * @param alt, the given Alternative object
+	 * Deletes all alternatives associated with the given choice ID.
+	 * @param choiceID The given choice ID
 	 * @return true if the deletion was a success, false otherwise
 	 * @throws Exception, failed to delete alternative
 	 */
-	public boolean deleteAlternative(Alternative alt) throws Exception {
-		// TODO delete feedback
+	public boolean deleteAlternatives(String choiceID) throws Exception {
+		FeedbackDAO feedbackDAO = new FeedbackDAO(logger);
+		ArrayList<Feedback> feedbacks;
+		ArrayList<Alternative> alts = getAllAlternativesByChoiceID(choiceID);
 
-		try {
-			PreparedStatement ps = conn.prepareStatement("DELETE FROM " + tblName + " WHERE altID=?;");
-			ps.setString(1, alt.getID());
-			int numAffected = ps.executeUpdate();
-			ps.close();
+		logger.log("Deleting alts for choice " + choiceID);
 
-			return (numAffected == 1);
+		// for each alternative in the choice
+		for (Alternative alternative : alts) {
+			// delete feedback associated with each alternative (rating + message)
+			feedbacks = alternative.getFeedback();
+			for (Feedback feedback : feedbacks) {
+				logger.log("About to delete feedback");
+				feedbackDAO.deleteFeedback(feedback);
+			}
 
-		} catch (Exception e) {
-			throw new Exception("Failed to delete alternative: " + e.getMessage());
+			// delete the alternative
+			try {
+				logger.log("Trying to delete the alternative");
+				PreparedStatement ps = conn.prepareStatement("DELETE FROM " + tblName +
+						" WHERE altID=? AND choiceID=?;");
+				ps.setString(1, alternative.getID());
+				ps.setString(2, choiceID);
+				ps.executeUpdate();
+				ps.close();
+
+			} catch (Exception e) {
+				throw new Exception("Failed to delete alternatives: " + e.getMessage());
+			}
 		}
+		return true;
 	}
 
 
@@ -186,6 +253,8 @@ public class AlternativeDAO {
 	 */
 	public boolean addAlternative(Alternative alt, String choiceID) throws Exception {
 		int result = 0;
+		FeedbackDAO feedbackDAO = new FeedbackDAO(logger);
+		ArrayList<Feedback> feedbacks;
 
 		try {
 			/*PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE id = ?;");
@@ -203,6 +272,22 @@ public class AlternativeDAO {
 				return false;
 			}
 
+			// add feedbacks
+			feedbacks = alt.getFeedback();
+			for (Feedback feedback : feedbacks) {
+				// add rating
+				if (feedback.getApproved() == 'A' || feedback.getApproved() == 'D') {
+					feedbackDAO.addRating(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(),
+							"", Timestamp.from(Instant.now()));
+				}
+				// add message
+				if (!feedback.getMessage().equals("") && !feedback.getMessage().equals(null)) {
+					feedbackDAO.addMessage(feedback.getAltID(), feedback.getUserID(), feedback.getMessage(),
+							feedback.getTimeStamp());
+				}
+			}
+
+			// add alternative
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO " + tblName +
 					" (altID,numLikes,numDislikes,description,choiceID) values(?,?,?,?,?);");
 			ps.setString(1, alt.getID());
@@ -231,6 +316,10 @@ public class AlternativeDAO {
 	 */
 	public List<Alternative> getAllAlternatives() throws Exception {
 		List<Alternative> allAlts = new ArrayList<Alternative>();
+		PreparedStatement ratings_ps;
+		PreparedStatement messages_ps;
+		ResultSet ratings_rs;
+		ResultSet messages_rs;
 		
 		try {
 			Statement statement = conn.createStatement();
@@ -238,7 +327,18 @@ public class AlternativeDAO {
 			ResultSet resultSet = statement.executeQuery(query);
 
 			while (resultSet.next()) {
-				Alternative a = generateAlternative(resultSet);
+				ratings_ps = conn.prepareStatement("SELECT * FROM " + fbTbl + "" +
+						" WHERE altID=?;");
+				ratings_ps.setString(1, resultSet.getString("altID"));
+				ratings_rs = ratings_ps.executeQuery();
+
+
+				messages_ps = conn.prepareStatement("SELECT * FROM " + msgTbl + "" +
+						" WHERE altID=?;");
+				messages_ps.setString(1, resultSet.getString("altID"));
+				messages_rs = messages_ps.executeQuery();
+
+				Alternative a = generateAlternative(resultSet, ratings_rs, messages_rs);
 				allAlts.add(a);
 			}
 			resultSet.close();
@@ -252,15 +352,66 @@ public class AlternativeDAO {
 
 	/**
 	 * Generates an Alternative object that represents the given database row.
-	 * @param resultSet, the cursor to the specified database row
+	 * Gets the ratings and also the messages associated with the alternative.
+	 * @param alt_rs The cursor to the alternative row in the Alternative table
+	 * @param ratings_rs The list of rating rows in Feedback for this alternative
 	 * @return an Alternative object
-	 * @throws Exception, failed to get user
+	 * @throws Exception, failed to generate Alternative
 	 */
-	private Alternative generateAlternative(ResultSet resultSet) throws Exception {
-		String id  = resultSet.getString("altID");
-		String desc = resultSet.getString("description");
+	private Alternative generateAlternative(ResultSet alt_rs, ResultSet ratings_rs, ResultSet messages_rs)
+			throws Exception {
+		FeedbackDAO feedbackDAO = new FeedbackDAO(logger);
+		UserDAO userDAO = new UserDAO(logger);
 
-		return new Alternative (id, desc);
+		logger.log("Generating alternative");
+
+		String id;
+		String description;
+		int totalApprovals = 0;
+		int totalDisapprovals = 0;
+		String userID;
+
+		ArrayList<Feedback> feedback = new ArrayList<>();
+		ArrayList<String> totalDisapprovalUsers = new ArrayList<>();
+		ArrayList<String> totalApprovalUsers = new ArrayList<>();
+
+		id = alt_rs.getString("altID");
+		description = alt_rs.getString("description");
+		totalApprovals = alt_rs.getInt("numLikes");
+		totalDisapprovals = alt_rs.getInt("numDislikes");
+
+		if (ratings_rs.isBeforeFirst()) {
+			while (ratings_rs.next()) {
+				// this method adds both the rating and the message to the feedback object
+				Feedback fb;
+				fb = feedbackDAO.generateFeedbackFromFeedbackTable(ratings_rs);
+				feedback.add(fb);
+				if (ratings_rs.getString("approval").equals("A")) {
+					userID = ratings_rs.getString("userID");
+					totalApprovalUsers.add(userDAO.getUserFromID(userID).getName());
+				} else if (ratings_rs.getString("approval").equals("D")) {
+					userID = ratings_rs.getString("userID");
+					totalDisapprovalUsers.add(userDAO.getUserFromID(userID).getName());
+				}
+			}
+		}
+		if (messages_rs.isBeforeFirst()) {
+			while (messages_rs.next()) {
+				// this method adds both the rating and the message to the feedback object
+				Feedback newFb = feedbackDAO.generateFeedbackFromMessageTable(messages_rs);
+				logger.log(newFb.getMessage());
+				if (!feedback.contains(newFb)) {
+					logger.log("Adding feedback: " + messages_rs.getString("message"));
+					feedback.add(newFb);
+				}
+//					logger.log("Adding feedback: " + messages_rs.getString("message"));
+//					feedback.add(feedbackDAO.generateFeedbackFromMessageTable(messages_rs));
+			}
+		}
+
+
+		return new Alternative(id, description, totalApprovals, totalDisapprovals,
+				feedback, totalApprovalUsers, totalDisapprovalUsers);
 	}
 
 }

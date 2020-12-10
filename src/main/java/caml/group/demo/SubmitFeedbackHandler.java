@@ -1,12 +1,5 @@
 package caml.group.demo;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 
@@ -15,13 +8,11 @@ import caml.group.demo.db.FeedbackDAO;
 import caml.group.demo.http.AddSubmitFeedbackRequest;
 import caml.group.demo.http.AddSubmitFeedbackResponse;
 import caml.group.demo.model.Alternative;
+import caml.group.demo.model.Choice;
 import caml.group.demo.model.Feedback;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import com.amazonaws.util.json.Jackson;
-import com.fasterxml.jackson.databind.JsonNode;
 
 public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRequest,AddSubmitFeedbackResponse> {
 	LambdaLogger logger;
@@ -35,52 +26,64 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 
 		feedbackDAO = new FeedbackDAO(logger);
 		AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
-		logger.log("Retrieved dao");
+		logger.log("Retrieved daos");
 
 		// get old alternative
+//		System.out.println("alt id " + feedback.getAltID());
 		alternative = alternativeDAO.getAlternativeByID(feedback.getAltID());
+		logger.log("Alternative: " + alternative.getDescription());
 
 		// store old approval
-		oldApproval = feedbackDAO.getApproval(feedback.getAltID(), feedback.getUserID());
-//		feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
-//				feedback.getTimeStamp());
+		oldApproval = feedbackDAO.getRating(feedback.getAltID(), feedback.getUserID());
+		System.out.println("Old approval = " + oldApproval);
 
-		System.out.println("old approval = " + oldApproval);
-
-		// update the alternative and feedback
-		alternative = alternativeDAO.getAlternativeByID(feedback.getAltID());
+		// approve alternative
 		if (feedback.getApproved() == 'A' && oldApproval != 'A') {
 			logger.log("Adding approval");
 			alternative.setTotalApprovals(alternative.getTotalApprovals() + 1);
-			feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+			feedbackDAO.addRating(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
 					feedback.getTimeStamp());
-			if (oldApproval != 'D') {
+			if (oldApproval == 'D') {
 				logger.log("Getting rid of old disapproval");
 				alternative.setTotalDisapprovals(alternative.getTotalDisapprovals() - 1);
 			}
-			alternativeDAO.updateAlternative(alternative, true, true);
+			alternativeDAO.updateAlternative(alternative);
 			return true;
 		}
 
 		// disapprove alternative
 		else if (feedback.getApproved() == 'D' && oldApproval != 'D') {
 			logger.log("Adding disapproval");
-			alternative.setTotalApprovals(alternative.getTotalDisapprovals() + 1);
-			feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+			alternative.setTotalDisapprovals(alternative.getTotalDisapprovals() + 1);
+			feedbackDAO.addRating(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
 					feedback.getTimeStamp());
-			if (oldApproval != 'A') {
+			if (oldApproval == 'A') {
 				logger.log("Getting rid of old approval");
 				alternative.setTotalApprovals(alternative.getTotalApprovals() - 1);
 			}
-			alternativeDAO.updateAlternative(alternative, true, false);
+			alternativeDAO.updateAlternative(alternative);
 			return true;
 		}
-		else if (feedbackDAO.feedbackExists(feedback.getAltID(), feedback.getUserID())) {
-			logger.log("Duplicate approval/disapproval, doing nothing :)");
+
+		// clear rating
+		else if (feedbackDAO.ratingExists(feedback.getAltID(), feedback.getUserID())) {
+			logger.log("Clearing alternative");
+
+			// delete disapproval
+			if (feedback.getApproved() == 'D') {
+				alternative.setTotalDisapprovals(alternative.getTotalDisapprovals() - 1);
+				feedbackDAO.clearRating(feedback.getAltID(), feedback.getUserID());
+			}
+
+			// delete approval
+			else {
+				alternative.setTotalApprovals(alternative.getTotalApprovals() - 1);
+				feedbackDAO.clearRating(feedback.getAltID(), feedback.getUserID());
+			}
 			return false;
 		}
 		else {
-			feedbackDAO.addFeedback(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+			feedbackDAO.addRating(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
 					feedback.getTimeStamp());
 			return true;
 		}
@@ -104,10 +107,11 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 				fail = true;
 				failMessage = "Duplicate approval";
 			}
+			logger.log("Submitted feedback");
 		}catch (Exception e){
 			fail = true;
 			failMessage = "Failed to submit feedback";
-		}
+		} 
 
 		AddSubmitFeedbackResponse response;
 		if(fail) response = new AddSubmitFeedbackResponse(400, failMessage);

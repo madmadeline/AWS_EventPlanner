@@ -50,7 +50,7 @@ public class UserDAO {
      * @return the User object
      * @throws SQLException if the user could not be found or inserted in the table
      */
-    public User loadOrInsertUser(String name, String pass, String choiceID) throws SQLException {
+    public User loadOrInsertUser(String name, String pass, String choiceID) throws Exception {
         User user = null; // User object representing the database entry
         PreparedStatement ps;
         ResultSet resultSet;
@@ -97,7 +97,10 @@ public class UserDAO {
 //                System.out.println("user is in the table");
                 user = rowToUserObject(resultSet, pass); // should only loop 1x
                 if (user != null) { logger.log("Retrieved user from the " + usrTbl + " table\n"); }
-                else { logger.log("Incorrect password\n"); }
+                else {
+                    logger.log("Incorrect password\n");
+                    return null;
+                }
             }
 
             resultSet.close();
@@ -185,32 +188,23 @@ public class UserDAO {
     }
 
 
-    // TESTED
     /**
-     * Deletes the specified user from the User table.
-     * @param user The given User
+     * Deletes all users registered for a given choice.
      * @param choiceID The given choice ID
-     * @return true if the User was deleted, false otherwise
-     * @throws Exception the User can't be found in the table
+     * @return True if the users were deleted, false otherwise
+     * @throws Exception The users can't be found in the table
      */
-    public boolean deleteUser(User user, int choiceID) throws Exception {
+    public boolean deleteUsers(String choiceID) throws Exception {
+        logger.log("Deleting users registered for choice " + choiceID);
+
         PreparedStatement ps = conn.prepareStatement("DELETE FROM " + usrTbl
-                + " WHERE userID=? AND username=? AND password=? AND choiceID=?;");
-        ps.setString(1, user.getID());
-        ps.setString(2, user.getName());
-        ps.setString(3, user.getPassword());
-        ps.setString(4, ""+choiceID);
+                + " WHERE choiceID=?;");
+        ps.setString(1, choiceID);
 
         try {
             int numDeleted = ps.executeUpdate();
-            if (numDeleted != 1) {
-                logger.log("User can't be deleted because they aren't in the table\n");
-                ps.close();
-                return false;
-            }
-
-            logger.log("Successfully deleted the user from the table");
-            return true;
+            ps.close();
+            return numDeleted == 1;
 
         } catch (Exception e) {
             throw new Exception("Failed to delete user: " + e.getMessage());
@@ -223,17 +217,25 @@ public class UserDAO {
      * @return the username
      * @throws Exception database connection idk
      */
-    public String getUsernameFromID(String userID) throws Exception {
+    public User getUserFromID(String userID) throws Exception {
+        logger.log("getting the user object from id " + userID);
+
         ResultSet resultSet;
 
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + usrTbl
                 + " WHERE userID=?;");
         ps.setString(1, userID);
 
+        logger.log("got user from user table");
+
         try {
             resultSet = ps.executeQuery(); // cursor that points to database row
-            if (resultSet.isBeforeFirst()) {
-                return resultSet.getString("username");
+            if (resultSet.next()) {
+                return new User(
+                        resultSet.getString("userID"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password")
+                );
             }
             return null;
         } catch (Exception e) {
@@ -250,7 +252,7 @@ public class UserDAO {
      * @return true if the User was added, false otherwise
      * @throws SQLException, failed to insert user
      */
-    public boolean addUser(User user, String choiceID) throws SQLException {
+    public boolean addUser(User user, String choiceID) throws Exception {
         PreparedStatement ps;
 
         // check if a username was actually given
@@ -299,25 +301,27 @@ public class UserDAO {
 
 
     /**
-     * Returns all Users in the User table as a list of User objects.
+     * Returns all Users that are registered for a given choice.
      * @return the list of User objects
-     * @throws Exception, couldn't get all the Users
+     * @throws Exception Couldn't get all the Users
      */
-    public List<User> getAllUsers() throws Exception {
-        
-        List<User> allConstants = new ArrayList<>();
+    public List<User> getAllUsers(String choiceID) throws Exception {
+        List<User> allUsers = new ArrayList<>();
+        logger.log("Getting all users registered for choice " + choiceID);
+
         try {
-            Statement statement = conn.createStatement();
-            String query = "SELECT * FROM " + usrTbl + ";";
-            ResultSet resultSet = statement.executeQuery(query);
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + usrTbl +
+                    " WHERE choiceID=?;");
+            ps.setString(1, choiceID);
+            ResultSet resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
                 User u = rowToUserObject(resultSet, resultSet.getString("username"));
-                allConstants.add(u);
+                allUsers.add(u);
             }
             resultSet.close();
-            statement.close();
-            return allConstants;
+            ps.close();
+            return allUsers;
 
         } catch (Exception e) {
             throw new Exception("Failed in getting users: " + e.getMessage());

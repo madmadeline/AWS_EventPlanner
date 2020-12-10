@@ -28,7 +28,7 @@ public class ReportHandler implements RequestHandler<AddReportRequest,AddReportR
 	public AddReportResponse handleRequest(AddReportRequest req, Context context) {
 		logger = context.getLogger();
         logger.log("Loading Java Lambda handler of RequestHandler");
-        logger.log(req.toString());
+//        logger.log(req.toString());
 
         boolean fail = false;
         String failMessage = "";

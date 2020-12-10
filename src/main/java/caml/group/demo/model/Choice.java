@@ -11,6 +11,7 @@ public class Choice {
 	final String description;
 	Timestamp time;
 	Alternative winner;
+	String winnerName;
 	final ArrayList<Alternative> alternatives;// = new ArrayList<Alternative>();
 	ArrayList<User> users;
 	final int maxTeamSize;
@@ -22,8 +23,11 @@ public class Choice {
 		this.alternatives = alternatives;
 		this.time = time;
 		this.winner = null;
+		this.users = new ArrayList<>();
 		this.maxTeamSize = teamSize;
+		this.winnerName = "";
 	}
+	
 
 	public Choice(String id, String description, Timestamp time, int teamSize) {
 		this.id = id;
@@ -31,7 +35,9 @@ public class Choice {
 		this.alternatives = null;
 		this.time = time;
 		this.winner = null;
+		this.users = new ArrayList<>();
 		this.maxTeamSize = teamSize;
+		this.winnerName = "";
 	}
 	
 	public String getID() { return this.id; }
@@ -40,7 +46,18 @@ public class Choice {
 		return alternatives;
 	}
 
-//	public int getMaxTeamSize() { return maxTimeSize; }
+	public boolean getChoiceIDbyAltID(String altID) {
+		//String ans = null;
+		boolean ans = false;
+		for(Alternative alt: alternatives) {
+			if(altID.equals(alt.getID())) {
+				//ans = this.id;
+				ans = true;
+			}
+		}
+		return ans;
+	}
+	
 //	public void setMaxTeamSize(int teamSize){ this.maxTeamSize = teamSize; }
 
 	public String getDescription(){
@@ -52,7 +69,15 @@ public class Choice {
 	public Alternative getWinner() { return this.winner; }
 	public void setWinner(Alternative winner) { this.winner = winner; }
 	public ArrayList<User> getUsers() { return this.users; }
-	
+
+	public void setWinnerName(String winnerName) {
+		this.winnerName = winnerName;
+	}
+
+	public String getWinnerName() {
+		return winnerName;
+	}
+
 	public void addUser(User user) { users.add(user); }
 	
 	

@@ -3,6 +3,8 @@ package caml.group.demo.db;
 import java.sql.*;
 import java.util.ArrayList;
 
+//import caml.group.demo.db.AlternativeDAO;
+
 import caml.group.demo.model.*;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
@@ -25,40 +27,45 @@ public class ChoiceDAO {
     }
 
 
-    // TESTED
     /**
      * Returns a Choice object that is the requested entry from the Choice table
      * @param id, the given id of the desired choice
      * @return the Choice object
      * @throws SQLException, exception thrown on fail
      */
-    public Choice getChoice(String id) throws SQLException {
-        logger.log("Getting choice\n");
-//        logger.log(id);
+    public Choice getChoice(String id) throws Exception {
+        logger.log("Getting choice " + id);
         Choice choice;
-        PreparedStatement ps;
-        ResultSet rs;
+        String description = "";
+        Timestamp time = null;
+        int teamSize = 0;
+        ArrayList<Alternative> alts;
+        Alternative winningAlt = null;
 
-        try {
-            ps = conn.prepareStatement(
-                    "Select c.choiceID, c.description as cDesc, altID, a.description as aDesc, dateOfCreation, " +
-                            "maxTeamSize From " + tblName + " c " +
-                            "join Alternative a on a.choiceID = c.choiceID WHERE c.choiceID=?");
-            ps.setString(1, id);
-            rs = ps.executeQuery();
+        AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
 
-            if (!rs.isBeforeFirst()) { // choice doesn't exist
-                logger.log("Invalid choice ID");
-                return null;
-            }
-        } catch(SQLException e){
-            throw new SQLException("Database error" + e.getMessage());
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName +
+                " WHERE choiceID=?");
+        ps.setString(1,id);
+        ResultSet rs = ps.executeQuery();
+
+        // get choice info
+        if (rs.next()) {
+            description = rs.getString("description");
+            time = rs.getTimestamp("dateOfCreation");
+            teamSize = rs.getInt("maxTeamSize");
+            winningAlt = alternativeDAO.getAlternativeByID(rs.getString("winningAlt"));
         }
-        choice = generateChoice(rs);
+
+        // get the alternatives (including ratings and messages)
+        alts = alternativeDAO.getAllAlternativesByChoiceID(id);
 
         rs.close();
         ps.close();
-//        logger.log("Returning choice");
+
+        choice = new Choice(id, description, alts, time, teamSize);
+        choice.setWinner(winningAlt);
+
         return choice;
     }
 
@@ -179,52 +186,107 @@ public class ChoiceDAO {
         return true;
     }
 
-    // TESTED
+
     /**
-     * Deletes the given choice from the Choice table. Also deletes
-     * any alternatives associated with the choice from the
+     * Deletes choices older than the timestamp from the Choice table.
+     * Also deletes any alternatives associated with the choice from the
      * Alternative table.
-     * @param choice The given choice
+     * @param timestamp The given timestamp
      * @return True if the choice/alternatives were deleted,
      * false otherwise
      * @throws Exception The choice couldn't be deleted
      */
-    public boolean deleteChoice(Choice choice) throws Exception {
-        logger.log("Deleting Choice " + choice.getID() + ": " + choice.getDescription());
-        PreparedStatement ps;
+    public ArrayList<Choice> deleteChoice(Timestamp timestamp) throws Exception {
+        logger.log("Deleting choices from before " + timestamp);
 
-        // Delete users from user table
-        try {
-            ps = conn.prepareStatement("Delete from User where choiceID=?;");
-            ps.setString(1, choice.getID());
-            ps.executeUpdate();
-            logger.log("Deleted all Users");
-        } catch (Exception e) {
-            throw new Exception ("Couldn't delete user " + e.getMessage());
+        PreparedStatement ps = conn.prepareStatement("SELECT * from Choice Where dateOfCreation<=?");
+        ps.setTimestamp(1,timestamp);
+        ResultSet rs = ps.executeQuery();
+        ArrayList<Choice> choices = generateReport(rs); // Just the return, and gives choice ids
+        ps.close();
+
+        logger.log("Getting all alt ids");
+        ArrayList<String> altIDs = new ArrayList<>();
+        for(Choice choice : choices){
+            PreparedStatement aps = conn.prepareStatement("SELECT * from Alternative where choiceID=?");
+            aps.setString(1, choice.getID());
+            ResultSet ars = aps.executeQuery();
+            while(ars.next()) altIDs.add(ars.getString("altID"));
+            ars.close();
+            aps.close();
         }
 
-        // Delete alts from alt table
-        AlternativeDAO dao = new AlternativeDAO(logger);
-        ArrayList<Alternative> alts = dao.getAllAlternativesByChoiceID(choice.getID());
-
-        for (Alternative alt : alts) { dao.deleteAlternative(alt); }
-        logger.log("Deleted alternatives");
-
-        // Delete the choice from the choice table
-        try {
-            ps = conn.prepareStatement(
-                    "delete from " + tblName + " where choiceID=? and description=?;"
-            );
-            ps.setString(1, choice.getID());
-            ps.setString(2, choice.getDescription());
-            int numAffected = ps.executeUpdate();
-            logger.log("Deleted choice");
-            ps.close();
-            return numAffected == 1;
-        } catch (Exception e) {
-            throw new Exception ("Couldn't delete choice " + e.getMessage());
+        logger.log("Deleting from Message");
+        for(String altID : altIDs){
+            PreparedStatement mps = conn.prepareStatement("DELETE FROM Message where altID=?");
+            mps.setString(1,altID);
+            mps.execute();
+            mps.close();
         }
+
+        logger.log("Deleting from Feedback");
+        for(String altID : altIDs){
+            PreparedStatement fps = conn.prepareStatement("DELETE FROM Feedback where altID=?");
+            fps.setString(1,altID);
+            fps.execute();
+            fps.close();
+        }
+
+        logger.log("Deleting from User");
+        for(Choice choice : choices){
+            PreparedStatement ups = conn.prepareStatement("DELETE FROM User where choiceID=?");
+            ups.setString(1,choice.getID());
+            ups.execute();
+            ups.close();
+        }
+
+        logger.log("Deleting from Alternative");
+        for(Choice choice : choices){
+            PreparedStatement aps2 = conn.prepareStatement("DELETE FROM Alternative where choiceID=?");
+            aps2.setString(1,choice.getID());
+            aps2.execute();
+            aps2.close();
+        }
+
+        logger.log("Deleting Choice");
+        PreparedStatement ps2 = conn.prepareStatement("DELETE From Choice where dateOfCreation<=?");
+        ps2.setTimestamp(1, timestamp);
+        ps2.execute();
+        ps2.close();
+
+        return  choices;
     }
+
+    /**
+     * Deletes a specific choice given a choice ID. Also deletes any alternatives
+     * associated with the choice from the Alternative table.
+     * @param choiceID The given choice ID
+     * @return True if the choice/alternatives were deleted,
+     * false otherwise
+     * @throws Exception The choice couldn't be deleted
+     */
+    public boolean deleteSpecificChoice(String choiceID) throws Exception {
+        UserDAO userDAO = new UserDAO(logger);
+        AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
+        int result;
+
+        logger.log("Deleting choice " + choiceID);
+
+        // delete alternatives, ratings, reviews
+        alternativeDAO.deleteAlternatives(choiceID);
+
+        // delete users
+        userDAO.deleteUsers(choiceID);
+
+        // delete choice
+        PreparedStatement ps = conn.prepareStatement("DELETE from " + tblName + " WHERE choiceID=?");
+        ps.setString(1, choiceID);
+        result = ps.executeUpdate();
+        ps.close();
+
+        return result == 1;
+    }
+
 
     /**
      * Generates a Choice object that represents several rows of ChoiceAltMatch
@@ -232,39 +294,90 @@ public class ChoiceDAO {
      * @return a Choice object
      * @throws SQLException failed to get Choice
      */
-    private Choice generateChoice(ResultSet rs) throws SQLException {
-        ArrayList<Alternative> alts = new ArrayList<>();
-//        logger.log("Generating choice from result set");
-        String id = "";
-        String description = "";
-        Timestamp time = null;
-        String aID;
-        String aDesc;
-        int teamSize = 0;
+    private Choice generateChoice(ResultSet rs) throws Exception {
+        ArrayList<Alternative> alts;
+        logger.log("Generating choice from result set");
+        String id;
+        String description;
+        Timestamp time;
+        int teamSize;
+        AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
 
-        while(rs.next()){
-            id = rs.getString("choiceID");
-//            logger.log("Got cID");
-            description = rs.getString("cDesc");
-//            logger.log("Got cDesc");
-            time = rs.getTimestamp("dateOfCreation");
-//            logger.log("got time");
-            aID = rs.getString("altID");
-//            logger.log("got aID");
-            aDesc = rs.getString("aDesc");
-            logger.log("got aDesc");
-            teamSize = rs.getInt("maxTeamSize");
-            logger.log("got maxTeamSize");
-            Alternative alt = new Alternative(aID, aDesc);
-//            logger.log("made alt");
-            alts.add(alt);
-//            logger.log("added alt to alts");
-        }
+        id = rs.getString("choiceID");
+            logger.log("Got cID");
+        description = rs.getString("description");
+            logger.log("Got cDesc");
+        time = rs.getTimestamp("dateOfCreation");
+        teamSize = rs.getInt("maxTeamSize");
+        logger.log("got maxTeamSize");
+
+        logger.log("about to get alts");
+        alts = alternativeDAO.getAllAlternativesByChoiceID(id);
 
         rs.close();
         return new Choice(id, description, alts, time, teamSize);
     }
+    /**
+     * Generates a Choice object that represents several rows of ChoiceAltMatch
+     * @param altID The given alternative ID
+     * @return a Choice object
+     * @throws SQLException failed to get Choice
+     */
+    public Choice generateChoiceByAltID(String altID) throws Exception {
+        Choice choice = null;
+        
+        PreparedStatement ps = conn.prepareStatement("SELECT * from Choice");
+        ResultSet rs = ps.executeQuery();
+        ArrayList<Choice> choices = generateReport(rs);
+        ps.close();
+        
+        for(Choice achoice: choices) {
+        	if(achoice.getChoiceIDbyAltID(altID)) {
+        		choice = achoice;
+        	}
+//        	ArrayList<Alternative> alternatives = achoice.getAlternatives();
+//        	for(Alternative alt: alternatives) {
+//        		if(alt.getID().equals(altID))
+//        			choice = achoice;
+//        	}
+        }   
+        return choice;
+    }
 
+    public void addWinner(String altID, String choiceID) throws Exception {
+        PreparedStatement ps = conn.prepareStatement("UPDATE Choice set winningAlt=? where choiceID=?");
+        ps.setString(1, altID);
+        ps.setString(2, choiceID);
+        ps.execute();
+        ps.close();
+    }
+    
+//    public ArrayList<Alternative> getAllAlternativesByChoiceID(String choiceID) throws Exception {
+//		ArrayList<Alternative> alts = new ArrayList<Alternative>();
+//		logger.log("getting the alts");
+//
+//		try {
+//			PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName +
+//					" WHERE choiceID=?;");
+//			ps.setString(1,  choiceID);
+//			ResultSet resultSet = ps.executeQuery(); // cursor that points to database row
+//
+//			while (resultSet.next()) {
+//				alts.add(generateAlternative(resultSet));
+//			}
+//			resultSet.close();
+//			ps.close();
+//
+//			logger.log("Retrieved all alternatives");
+//			return alts;
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			throw new Exception("Failed in getting alternatives: " + e.getMessage());
+//		}
+//	}  
+    
+    
     private ArrayList<Choice> generateReport(ResultSet rs) throws Exception {
         ArrayList<Choice> choices = new ArrayList<>();
 
@@ -272,6 +385,37 @@ public class ChoiceDAO {
             logger.log("Getting choice data for choice " + rs.getString("choiceID"));
             Choice choice = new Choice(rs.getString("choiceID"), rs.getString("description"),
                     rs.getTimestamp("dateOfCreation"), rs.getInt("maxTeamSize"));
+            if(rs.getString("winningAlt") != null){
+                logger.log("Getting alt desc");
+                logger.log("Preparing statement");
+                PreparedStatement ps = conn.prepareStatement("SELECT description FROM Alternative where altID=?");
+                logger.log("Setting string");
+                ps.setString(1, rs.getString("winningAlt"));
+                logger.log("Executing query");
+                ResultSet rs2 = ps.executeQuery();
+                logger.log("Getting desc");
+                while(rs2.next()) choice.setWinnerName(rs2.getString("description"));
+                logger.log("closing ps");
+                ps.close();
+                logger.log("closing rs2");
+                rs2.close();
+            }
+            choices.add(choice);
+        }
+
+        return choices;
+    }
+
+    private ArrayList<Choice> generateChoices(ResultSet rs) throws Exception {
+        ArrayList<Choice> choices = new ArrayList<>();
+        ArrayList<Alternative> alts;
+        AlternativeDAO alternativeDAO = new AlternativeDAO(logger);
+
+        while(rs.next()){
+            alts = alternativeDAO.getAllAlternativesByChoiceID(rs.getString("choiceID"));
+            logger.log("Getting choice data for choice " + rs.getString("choiceID"));
+            Choice choice = new Choice(rs.getString("choiceID"), rs.getString("description"),
+                    alts, rs.getTimestamp("dateOfCreation"), rs.getInt("maxTeamSize"));
             choices.add(choice);
         }
 
