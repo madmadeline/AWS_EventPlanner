@@ -66,7 +66,7 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 		}
 
 		// clear rating
-		else if (feedback.getApproved() == 'O'/*feedbackDAO.ratingExists(feedback.getAltID(), feedback.getUserID())*/) {
+		else if (feedback.getApproved() == 'O') {
 			logger.log("Clearing alternative");
 
 			// delete disapproval
@@ -85,9 +85,9 @@ public class SubmitFeedbackHandler implements RequestHandler<AddSubmitFeedbackRe
 			return true;
 		}
 		else {
-			feedbackDAO.addRating(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
-					feedback.getTimeStamp());
-			return true;
+//			feedbackDAO.addRating(feedback.getAltID(), feedback.getUserID(), feedback.getApproved(), feedback.getMessage(),
+//					feedback.getTimeStamp());
+			return false;
 		}
 	}
 

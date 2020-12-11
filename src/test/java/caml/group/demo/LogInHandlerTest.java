@@ -1,16 +1,12 @@
 package caml.group.demo;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.UUID;
 
-//import caml.group.demo.LogInHandler;
 import caml.group.demo.db.ChoiceDAO;
 import caml.group.demo.db.DatabaseUtil;
-import caml.group.demo.db.UserDAO;
 import caml.group.demo.model.Alternative;
 import caml.group.demo.model.Choice;
 import caml.group.demo.model.TestContext;
@@ -26,11 +22,11 @@ import com.google.gson.Gson;
 import caml.group.demo.http.AddLogInRequest;
 import caml.group.demo.http.AddLogInResponse;
 
+// ALL TESTS PASSED 12/11 3:45PM
 /**
  * A simple test harness for locally invoking your Lambda function handler.
  */
 public class LogInHandlerTest {
-	UserDAO udao;
 	ChoiceDAO choiceDAO;
 	LambdaLogger logger;
 	Choice choice;
@@ -49,10 +45,8 @@ public class LogInHandlerTest {
 	}
 
 
-	void testInput(String incoming) throws Exception {
-		java.sql.Connection conn;
-		conn = DatabaseUtil.connect();
-
+	void testInput(String incoming) {
+		System.out.println("testing valid input");
 		LogInHandler handler = new LogInHandler();
 		AddLogInRequest req = new Gson().fromJson(incoming, AddLogInRequest.class);
 		AddLogInResponse response = handler.handleRequest(req, createContext("post"));
@@ -61,19 +55,23 @@ public class LogInHandlerTest {
 		Assert.assertEquals(200, response.statusCode);
 		Assert.assertEquals(req.getUsername(), response.username);
 		Assert.assertEquals(req.getPassword(), response.password);
-		Assert.assertEquals(""+req.getChoiceID(), response.choice.getID());
+		Assert.assertEquals(req.getChoiceID(), response.choice.getID());
 	}
 
-	void testFailInput(String incoming, String outgoing) throws IOException, ClassNotFoundException, SQLException {
+	void testFailInput(String incoming, String outgoing) {
+		System.out.println("testing invalid input");
 		LogInHandler handler = new LogInHandler();
 		AddLogInRequest req = new Gson().fromJson(incoming, AddLogInRequest.class);
 		AddLogInResponse response = handler.handleRequest(req, createContext("post"));
 
 		Assert.assertEquals(400, response.statusCode);
+		Assert.assertEquals(outgoing, response.error);
 	}
 
 	@Before
 	public void createChoice() throws Exception {
+		System.out.println("creating mock choice");
+
 		DatabaseUtil.connect();
 		TestContext ctx = new TestContext();
 		ctx.setFunctionName("post");
@@ -97,108 +95,73 @@ public class LogInHandlerTest {
 		choiceDAO.addChoice(choice);
 	}
 
-	/*@After
+	@After
+//	@Test
 	public void deleteChoice() throws Exception {
-		choiceDAO.deleteChoice(choice);
-	}*/
+		System.out.println("deleting mock choice");
+		choice = choiceDAO.getChoice(choice.getID());
+//		choice = choiceDAO.getChoice("709eba57-c49b-4dae-a3dc-121cecada2b2");
+		choiceDAO.deleteSpecificChoice(choice.getID());
+	}
 
-	// passed dec 3 2:39pm
-//	@Test
-//	public void testAddUserAndPass() throws Exception {
-//		createChoice();
-//		System.out.println(choice.getID());
-//		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"Hello\"," +
-//				"\"choiceID\": \""+choice.getID()+"\"}";
-//
-//		try {
-//			testInput(SAMPLE_INPUT_STRING);
-//		} catch (IOException ioe) {
-//			Assert.fail("Invalid:" + ioe.getMessage());
-//		}
-//		deleteChoice();
-//	}
-//
-//	@Test
-//	public void testAddUserNoPass() throws Exception {
-//		createChoice();
-//
-//		System.out.println(choice.getID());
-//
-//		String SAMPLE_INPUT_STRING = "{\"username\": \"jane doe\", \"password\": \"\"," +
-//				"\"choiceID\": \""+ choice.getID() + "\"}";
-//
-//
-//		try {
-//			testInput(SAMPLE_INPUT_STRING);
-//		} catch (IOException ioe) {
-//			Assert.fail("Invalid:" + ioe.getMessage());
-//		}
-//
-//		deleteChoice();
-//	}
+	@Test
+	public void testAddUserAndPass() {
+		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"Hello\"," +
+				"\"choiceID\": \""+choice.getID()+"\"}";
 
-//	@Test
-//	public void testAddUserInvalidChoiceID() throws Exception {
-//		String SAMPLE_INPUT_STRING = "{\"username\": \"jane doe\", \"password\": \"\"," +
-//				"\"choiceID\": \"9999\"}";
-//
-//
-//		try {
-//			testFailInput(SAMPLE_INPUT_STRING, "hi");
-//		} catch (IOException ioe) {
-//			Assert.fail("Invalid:" + ioe.getMessage());
-//		}
-//	}
-//
-//	@Test
-//	public void testLoadUserAndPass() throws Exception {
-//		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"Hello\"," +
-//				"\"choiceID\": \"1234\"}";
-//
-//		try {
-//			testInput(SAMPLE_INPUT_STRING);
-//		} catch (IOException ioe) {
-//			Assert.fail("Invalid:" + ioe.getMessage());
-//		}
-//	}
+		testInput(SAMPLE_INPUT_STRING);
+	}
+
+	@Test
+	public void testAddUserNoPass() {
+		String SAMPLE_INPUT_STRING = "{\"username\": \"jane doe\", \"password\": \"\"," +
+				"\"choiceID\": \""+ choice.getID() + "\"}";
 
 
+		testInput(SAMPLE_INPUT_STRING);
+	}
 
-//	@Test
-//	public void testLoadUser() throws Exception {
-//		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"pass101\"}";
-//		String RESULT = "true";
-//
-//		try {
-//			testInput(SAMPLE_INPUT_STRING);
-//		} catch (IOException ioe) {
-//			Assert.fail("Invalid:" + ioe.getMessage());
-//		}
-//	}
-//
-//	@Test
-//	public void testFailInput() throws ClassNotFoundException, SQLException {
-//		String SAMPLE_INPUT_STRING = "{\"username\": \"\", \"password\": \"pass10001\"}";
-//		String RESULT = "false";
-//
-//		try {
-//			testInput(SAMPLE_INPUT_STRING);
-//		} catch (IOException ioe) {
-//			Assert.fail("Invalid:" + ioe.getMessage());
-//		}
-//	}
-//
-//	@Test
-//	public void testFailInputWrongPass() throws ClassNotFoundException, SQLException {
-//		String SAMPLE_INPUT_STRING = "{\"username\": \"john doe\", \"password\": \"pass10001\"}";
-//		String RESULT = "false";
-//
-//		try {
-//			testInput(SAMPLE_INPUT_STRING);
-//		} catch (IOException ioe) {
-//			Assert.fail("Invalid:" + ioe.getMessage());
-//		}
-//	}
+	@Test
+	public void testAddUserInvalidChoiceID() {
+		String SAMPLE_INPUT_STRING = "{\"username\": \"jane doe\", \"password\": \"\"," +
+				"\"choiceID\": \"9999\"}";
+
+
+		testFailInput(SAMPLE_INPUT_STRING, "Invalid Choice ID");
+	}
+
+	@Test
+	public void testLoadUser() throws Exception {
+		String SAMPLE_INPUT_STRING = "{\"username\": \"jane doe\", \"password\": \"\"," +
+				"\"choiceID\": \""+ choice.getID() + "\"}";
+
+		testInput(SAMPLE_INPUT_STRING);
+		testInput(SAMPLE_INPUT_STRING);
+
+		choice = choiceDAO.getChoice(choice.getID());
+		Assert.assertEquals(1, choice.getUsers().size());
+	}
+
+	@Test
+	public void testNoUsername() {
+		String SAMPLE_INPUT_STRING = "{\"username\": \"\", \"password\": \"pass10001\"}";
+
+		testFailInput(SAMPLE_INPUT_STRING, "No username was given.");
+	}
+
+	@Test
+	public void testWrongPass() throws Exception {
+		String SAMPLE_INPUT_STRING = "{\"username\": \"scary\", \"password\": \"\"," +
+				"\"choiceID\": \""+ choice.getID() + "\"}";
+		String SAMPLE_INPUT_STRING_WRONG = "{\"username\": \"scary\", \"password\": \"boo\"," +
+				"\"choiceID\": \""+ choice.getID() + "\"}";
+
+		testInput(SAMPLE_INPUT_STRING);
+		testFailInput(SAMPLE_INPUT_STRING_WRONG, "Incorrect password: boo.");
+
+		choice = choiceDAO.getChoice(choice.getID());
+		Assert.assertEquals(1, choice.getUsers().size());
+	}
 
 
 }

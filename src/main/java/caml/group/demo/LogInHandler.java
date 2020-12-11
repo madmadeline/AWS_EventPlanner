@@ -46,73 +46,74 @@ public class LogInHandler implements RequestHandler<AddLogInRequest,AddLogInResp
 		User user = null;
 		String name;
 		String pass;
-		String choiceID;
+		String choiceID = "";
 		AddLogInResponse response;
 		Choice choice = null;
 
-		try { // get the given username and password
-			name = req.getUsername();
-			if (name.equals("")) {
-				failMessage = "No username was given.";
-				fail = true;
-			} else if (name.length() > 30) {
-				failMessage = "The username is longer than 30 characters.";
-				fail = true;
-			}
-			try {
-				// make sure that the choice ID is valid
-				choiceID = String.valueOf(req.getChoiceID());
-				ChoiceDAO cdao = new ChoiceDAO(logger);
-				choice = cdao.getChoice(""+choiceID);
-				if (choice == null ) {
-					failMessage = "Invalid Choice ID";
-					fail = true;
-				}
+		name = req.getUsername();
+		if (name.equals("")) {
+			failMessage = "No username was given.";
+			response = new AddLogInResponse(400, failMessage);
+			logger.log(response.toString());
+			return response;
 
-				// try to log in
-				try {
-					pass = req.getPassword();
-					if (pass.length() > 30) {
-						failMessage = "The password is longer than 30 characters.";
-						fail = true;
-					}
-//					if(choice.getWinner() != null) {
-//						failMessage = "The choice is finalized.";
-//						fail = true;
-//					}
-					logger.log(String.valueOf(choice.getMaxTeamSize()));
-					logger.log(String.valueOf(choice.getUsers().size()));
-					if(choice.getMaxTeamSize() <= choice.getUsers().size() ) {						
-						failMessage = "The choice is full.";
-						fail = true;
-						
-						for(User aUser: choice.getUsers()) {
-							if(name.equals(aUser.getName()) && pass.equals(aUser.getPassword())) {
-								fail = false;
-							}
-						}
-					}
-					if (!fail) {
-						UserDAO dao = new UserDAO(logger);
-						user = dao.loadOrInsertUser(name, pass, choiceID);
-						if (user == null) {
-							failMessage = "Incorrect password: " + req.getPassword() + ".";
-							fail = true;
-						}
-					}
-					} catch (Exception e) {
-						failMessage = "Invalid password: " + req.getPassword() + ".";
-						fail = true;
-					}
-				} catch (Exception e) {
-					failMessage = "Invalid choice ID: " + req.getChoiceID() + ".";
-				}
-			} catch (Exception e) {
-				failMessage = "Invalid username: " + req.getUsername() + ".";
+		} else if (name.length() > 30) {
+			failMessage = "The username is longer than 30 characters.";
+			response = new AddLogInResponse(400, failMessage);
+			logger.log(response.toString());
+			return response;
+		}
+
+		// make sure that the choice ID is valid
+		try {
+			choiceID = String.valueOf(req.getChoiceID());
+			ChoiceDAO cdao = new ChoiceDAO(logger);
+			choice = cdao.getChoice("" + choiceID);
+			if (choice == null) {
+				failMessage = "Invalid Choice ID";
+				response = new AddLogInResponse(400, failMessage);
+				logger.log(response.toString());
+				return response;
+			}
+		} catch (Exception e) {
+			failMessage = "Database connection error.";
+			fail = true;
+		}
+
+		// try to log in
+		try {
+			pass = req.getPassword();
+			if (pass.length() > 30) {
+				failMessage = "The password is longer than 30 characters.";
 				fail = true;
 			}
+
+			// make sure that the choice isn't full
+			logger.log(String.valueOf(choice.getMaxTeamSize()));
+			logger.log(String.valueOf(choice.getUsers().size()));
+			if(choice.getMaxTeamSize() <= choice.getUsers().size() ) {
+				failMessage = "The choice is full.";
+				fail = true;
+
+				for(User aUser: choice.getUsers()) {
+					if(name.equals(aUser.getName()) && pass.equals(aUser.getPassword())) {
+						fail = false;
+					}
+				}
+			}
+
+			// login or register
+			UserDAO dao = new UserDAO(logger);
+			user = dao.loadOrInsertUser(name, pass, choiceID);
+			if (user == null) {
+				failMessage = "Incorrect password: " + req.getPassword() + ".";
+				fail = true;
+			}
+		} catch (Exception e) {
+			failMessage = "Database connection error";
+			fail = true;
+		}
 		
-
 	response = new AddLogInResponse(400, failMessage);
 
 	if (!fail) {

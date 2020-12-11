@@ -232,8 +232,12 @@ public class AlternativeDAO {
 						" WHERE altID=? AND choiceID=?;");
 				ps.setString(1, alternative.getID());
 				ps.setString(2, choiceID);
-				ps.executeUpdate();
+				int result = ps.executeUpdate();
 				ps.close();
+
+				if (result == 1) {
+					logger.log("Deleted all alternatives for choice " + choiceID);
+				}
 
 			} catch (Exception e) {
 				throw new Exception("Failed to delete alternatives: " + e.getMessage());
@@ -257,16 +261,6 @@ public class AlternativeDAO {
 		ArrayList<Feedback> feedbacks;
 
 		try {
-			/*PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE id = ?;");
-			ps.setString(1, alt.getID());
-			ResultSet resultSet = ps.executeQuery();
-
-			// already present?
-			while (resultSet.next()) {
-				generateAlternative(resultSet);
-				resultSet.close();
-			}*/
-
 			if (alt.getDescription().length() > 60) {
 				logger.log("Alt desc too long");
 				return false;
@@ -309,46 +303,46 @@ public class AlternativeDAO {
 		}
 	}
 
-	/**
-	 * Returns all Alternatives in the Alternative table as a list of Alternative objects.
-	 * @return the list of Alternative objects
-	 * @throws Exception, couldn't get all the Alternative
-	 */
-	public List<Alternative> getAllAlternatives() throws Exception {
-		List<Alternative> allAlts = new ArrayList<Alternative>();
-		PreparedStatement ratings_ps;
-		PreparedStatement messages_ps;
-		ResultSet ratings_rs;
-		ResultSet messages_rs;
-		
-		try {
-			Statement statement = conn.createStatement();
-			String query = "SELECT * FROM " + tblName + ";";
-			ResultSet resultSet = statement.executeQuery(query);
-
-			while (resultSet.next()) {
-				ratings_ps = conn.prepareStatement("SELECT * FROM " + fbTbl + "" +
-						" WHERE altID=?;");
-				ratings_ps.setString(1, resultSet.getString("altID"));
-				ratings_rs = ratings_ps.executeQuery();
-
-
-				messages_ps = conn.prepareStatement("SELECT * FROM " + msgTbl + "" +
-						" WHERE altID=?;");
-				messages_ps.setString(1, resultSet.getString("altID"));
-				messages_rs = messages_ps.executeQuery();
-
-				Alternative a = generateAlternative(resultSet, ratings_rs, messages_rs);
-				allAlts.add(a);
-			}
-			resultSet.close();
-			statement.close();
-			return allAlts;
-
-		} catch (Exception e) {
-			throw new Exception("Failed in getting all alternatives: " + e.getMessage());
-		}
-	}
+//	/**
+//	 * Returns all Alternatives in the Alternative table as a list of Alternative objects.
+//	 * @return the list of Alternative objects
+//	 * @throws Exception, couldn't get all the Alternative
+//	 */
+//	public List<Alternative> getAllAlternatives() throws Exception {
+//		List<Alternative> allAlts = new ArrayList<Alternative>();
+//		PreparedStatement ratings_ps;
+//		PreparedStatement messages_ps;
+//		ResultSet ratings_rs;
+//		ResultSet messages_rs;
+//
+//		try {
+//			Statement statement = conn.createStatement();
+//			String query = "SELECT * FROM " + tblName + ";";
+//			ResultSet resultSet = statement.executeQuery(query);
+//
+//			while (resultSet.next()) {
+//				ratings_ps = conn.prepareStatement("SELECT * FROM " + fbTbl + "" +
+//						" WHERE altID=?;");
+//				ratings_ps.setString(1, resultSet.getString("altID"));
+//				ratings_rs = ratings_ps.executeQuery();
+//
+//
+//				messages_ps = conn.prepareStatement("SELECT * FROM " + msgTbl + "" +
+//						" WHERE altID=?;");
+//				messages_ps.setString(1, resultSet.getString("altID"));
+//				messages_rs = messages_ps.executeQuery();
+//
+//				Alternative a = generateAlternative(resultSet, ratings_rs, messages_rs);
+//				allAlts.add(a);
+//			}
+//			resultSet.close();
+//			statement.close();
+//			return allAlts;
+//
+//		} catch (Exception e) {
+//			throw new Exception("Failed in getting all alternatives: " + e.getMessage());
+//		}
+//	}
 
 	/**
 	 * Generates an Alternative object that represents the given database row.

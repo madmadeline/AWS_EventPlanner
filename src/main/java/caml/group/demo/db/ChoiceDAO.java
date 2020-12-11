@@ -57,6 +57,11 @@ public class ChoiceDAO {
             teamSize = rs.getInt("maxTeamSize");
             winningAlt = alternativeDAO.getAlternativeByID(rs.getString("winningAlt"));
         }
+        // choice doesn't exist in the table
+        else {
+            logger.log("Choice can't be found in the table - invalid ID");
+            return null;
+        }
 
         // get the alternatives (including ratings and messages)
         alts = alternativeDAO.getAllAlternativesByChoiceID(id);
@@ -162,6 +167,7 @@ public class ChoiceDAO {
             throw new Exception ("Error " + e.getMessage());
         }
 
+        // insert choice into choice table
         try {
             ps = conn.prepareStatement(
                     "Insert into " + tblName + "(choiceID, description, dateOfCreation, winningAlt, maxTeamSize) values (?,?,?,null,?);"
@@ -185,15 +191,15 @@ public class ChoiceDAO {
             ArrayList<Alternative> alts = choice.getAlternatives();
             AlternativeDAO dao = new AlternativeDAO(logger);
             boolean result;
-            //ChoiceAltMatchDAO dao2 = new ChoiceAltMatchDAO(logger);
             for (Alternative alt : alts) {
                 logger.log("alt " + alt.getDescription());
                 result = dao.addAlternative(alt, choice.getID());
 
+                // couldn't insert alternative --> delete the choice
                 if (!result) {
+                    deleteSpecificChoice(choice.getID());
                     return false;
                 }
-                //dao2.addChoiceAltMatch(choice, alt);
             }
         }
         logger.log("Exiting add choice");

@@ -47,34 +47,28 @@ public class FindChoiceHandlerTest {
 
 
     void testInput(String incoming) throws Exception {
-        java.sql.Connection conn;
-        conn = DatabaseUtil.connect();
+        DatabaseUtil.connect();
 
         FindChoiceHandler handler = new FindChoiceHandler();
         AddFindChoiceRequest req = new Gson().fromJson(incoming, AddFindChoiceRequest.class);
+
+        System.out.println("Testing valid input");
+
         AddFindChoiceResponse response = handler.handleRequest(req, createContext("post"));
 
-        choice = choiceDAO.getChoice(choice.getID());
-//        ArrayList<Alternative> alts = response.alternatives;
-//        for (Alternative alt : response.alternatives) {
-//            if (alt.getDescription().equals("Spoon")) {
-//                System.out.println("first alt " + alt.getDescription());
-//                System.out.println(alt.getFeedback().get(0).getMessage());
-//            }
-//        }
-
-
         Assert.assertTrue(response.result);
-//        System.out.println(response.toString());
         Assert.assertEquals(200, response.statusCode);
     }
 
-    void testFailInput(String incoming) throws IOException, ClassNotFoundException, SQLException {
-        LogInHandler handler = new LogInHandler();
-        AddLogInRequest req = new Gson().fromJson(incoming, AddLogInRequest.class);
-        AddLogInResponse response = handler.handleRequest(req, createContext("post"));
+    void testFailInput(String incoming, String outgoing) {
+        FindChoiceHandler handler = new FindChoiceHandler();
+        AddFindChoiceRequest req = new Gson().fromJson(incoming, AddFindChoiceRequest.class);
+
+        System.out.println("testing fail input");
+        AddFindChoiceResponse response = handler.handleRequest(req, createContext("post"));
 
         Assert.assertEquals(400, response.statusCode);
+        Assert.assertEquals(outgoing, response.error);
     }
 
     @Before
@@ -110,42 +104,49 @@ public class FindChoiceHandlerTest {
         choiceDAO.deleteSpecificChoice(choice.getID());
     }
 
-//    @Test
-//    public void testFindChoice() throws Exception {
-//        String SAMPLE_INPUT_STRING = "{\"choiceID\":\""+choice.getID()+"\"}";
-//        try {
-//            testInput(SAMPLE_INPUT_STRING);
-//        } catch (IOException ioe) {
-//            Assert.fail("Invalid:" + ioe.getMessage());
-//        }
-//    }
-//
-//    @Test
-//    public void testFindInvalidChoice() throws Exception {
-//        String SAMPLE_INPUT_STRING = "{\"choiceID\":\"100e01\"}";
-//        try {
-//            testFailInput(SAMPLE_INPUT_STRING);
-//        } catch (IOException ioe) {
-//            Assert.fail("Invalid:" + ioe.getMessage());
-//        }
-//    }
-//
-//    @Test
-//    public void testFindChoiceWithFeedback() throws Exception {
-//        String SAMPLE_INPUT_STRING = "{\"choiceID\":\""+choice.getID()+"\"}";
-//        try {
-//            SubmitFeedbackMessageHandler fbHandler = new SubmitFeedbackMessageHandler();
-//            AddSubmitFeedbackMessageRequest request = new AddSubmitFeedbackMessageRequest();
-//            request.setAltID(choice.getAlternatives().get(0).getID());
-//            request.setUsername(user.getName());
-//            request.setMessage("From the spoon");
-//            request.setUserID(user.getID());
-//
-//            fbHandler.handleRequest(request, context);
-//
-//            testInput(SAMPLE_INPUT_STRING);
-//        } catch (IOException ioe) {
-//            Assert.fail("Invalid:" + ioe.getMessage());
-//        }
-//    }
+    @Test
+    public void testFindChoice() throws Exception {
+        String SAMPLE_INPUT_STRING = "{\"choiceID\":\""+choice.getID()+"\"}";
+        try {
+            testInput(SAMPLE_INPUT_STRING);
+        } catch (IOException ioe) {
+            Assert.fail("Invalid:" + ioe.getMessage());
+        }
+    }
+
+    @Test
+    public void testFindInvalidChoice() throws Exception {
+        String SAMPLE_INPUT_STRING = "{\"choiceID\":\"100e01\"}";
+        testFailInput(SAMPLE_INPUT_STRING, "Choice does not exist");
+    }
+
+    @Test
+    public void testFindChoiceWithFeedback() throws Exception {
+        String SAMPLE_INPUT_STRING = "{\"choiceID\":\""+choice.getID()+"\"}";
+        try {
+            System.out.println("Adding feedback");
+
+            String altID = choice.getAlternatives().get(0).getID();
+            String userID = user.getID();
+            String username = user.getName();
+            String message = "From the spoon";
+
+            SubmitFeedbackMessageHandler fbHandler = new SubmitFeedbackMessageHandler();
+            AddSubmitFeedbackMessageRequest request = new AddSubmitFeedbackMessageRequest();
+            request.setAltID(altID);
+            request.setUsername(username);
+            request.setMessage(message);
+            request.setUserID(userID);
+
+            AddSubmitFeedbackMessageResponse response = fbHandler.handleRequest(request, context);
+
+            testInput(SAMPLE_INPUT_STRING);
+            Assert.assertEquals(message, response.message);
+            Assert.assertEquals(username, response.username);
+            Assert.assertEquals(userID, response.userID);
+            Assert.assertEquals(altID, response.altID);
+        } catch (IOException ioe) {
+            Assert.fail("Invalid:" + ioe.getMessage());
+        }
+    }
 }

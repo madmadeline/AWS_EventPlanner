@@ -48,29 +48,18 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 		String failMessage = "";
 		String randString = UUID.randomUUID().toString();
 
-		/*while(true){
-			Random rand = new Random();
-			int randInt = rand.nextInt(9000) + 1000;
-			randString = String.valueOf(randInt);
-			try {
-				if(checkChoice(randString)) break;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}*/
-
 		Timestamp time = Timestamp.from(Instant.now());
-		String alt1Append = UUID.randomUUID().toString();
-		String alt2Append = UUID.randomUUID().toString();
-		String alt3Append = UUID.randomUUID().toString();
-		String alt4Append = UUID.randomUUID().toString();
-		String alt5Append = UUID.randomUUID().toString();
+		String alt1ID = UUID.randomUUID().toString();
+		String alt2ID = UUID.randomUUID().toString();
+		String alt3ID = UUID.randomUUID().toString();
+		String alt4ID = UUID.randomUUID().toString();
+		String alt5ID = UUID.randomUUID().toString();
 
-		Alternative alt1 = new Alternative(alt1Append, req.getAlt1Description());
-		Alternative alt2 = new Alternative(alt2Append, req.getAlt2Description());
-		Alternative alt3 = new Alternative(alt3Append, req.getAlt3Description());
-		Alternative alt4 = new Alternative(alt4Append, req.getAlt4Description());
-		Alternative alt5 = new Alternative(alt5Append, req.getAlt5Description());
+		Alternative alt1 = new Alternative(alt1ID, req.getAlt1Description());
+		Alternative alt2 = new Alternative(alt2ID, req.getAlt2Description());
+		Alternative alt3 = new Alternative(alt3ID, req.getAlt3Description());
+		Alternative alt4 = new Alternative(alt4ID, req.getAlt4Description());
+		Alternative alt5 = new Alternative(alt5ID, req.getAlt5Description());
 		ArrayList<Alternative> alts = new ArrayList<>();
 		if(req.getAlt1ID() != null) alts.add(alt1);
 		if(req.getAlt2ID() != null) alts.add(alt2);
@@ -84,9 +73,8 @@ public class CreateChoiceHandler implements RequestHandler<AddCreateChoiceReques
 			try {
 				boolean result = createChoice(choice);
 				if (!result) {
-					failMessage = "Either the choice description, an alternative " +
-							"description exceeds the 60 character limit, or you have " +
-							"a duplicate alternative";
+					failMessage = "Either the choice description or an alternative " +
+							"description exceeds the 60 character limit";
 					fail = true;
 				}
 			} catch (Exception e) {

@@ -204,6 +204,10 @@ public class UserDAO {
         try {
             int numDeleted = ps.executeUpdate();
             ps.close();
+            if (numDeleted == 1) {
+                logger.log("Deleted all users for choice " + choiceID);
+            }
+
             return numDeleted == 1;
 
         } catch (Exception e) {

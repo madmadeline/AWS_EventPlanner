@@ -41,38 +41,8 @@ public class ReportHandlerTest {
         return ctx;
     }
 
-
-    @Before
-    public void init() throws Exception {
-        logger = createContext("post").getLogger();
-//        choiceDAO = new ChoiceDAO(logger);
-//        userDAO = new UserDAO(logger);
-//
-//        // create mock choice
-//        System.out.println("creating mock choice");
-//        ArrayList<Alternative> alts = new ArrayList<>();
-//        alts.add(new Alternative(UUID.randomUUID().toString(), "Spoon"));
-//        alts.add(new Alternative(UUID.randomUUID().toString(), "Fork"));
-//        alts.add(new Alternative(UUID.randomUUID().toString(), "Knife"));
-//        alts.add(new Alternative(UUID.randomUUID().toString(), "Chair"));
-//
-//        choice = new Choice(UUID.randomUUID().toString(), "Best silverware to steal from DAKA",
-//                alts, Timestamp.from(Instant.now()), 5);
-//
-//        choiceDAO.addChoice(choice);
-//
-//        // register coronavirus
-//        System.out.println("registering corona virus");
-//        user = new User("8888","Corona","Virus");
-//        userDAO.addUser(user, choice.getID());
-//        choice.addUser(user);
-    }
-
-
     void testInput(String incoming) throws Exception {
-        java.sql.Connection conn;
-        conn = DatabaseUtil.connect();
-        int index = 0;
+        DatabaseUtil.connect();
 
         ReportHandler handler = new ReportHandler();
         AddReportRequest req = new Gson().fromJson(incoming, AddReportRequest.class);
@@ -82,18 +52,9 @@ public class ReportHandlerTest {
         Assert.assertEquals(200, response.statusCode);
     }
 
-//    void testFailInput(String incoming, String outgoing) throws IOException, ClassNotFoundException, SQLException {
-//        CreateChoiceHandler handler = new CreateChoiceHandler();
-//        AddCreateChoiceRequest req = new Gson().fromJson(incoming, AddCreateChoiceRequest.class);
-//        AddCreateChoiceResponse response = handler.handleRequest(req, createContext("post"));
-//
-//        Assert.assertEquals(400, response.statusCode);
-//        Assert.assertEquals(outgoing, response.error);
-//    }
-
-//    @Test
-//    public void testReport() throws Exception {
-//        testInput("");
-//    }
+    @Test
+    public void testReport() throws Exception {
+        testInput("");
+    }
 
 }
