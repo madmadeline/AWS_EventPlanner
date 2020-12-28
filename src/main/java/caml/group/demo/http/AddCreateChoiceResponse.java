@@ -2,7 +2,6 @@ package caml.group.demo.http;
 
 import caml.group.demo.model.Alternative;
 import caml.group.demo.model.Choice;
-import com.amazonaws.services.dynamodbv2.xspec.S;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ public class AddCreateChoiceResponse {
     public String description;
     public Timestamp time;
     public int maxTeamSize;
-    public ArrayList<Alternative> alts;
+    public ArrayList<Alternative> alternatives;
 
 
     public AddCreateChoiceResponse(int statusCode, Choice choice){
@@ -26,7 +25,7 @@ public class AddCreateChoiceResponse {
         this.choiceID = choice.getID();
         this.description = choice.getDescription();
         this.time = choice.getTime();
-        this.alts = choice.getAlternatives();
+        this.alternatives = choice.getAlternatives();
         this.maxTeamSize = choice.getMaxTeamSize();
     }
 

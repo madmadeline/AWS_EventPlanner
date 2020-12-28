@@ -11,7 +11,7 @@ function processCreateResponse(result) {
 		//get the choice info from the parsed json
 		var choiceID = obj.choiceID;
 		var description = obj.description;
-		var alts = obj.alts;
+		var alts = obj.alternatives;
 		
 		//update the register form
 		document.createUserForm.newChoiceID.value = choiceID;
@@ -20,50 +20,23 @@ function processCreateResponse(result) {
 		var output = "";
 		var altsOutput = "";
 		
+		//send the json to the invisible div for sneaky js access
+		var payload = document.getElementById("payload");
+		payload.innerHTML = result;
+		
 		//get the alternatives output
-		var len = Object.keys(obj.alts[0]).length;
-		len = len - 1;
-		for (var i = 0; i < len; i++){
-			altsOutput += ("Alternative " + i + "ID: " + alts[i].ID + " Description: " + alts[i].description + "\"><b>");
+		//altsOutput = alt1 + "<br />" + alt2 + "<br />" + alt3 + "<br />" + alt4 + "<br />" + alt5 + "<br />";
+		for (var i = 0; i < alts.length; i++){
+			altsOutput += alts[i].description + "<br />";
 		}
-		output = "Choice Description: " + description + " Choice ID: " + choiceID + " Alternatives: " + "\"><b>" + altsOutput;
+		output = "Choice Description: " + description + "<br />" + "Choice ID:" + choiceID + "<br />" + "Alternatives: " + "<br />" + altsOutput;
 		
 		displayChoice.innerHTML = output;
 	}else{
 		//error
 		console.log("Choice failed to create.");
+		displayChoice.innerHTML = "Error: Choice creation failed.";
 	}
-	
-	
-	/* OLD JS=======================================================================
-	var id = obj.choiceID; //the choice id
-	
-	//change the innerHTML of the register choice thing
-	var head = document.getElementById("registerHeader");
-	head.innerHTML = "Register with Choice: " + id;
-	
-		var displayChoice = document.getElementById('displayChoice');
-
-	var len = Object.keys(obj.alts[0]).length;
-
-	var output = "";
-	//print the info about the alternatives
-	
-	var altOutput = "";
-	for(var i = 0; i < len - 1; i++){
-		console.log("GET ALTS: " + obj.alts[i].description);
-		altOutput += ("Alternative " + i +  " ID: " + obj.alts[i].ID +  " Description: " + obj.alts[i].description + "\n");
-	}
-		
-    output = "Choice Description: " + obj.description + " Choice ID: " + obj.choiceID + " Alternatives:\n" + altOutput;
-
-
-  // Update computation result
-  displayChoice.innerHTML = output;
-
-	console.log("ID: " + obj.choiceID);
-
-  refreshChoicesList();*/
 }
 
 function handleCreateClick(e) {
@@ -72,7 +45,41 @@ function handleCreateClick(e) {
   var data = {};
   data["choiceDescription"] = form.choiceDesc.value;
   data["maxTeamSize"] = form.numParticipants.value;
-  data["alternatives"] = [form.alt1.value, form.alt2.value, form.alt3.value, form.alt4.value, form.alt5.value];
+
+  var counter = 0;
+  if (form.alt1.value.length != 0){
+	 data["alt1ID"] = form.alt1.value;
+	 data["alt1Description"] = form.alt1.value;
+	 counter++;
+  }
+  if (form.alt2.value.length != 0){
+	 data["alt2ID"] = form.alt2.value;
+     data["alt2Description"] = form.alt2.value;
+	 counter++;
+  }
+  if (form.alt3.value.length != 0){
+	data["alt3ID"] = form.alt3.value;
+	data["alt3Description"] = form.alt3.value;
+	counter++;
+  }
+  if (form.alt4.value.length != 0){
+	data["alt4ID"] = form.alt4.value;
+	data["alt4Description"] = form.alt4.value;
+	counter++;
+  }
+  if (form.alt4.value.length != 0){
+	data["alt5ID"] = form.alt5.value;
+	data["alt5Description"] = form.alt5.value;
+	counter++;
+  }
+
+  //if less than 2 alts, don't even send info. CATCH
+  if (counter <= 1){
+	console.log("User tried to create choice with less than 2 alternatives. Caught by front end.");
+	displayChoice.innerHTML = "Please include at least 2 alternatives.";
+	return;
+  } 
+
 
   var js = JSON.stringify(data);
   console.log("JS:" + js);

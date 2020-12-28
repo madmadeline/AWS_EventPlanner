@@ -14,41 +14,53 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import java.util.ArrayList;
 
 public class FindChoiceHandler implements RequestHandler<AddFindChoiceRequest,AddFindChoiceResponse> {
-    LambdaLogger logger;
+	LambdaLogger logger;
 
-    public Choice getChoice(String id) throws Exception {
-        Choice choice = null;
-        logger.log("Getting dao");
-        ChoiceDAO dao = new ChoiceDAO(logger);
-        logger.log("Got dao. Getting choice");
-        choice = dao.getChoice(id);
-        return choice;
-    }
+	public Choice getChoice(String id) throws Exception {
+		Choice choice = null;
+		logger.log("Getting dao");
+		ChoiceDAO dao = new ChoiceDAO(logger);
+		logger.log("Got dao. Getting choice");
+		choice = dao.getChoice(id);
+		return choice;
+	}
 
-    @Override
-    public AddFindChoiceResponse handleRequest(AddFindChoiceRequest req, Context context) {
-        logger = context.getLogger();
-        logger.log("Loading Java Lambda handler of RequestHandler");
-        logger.log(req.toString());
+	@Override
+	public AddFindChoiceResponse handleRequest(AddFindChoiceRequest req, Context context) {
+		logger = context.getLogger();
+		logger.log("Loading Java Lambda handler of RequestHandler");
+		logger.log(req.toString());
 
-        boolean fail = false;
-        String failMessage = "";
-        Choice choice = null;
-        String id = "";
+		boolean fail = false;
+		String failMessage = "";
+		Choice choice = null;
+		String id = "";
 
-        try{
-            id = req.getChoiceID();
-            logger.log(id);
-            choice = getChoice(id);
-        } catch (Exception e) {
-            fail = true;
-            failMessage = "Failed to retrieve choice";
-        }
+		try{
+			id = req.getChoiceID();
+			logger.log(id);
+			choice = getChoice(id);
+		} catch (Exception e) {
+			fail = true;
+			failMessage = "Failed to retrieve choice";
+		}
 
-        AddFindChoiceResponse response;
-        if(fail) response = new AddFindChoiceResponse(400, failMessage);
-        else response = new AddFindChoiceResponse(choice, 200);
 
-        return response;
-    }
+		if(!fail){
+			if (choice == null) {
+				fail = true;
+				failMessage = "Choice does not exist";
+			}
+//			if(choice.getWinner() != null ) {
+//				failMessage = "The choice is finalized.";
+//				fail = true;
+//			}
+		}
+
+		AddFindChoiceResponse response;
+		if(fail) response = new AddFindChoiceResponse(400, failMessage);
+		else response = new AddFindChoiceResponse(choice, 200);
+
+		return response;
+	}
 }

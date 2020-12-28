@@ -3,24 +3,19 @@ package caml.group.demo.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.sql.Timestamp;
+
 //import java.time.ZonedDateTime;
 
 public class Choice {
 	final String id;
 	final String description;
-	final ArrayList<Alternative> alternatives;// = new ArrayList<Alternative>();
-	int maxTeamSize;
-	ArrayList<User> users;
 	Timestamp time;
 	Alternative winner;
+	String winnerName;
+	final ArrayList<Alternative> alternatives;// = new ArrayList<Alternative>();
+	ArrayList<User> users;
+	final int maxTeamSize;
 
-	public Choice(String id, String description, ArrayList<Alternative> alternatives, Timestamp time) {
-		this.id = id;
-		this.description = description;
-		this.alternatives = alternatives;
-		this.time = time;
-		this.winner = null;
-	}
 
 	public Choice(String id, String description, ArrayList<Alternative> alternatives, Timestamp time, int teamSize) {
 		this.id = id;
@@ -28,17 +23,42 @@ public class Choice {
 		this.alternatives = alternatives;
 		this.time = time;
 		this.winner = null;
+		this.users = new ArrayList<>();
 		this.maxTeamSize = teamSize;
+		this.winnerName = "";
+	}
+	
+
+	public Choice(String id, String description, Timestamp time, int teamSize) {
+		this.id = id;
+		this.description = description;
+		this.alternatives = null;
+		this.time = time;
+		this.winner = null;
+		this.users = new ArrayList<>();
+		this.maxTeamSize = teamSize;
+		this.winnerName = "";
 	}
 	
 	public String getID() { return this.id; }
-
+	public int getMaxTeamSize() { return this.maxTeamSize; };
 	public ArrayList<Alternative> getAlternatives() {
 		return alternatives;
 	}
 
-	public int getMaxTeamSize() { return maxTeamSize; }
-	public void setMaxTeamSize(int teamSize){ this.maxTeamSize = teamSize; }
+	public boolean getChoiceIDbyAltID(String altID) {
+		//String ans = null;
+		boolean ans = false;
+		for(Alternative alt: alternatives) {
+			if(altID.equals(alt.getID())) {
+				//ans = this.id;
+				ans = true;
+			}
+		}
+		return ans;
+	}
+	
+//	public void setMaxTeamSize(int teamSize){ this.maxTeamSize = teamSize; }
 
 	public String getDescription(){
 		return description;
@@ -48,8 +68,20 @@ public class Choice {
 	}
 	public Alternative getWinner() { return this.winner; }
 	public void setWinner(Alternative winner) { this.winner = winner; }
-	public ArrayList<User> getUsers() { return this.users; }
-	
+	public ArrayList<User> getUsers() { return users; }
+
+	public void setUsers(ArrayList<User> users) {
+		this.users = users;
+	}
+
+	public void setWinnerName(String winnerName) {
+		this.winnerName = winnerName;
+	}
+
+	public String getWinnerName() {
+		return winnerName;
+	}
+
 	public void addUser(User user) { users.add(user); }
 	
 	

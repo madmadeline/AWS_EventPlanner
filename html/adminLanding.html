@@ -2,48 +2,28 @@
     <head>
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script type = 'text/javascript' src='../js/createReport.js'></script>
+        <script type = 'text/javascript' src='../js/api.js'></script>
+        <script type = 'text/javascript' src='../js/deleteChoices.js'></script>
       </head>
-    <body onload = "getChoices()">
         <h1>CHOICEMAKER - ADMIN PAGE</h1>
+        <a href="https://3733camlgroupproject.s3.amazonaws.com/html/createChoice.html">Home Page</a>
         <div class = "container">
-        <div class = "loginForm">
-            <h2>
-                Current Choices:
-            </h2>
-            <div id = "choiceList"></div>
-            <table id = "choicesTbl">
-                <thead>
-                    <tr>
-                        <th colspan = "2">Choices</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Timestamp</td>
-                        <td>Choice Name</td>
-                    </tr>
-                    <tr>
-                        <td>11/14/20</td>
-                        <td>Movie Night</td>
-                    </tr>
-                    <tr>
-                        <td>11/15/20</td>
-                        <td>Study Group Meeting</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class = "alternativesFeedback">
+        <div class = "reportDiv">
             <h2>Generate a Report:</h2>
-            <button id = "generateReportBtn">Generate</button>
+            <input type = "button" id = "genReportBtn" value = "Generate" onclick = "Javascript:handleReportClick()">
+            <div id = "reportList"></div>
+            
+
         </div>
-        <div class = "choicesSearch">
+        <div class = "deleteChoices">
             <h2>Delete Old Choices:</h2>
-            <form>
-                <label for = "deleteForm">Delete choices older than:</label>
-                <input type = "number" id = "deleteForm"> <br>days. (cannot be undone.)
+            <form name = "deleteForm">
+                <label for = "deleteDays">Delete choices older than:</label>
+                <input type = "number" id = "deleteDays" name = "deleteDays"> <br>days. (cannot be undone.)
             </form>
-            <button>Delete</button>
+            <input type = "button" id = "deleteChoicesBtn" value = "Delete" onclick = "Javascript:handleDeleteClick()">
+            <div id = "deleteResult"></div>
         </div>
         </div>
     </body>

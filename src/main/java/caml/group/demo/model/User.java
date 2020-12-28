@@ -1,20 +1,25 @@
 package caml.group.demo.model;
 
 public class User {
-	String id;
+	final String id;
+	final String name;
 	String password; //Optional
+
+
 	/**
 	 * Constructor for User
-	 * @param id, the given username
-	 * @param password, the given password (can be "")
+	 * @param name the given username
+	 * @param password the given password (can be "")
 	 */
-	public User(String id, String password) {
+	public User(String id, String name, String password) {
 		this.id = id;
+		this.name = name;
 		this.password = password;
 	}
 	
 	// getters
 	public String getID() { return id; }
+	public String getName() { return name; }
 	public String getPassword() { return password; }
 	
 	
@@ -26,9 +31,9 @@ public class User {
 		
 	}
 	
-	public void rate(RatingType r) {
-		
-	}
+//	public void rate(RatingType r) {
+//
+//	}
 	
 	
 }

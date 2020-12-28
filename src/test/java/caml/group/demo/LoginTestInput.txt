@@ -1,5 +1,0 @@
-{
-  "username": "madmadeline",
-  "password": "12345",
-  "choiceID": "1111"
-}
