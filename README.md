@@ -7,6 +7,7 @@ CS 3733 - Software Engineering B20
 - Brandon Snapperman, Backend Java
 - Jyalu Wu, Backend Java and Junit testing
 
-Demo Video:
+Demo Video: https://youtu.be/ZwwX8C-y68U
+App Homepage: https://3733camlgroupproject.s3.amazonaws.com/html/createChoice.html
 
-Application website has since been archived due to AWS costs. The final version of the app is demonstrated in the demo video and the full code is found here in the GitHub.
+Application website to be archived due to AWS costs. The final version of the app is demonstrated in the demo video and the full code is found here in the GitHub.
